@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Python Data Transformation — Interview Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e1117;
+  --surface: #161b22;
+  --surface-2: #1c2333;
+  --border: #2a3040;
+  --text: #e0e4eb;
+  --text-muted: #8b95a5;
+  --accent: #58a6ff;
+  --accent-dim: #1a3a5c;
+  --green: #3fb950;
+  --green-dim: #1a3d2a;
+  --orange: #d29922;
+  --orange-dim: #3d2e0a;
+  --red: #f85149;
+  --purple: #bc8cff;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'Inter', system-ui, sans-serif;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #ffffff;
+    --surface: #f6f8fa;
+    --surface-2: #eef1f5;
+    --border: #d1d5db;
+    --text: #1f2937;
+    --text-muted: #6b7280;
+    --accent: #2563eb;
+    --accent-dim: #dbeafe;
+    --green: #16a34a;
+    --green-dim: #dcfce7;
+    --orange: #ca8a04;
+    --orange-dim: #fef9c3;
+    --red: #dc2626;
+    --purple: #7c3aed;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0e1117;
+  --surface: #161b22;
+  --surface-2: #1c2333;
+  --border: #2a3040;
+  --text: #e0e4eb;
+  --text-muted: #8b95a5;
+  --accent: #58a6ff;
+  --accent-dim: #1a3a5c;
+  --green: #3fb950;
+  --green-dim: #1a3d2a;
+  --orange: #d29922;
+  --orange-dim: #3d2e0a;
+  --red: #f85149;
+  --purple: #bc8cff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 2.5rem;
+}
+
+.problem-nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.problem-nav button {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.problem-nav button:hover { border-color: var(--accent); color: var(--text); }
+.problem-nav button.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+.problem {
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+
+.problem.active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.problem-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.problem-number {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-dim);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.difficulty {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.difficulty.medium { color: var(--orange); background: var(--orange-dim); }
+.difficulty.hard { color: var(--red); background: rgba(248,81,73,0.12); }
+
+.problem-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.skills-tested {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-family: var(--mono);
+  margin-bottom: 1.25rem;
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.problem-body {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.problem-body p { margin-bottom: 0.75rem; }
+.problem-body p:last-child { margin-bottom: 0; }
+
+pre {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+  white-space: pre;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.85em;
+  background: var(--surface-2);
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+}
+
+pre code { background: none; padding: 0; }
+
+.toggle-btn {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.toggle-btn:hover { border-color: var(--accent); color: var(--text); }
+
+.hidden-content {
+  display: none;
+  margin-top: 0.75rem;
+  animation: fadeIn 0.2s ease;
+}
+
+.hidden-content.visible { display: block; }
+
+.hint-box {
+  background: var(--orange-dim);
+  border: 1px solid var(--orange);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.hint-box .section-label { color: var(--orange); }
+
+.solution-box {
+  background: var(--green-dim);
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.solution-box .section-label { color: var(--green); }
+
+.solution-box pre {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.walkthrough {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(63,185,80,0.2);
+  font-size: 0.9rem;
+}
+
+.walkthrough p { margin-bottom: 0.5rem; }
+
+.concepts-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 1rem;
+}
+
+.concept-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--purple);
+  background: rgba(188,140,255,0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.footer-note {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+</style>
+</head>
+<body>
+
+<h1>Python Data Transformation Practice</h1>
+<p class="subtitle">10 problems calibrated for Senior DE live coding interviews — pure Python, no Spark</p>
+
+<div class="problem-nav" id="nav"></div>
+<div id="problems-container"></div>
+
+<div class="footer-note">
+  Target: 15–20 min per problem. Practice in your IDE with AI/Copilot off. Talk through your approach out loud before writing code.
+</div>
+
+<script>
+const problems = [
+  {
+    id: 1,
+    title: "Flatten Nested Transactions",
+    difficulty: "medium",
+    skills: "nested dicts · list comprehension · json traversal",
+    body: `<p>You receive a list of customer records, each containing a nested list of transactions. Write a function that flattens this into a single list of dicts, each containing the customer name and individual transaction details.</p>
+<pre><code>Input:
+customers = [
+    {
+        "name": "Alice",
+        "transactions": [
+            {"id": "T1", "amount": 150.0, "currency": "USD"},
+            {"id": "T2", "amount": 89.50, "currency": "EUR"}
+        ]
+    },
+    {
+        "name": "Bob",
+        "transactions": [
+            {"id": "T3", "amount": 200.0, "currency": "USD"}
+        ]
+    }
+]
+
+Expected Output:
+[
+    {"customer": "Alice", "id": "T1", "amount": 150.0, "currency": "USD"},
+    {"customer": "Alice", "id": "T2", "amount": 89.50, "currency": "EUR"},
+    {"customer": "Bob",   "id": "T3", "amount": 200.0, "currency": "USD"}
+]</code></pre>
+<p><strong>Follow-up:</strong> What if some customers have no transactions key, or transactions is None?</p>`,
+    hint: `Think about a nested loop — outer loop over customers, inner loop over transactions. For each transaction, merge the customer name into it. For the follow-up, use <code>.get("transactions") or []</code> to handle missing/None.`,
+    solution: `<pre><code>def flatten_transactions(customers):
+    result = []
+    for customer in customers:
+        name = customer["name"]
+        for txn in customer.get("transactions") or []:
+            result.append({
+                "customer": name,
+                **txn
+            })
+    return result
+
+# One-liner version:
+def flatten_transactions_v2(customers):
+    return [
+        {"customer": c["name"], **txn}
+        for c in customers
+        for txn in (c.get("transactions") or [])
+    ]</code></pre>`,
+    walkthrough: `The <code>**txn</code> unpacking spreads transaction fields into the new dict. Using <code>.get("transactions") or []</code> handles both missing keys and None values. The list comprehension version shows fluency but the explicit loop is clearer during an interview — use whichever you're more comfortable explaining.`,
+    concepts: ["dict unpacking", "nested loops", "defensive .get()", "list comprehension"]
+  },
+  {
+    id: 2,
+    title: "Deduplicate by Latest Timestamp",
+    difficulty: "medium",
+    skills: "defaultdict · sorting · dict operations",
+    body: `<p>Given a list of event records with possible duplicates (same <code>event_id</code>), keep only the record with the latest <code>timestamp</code> for each event.</p>
+<pre><code>Input:
+events = [
+    {"event_id": "E1", "timestamp": "2024-03-15T10:00:00", "status": "pending"},
+    {"event_id": "E2", "timestamp": "2024-03-15T09:00:00", "status": "done"},
+    {"event_id": "E1", "timestamp": "2024-03-15T14:00:00", "status": "done"},
+    {"event_id": "E3", "timestamp": "2024-03-15T08:00:00", "status": "pending"},
+    {"event_id": "E2", "timestamp": "2024-03-15T12:00:00", "status": "failed"},
+]
+
+Expected Output (order doesn't matter):
+[
+    {"event_id": "E1", "timestamp": "2024-03-15T14:00:00", "status": "done"},
+    {"event_id": "E2", "timestamp": "2024-03-15T12:00:00", "status": "failed"},
+    {"event_id": "E3", "timestamp": "2024-03-15T08:00:00", "status": "pending"}
+]</code></pre>
+<p><strong>Follow-up:</strong> What if there are millions of records? How would you optimize memory?</p>`,
+    hint: `Iterate once, maintaining a dict keyed by event_id. For each record, compare timestamps and keep the later one. ISO timestamps sort lexicographically, so you can compare them as strings.`,
+    solution: `<pre><code>def dedup_latest(events):
+    latest = {}
+    for event in events:
+        eid = event["event_id"]
+        if eid not in latest or event["timestamp"] > latest[eid]["timestamp"]:
+            latest[eid] = event
+    return list(latest.values())
+
+# Follow-up: for millions of records in a file,
+# use a generator to stream without loading all at once:
+import json
+
+def dedup_from_file(filepath):
+    latest = {}  # only stores one record per event_id
+    with open(filepath) as f:
+        for line in f:
+            event = json.loads(line)
+            eid = event["event_id"]
+            if eid not in latest or event["timestamp"] > latest[eid]["timestamp"]:
+                latest[eid] = event
+    return list(latest.values())</code></pre>`,
+    walkthrough: `This is O(n) time and O(unique keys) space — optimal. The key insight is that ISO 8601 timestamps compare correctly as strings, so no datetime parsing needed. For the follow-up, streaming from a file line-by-line keeps memory to O(unique event_ids) instead of O(total records).`,
+    concepts: ["dict as lookup", "string comparison for ISO timestamps", "streaming / generators", "O(n) single-pass"]
+  },
+  {
+    id: 3,
+    title: "Group and Aggregate Sales",
+    difficulty: "medium",
+    skills: "defaultdict · Counter · sorting with lambda",
+    body: `<p>Given a list of sales records, produce a summary: for each <code>region</code>, the total revenue, number of transactions, and the top-selling product (by total amount).</p>
+<pre><code>Input:
+sales = [
+    {"region": "APAC", "product": "Widget",  "amount": 500},
+    {"region": "EMEA", "product": "Gadget",  "amount": 300},
+    {"region": "APAC", "product": "Gizmo",   "amount": 700},
+    {"region": "APAC", "product": "Widget",  "amount": 200},
+    {"region": "EMEA", "product": "Widget",  "amount": 450},
+    {"region": "EMEA", "product": "Gadget",  "amount": 150},
+]
+
+Expected Output:
+{
+    "APAC": {"total_revenue": 1400, "num_transactions": 3, "top_product": "Gizmo"},
+    "EMEA": {"total_revenue": 900,  "num_transactions": 3, "top_product": "Widget"}
+}</code></pre>`,
+    hint: `Use a <code>defaultdict</code> to accumulate per-region. For top product, you need a nested grouping: region → product → total amount. Then find the max within each region.`,
+    solution: `<pre><code>from collections import defaultdict
+
+def summarize_sales(sales):
+    region_totals = defaultdict(lambda: {"revenue": 0, "count": 0})
+    product_revenue = defaultdict(lambda: defaultdict(int))
+
+    for s in sales:
+        region = s["region"]
+        region_totals[region]["revenue"] += s["amount"]
+        region_totals[region]["count"] += 1
+        product_revenue[region][s["product"]] += s["amount"]
+
+    result = {}
+    for region, totals in region_totals.items():
+        top_product = max(product_revenue[region],
+                         key=product_revenue[region].get)
+        result[region] = {
+            "total_revenue": totals["revenue"],
+            "num_transactions": totals["count"],
+            "top_product": top_product
+        }
+    return result</code></pre>`,
+    walkthrough: `Two defaultdicts let you accumulate in a single pass. The nested <code>defaultdict(int)</code> for product_revenue handles the two-level grouping cleanly. <code>max(dict, key=dict.get)</code> is a common pattern to find the key with the highest value — worth memorizing.`,
+    concepts: ["defaultdict", "nested defaultdict", "max() with key=", "single-pass aggregation"]
+  },
+  {
+    id: 4,
+    title: "Parse and Clean CSV Data",
+    difficulty: "medium",
+    skills: "csv module · error handling · type conversion",
+    body: `<p>Read a CSV string (simulating a file), clean the data, and return structured records. Handle: leading/trailing whitespace, empty rows, invalid amounts (non-numeric), and missing required fields.</p>
+<pre><code>Input (as a string — imagine reading from a file):
+csv_data = """name,email,amount,date
+Alice, alice@example.com, 150.50, 2024-01-15
+Bob, bob@example.com, , 2024-01-16
+, charlie@example.com, 200, 2024-01-17
+Dave, dave@example.com, not_a_number, 2024-01-18
+Eve, eve@example.com, 300.75, 2024-01-19
+
+"""
+
+Expected Output:
+valid = [
+    {"name": "Alice", "email": "alice@example.com", "amount": 150.50, "date": "2024-01-15"},
+    {"name": "Eve",   "email": "eve@example.com",   "amount": 300.75, "date": "2024-01-19"}
+]
+errors = [
+    {"row": 3, "reason": "missing amount", "data": {"name": "Bob", ...}},
+    {"row": 4, "reason": "missing name",   "data": {"name": "",   ...}},
+    {"row": 5, "reason": "invalid amount", "data": {"name": "Dave", ...}}
+]</code></pre>
+<p><strong>Follow-up:</strong> How would you modify this to process a 10GB file?</p>`,
+    hint: `Use <code>csv.DictReader</code> with <code>io.StringIO</code> to simulate file reading. Strip all values. Validate each row: check for empty required fields, try <code>float()</code> conversion for amount. Separate valid and error records.`,
+    solution: `<pre><code>import csv
+import io
+
+def parse_and_clean(csv_data):
+    valid, errors = [], []
+    reader = csv.DictReader(io.StringIO(csv_data))
+
+    for row_num, row in enumerate(reader, start=2):
+        # Strip all values
+        cleaned = {k: v.strip() for k, v in row.items()}
+
+        # Skip fully empty rows
+        if not any(cleaned.values()):
+            continue
+
+        # Validate required fields
+        if not cleaned.get("name"):
+            errors.append({"row": row_num, "reason": "missing name", "data": cleaned})
+            continue
+        if not cleaned.get("amount"):
+            errors.append({"row": row_num, "reason": "missing amount", "data": cleaned})
+            continue
+
+        # Validate amount is numeric
+        try:
+            cleaned["amount"] = float(cleaned["amount"])
+        except ValueError:
+            errors.append({"row": row_num, "reason": "invalid amount", "data": cleaned})
+            continue
+
+        valid.append(cleaned)
+
+    return valid, errors
+
+# For a 10GB file: use the same pattern but read from file,
+# process row by row (csv.DictReader already streams),
+# and yield instead of appending:
+
+def parse_large_file(filepath):
+    with open(filepath) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            cleaned = {k: v.strip() for k, v in row.items()}
+            if cleaned.get("name") and cleaned.get("amount"):
+                try:
+                    cleaned["amount"] = float(cleaned["amount"])
+                    yield cleaned
+                except ValueError:
+                    pass  # log error</code></pre>`,
+    walkthrough: `<code>csv.DictReader</code> handles header parsing automatically. The validation chain uses early <code>continue</code> to keep the happy path clean. For the 10GB follow-up: csv.DictReader already streams (doesn't load the file), and switching to <code>yield</code> makes the function a generator — the caller processes one row at a time.`,
+    concepts: ["csv.DictReader", "io.StringIO", "try/except for type validation", "generators for large files", "early return pattern"]
+  },
+  {
+    id: 5,
+    title: "Nested JSON Flattening",
+    difficulty: "hard",
+    skills: "recursion · dict operations · key building",
+    body: `<p>Write a function that takes an arbitrarily nested JSON-like dict and flattens it into a single-level dict with dot-separated keys.</p>
+<pre><code>Input:
+data = {
+    "user": {
+        "name": "Alice",
+        "address": {
+            "city": "Bengaluru",
+            "zip": "560001"
+        },
+        "scores": [85, 92, 78]
+    },
+    "active": True
+}
+
+Expected Output:
+{
+    "user.name": "Alice",
+    "user.address.city": "Bengaluru",
+    "user.address.zip": "560001",
+    "user.scores": [85, 92, 78],
+    "active": True
+}
+</code></pre>
+<p><strong>Follow-up:</strong> What if you also want to flatten lists, producing keys like <code>user.scores.0</code>, <code>user.scores.1</code>?</p>`,
+    hint: `Use recursion. Base case: value is not a dict → add to result with the full key path. Recursive case: value is a dict → recurse with updated prefix. Build the key prefix with dots.`,
+    solution: `<pre><code>def flatten_json(data, prefix="", separator="."):
+    result = {}
+    for key, value in data.items():
+        full_key = f"{prefix}{separator}{key}" if prefix else key
+        if isinstance(value, dict):
+            result.update(flatten_json(value, full_key, separator))
+        else:
+            result[full_key] = value
+    return result
+
+# Follow-up: also flatten lists
+def flatten_json_deep(data, prefix="", sep="."):
+    result = {}
+    if isinstance(data, dict):
+        for key, value in data.items():
+            full_key = f"{prefix}{sep}{key}" if prefix else key
+            result.update(flatten_json_deep(value, full_key, sep))
+    elif isinstance(data, list):
+        for i, item in enumerate(data):
+            full_key = f"{prefix}{sep}{i}" if prefix else str(i)
+            result.update(flatten_json_deep(item, full_key, sep))
+    else:
+        result[prefix] = data
+    return result</code></pre>`,
+    walkthrough: `This is a classic recursion problem that appears in DE interviews because it mirrors real ETL work — flattening API responses for database storage. The follow-up version handles both dicts and lists recursively. Key patterns: <code>isinstance()</code> for type checking, <code>dict.update()</code> for merging results, and building the key prefix through recursion.`,
+    concepts: ["recursion", "isinstance()", "dict.update()", "key prefix building", "handling mixed types"]
+  },
+  {
+    id: 6,
+    title: "Sliding Window: Moving Average",
+    difficulty: "medium",
+    skills: "deque · generators · edge cases",
+    body: `<p>Compute a sliding window moving average over a stream of numbers. Given a list of values and a window size <code>k</code>, return the moving average at each position (starting from when the window is full).</p>
+<pre><code>Input:
+values = [10, 20, 30, 40, 50, 60, 70]
+k = 3
+
+Expected Output:
+[20.0, 30.0, 40.0, 50.0, 60.0]
+# Explanation:
+# (10+20+30)/3=20, (20+30+40)/3=30, (30+40+50)/3=40, ...
+</code></pre>
+<p><strong>Follow-up:</strong> Implement as a generator that could process an infinite stream. What's the time complexity?</p>`,
+    hint: `Maintain a running sum. When the window is full, subtract the element leaving and add the new one. Use <code>collections.deque(maxlen=k)</code> to automatically evict old elements.`,
+    solution: `<pre><code>from collections import deque
+
+def moving_average(values, k):
+    result = []
+    window = deque(maxlen=k)
+    window_sum = 0
+
+    for val in values:
+        if len(window) == k:
+            window_sum -= window[0]  # will be evicted
+        window.append(val)
+        window_sum += val
+        if len(window) == k:
+            result.append(window_sum / k)
+    return result
+
+# Generator version for infinite streams:
+def moving_average_stream(stream, k):
+    window = deque(maxlen=k)
+    window_sum = 0
+    for val in stream:
+        if len(window) == k:
+            window_sum -= window[0]
+        window.append(val)
+        window_sum += val
+        if len(window) == k:
+            yield window_sum / k</code></pre>`,
+    walkthrough: `The running sum trick gives O(1) per element instead of O(k) — you don't re-sum the window each time. <code>deque(maxlen=k)</code> automatically drops the oldest element when full, but we subtract it from the sum before it's evicted. The generator version uses <code>yield</code> so it works on infinite streams with constant memory.`,
+    concepts: ["deque with maxlen", "running sum optimization", "generators for streaming", "O(n) time O(k) space"]
+  },
+  {
+    id: 7,
+    title: "Merge Overlapping Intervals",
+    difficulty: "medium",
+    skills: "sorting · interval logic · tuple unpacking",
+    body: `<p>Given a list of time intervals (as tuples or lists), merge all overlapping intervals. This models real DE problems like merging overlapping session logs or time ranges.</p>
+<pre><code>Input:
+intervals = [(1, 3), (2, 6), (8, 10), (15, 18), (9, 11)]
+
+Expected Output:
+[(1, 6), (8, 11), (15, 18)]
+</code></pre>
+<p><strong>Follow-up:</strong> What if intervals are given as ISO timestamp strings instead of integers?</p>`,
+    hint: `Sort by start time first. Then iterate: if the current interval overlaps with the last merged interval (current start ≤ last end), extend the last merged interval. Otherwise, start a new merged interval.`,
+    solution: `<pre><code>def merge_intervals(intervals):
+    if not intervals:
+        return []
+
+    sorted_iv = sorted(intervals, key=lambda x: x[0])
+    merged = [list(sorted_iv[0])]
+
+    for start, end in sorted_iv[1:]:
+        if start <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], end)
+        else:
+            merged.append([start, end])
+
+    return [tuple(iv) for iv in merged]
+
+# Follow-up: ISO timestamps work the same way
+# because they sort lexicographically:
+def merge_time_intervals(intervals):
+    if not intervals:
+        return []
+    sorted_iv = sorted(intervals, key=lambda x: x[0])
+    merged = [list(sorted_iv[0])]
+    for start, end in sorted_iv[1:]:
+        if start <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], end)
+        else:
+            merged.append([start, end])
+    return [tuple(iv) for iv in merged]</code></pre>`,
+    walkthrough: `Sort first, then single pass — O(n log n) total. The overlap check is <code>start <= last_end</code>. Using <code>max()</code> for the end handles the case where one interval is fully contained within another. This is a LeetCode classic (Problem 56) but also genuinely useful in DE for session merging and event consolidation.`,
+    concepts: ["sorting with lambda", "greedy algorithm", "interval merging", "tuple unpacking"]
+  },
+  {
+    id: 8,
+    title: "Log File Parser with Regex",
+    difficulty: "medium",
+    skills: "regex · file parsing · Counter · datetime",
+    body: `<p>Parse web server log entries to extract the timestamp, HTTP method, path, and status code. Then find: how many requests per status code, and the top 3 most requested paths.</p>
+<pre><code>Input (log lines):
+logs = [
+    '2024-03-15T10:23:45 GET /api/users 200',
+    '2024-03-15T10:23:46 POST /api/orders 201',
+    '2024-03-15T10:23:47 GET /api/users 200',
+    '2024-03-15T10:23:48 GET /api/products 500',
+    '2024-03-15T10:23:49 GET /api/users 200',
+    '2024-03-15T10:23:50 DELETE /api/orders/123 404',
+    '2024-03-15T10:23:51 POST /api/orders 201',
+    '2024-03-15T10:23:52 GET /api/products 200',
+]
+
+Expected Output:
+status_counts = {200: 4, 201: 2, 500: 1, 404: 1}
+top_paths = [("/api/users", 3), ("/api/orders", 2), ("/api/products", 2)]</code></pre>`,
+    hint: `Use <code>re.match()</code> or simply <code>str.split()</code> — these logs are space-delimited so regex isn't strictly necessary, but knowing both approaches is valuable. Use <code>Counter</code> for both aggregations, and <code>.most_common(3)</code> for top paths.`,
+    solution: `<pre><code>import re
+from collections import Counter
+
+def parse_logs(logs):
+    pattern = r'(\\S+)\\s+(GET|POST|PUT|DELETE|PATCH)\\s+(\\S+)\\s+(\\d{3})'
+    status_counts = Counter()
+    path_counts = Counter()
+
+    for line in logs:
+        match = re.match(pattern, line)
+        if match:
+            timestamp, method, path, status = match.groups()
+            status_counts[int(status)] += 1
+            path_counts[path] += 1
+
+    top_paths = path_counts.most_common(3)
+    return dict(status_counts), top_paths
+
+# Simpler version without regex (for well-structured logs):
+def parse_logs_simple(logs):
+    status_counts = Counter()
+    path_counts = Counter()
+
+    for line in logs:
+        parts = line.strip().split()
+        if len(parts) == 4:
+            _, method, path, status = parts
+            status_counts[int(status)] += 1
+            path_counts[path] += 1
+
+    return dict(status_counts), path_counts.most_common(3)</code></pre>`,
+    walkthrough: `In an interview, offering both approaches — regex for messy logs, split() for clean ones — shows judgment. <code>Counter.most_common(n)</code> returns the n most frequent items as (element, count) tuples, which is exactly what "top N" questions want. Knowing when to use regex vs split() is a seniority signal.`,
+    concepts: ["re.match()", "Counter", ".most_common()", "str.split()", "structured vs unstructured parsing"]
+  },
+  {
+    id: 9,
+    title: "Build a Schema Validator",
+    difficulty: "hard",
+    skills: "type checking · recursion · error collection",
+    body: `<p>Write a function that validates a list of records against a schema definition. The schema specifies field names, expected types, and whether fields are required. Collect all validation errors.</p>
+<pre><code>schema = {
+    "name":   {"type": str,   "required": True},
+    "age":    {"type": int,   "required": True},
+    "email":  {"type": str,   "required": False},
+    "score":  {"type": float, "required": True},
+}
+
+records = [
+    {"name": "Alice", "age": 30, "score": 95.5},
+    {"name": "Bob",   "age": "twenty", "email": "bob@x.com", "score": 88.0},
+    {"name": "",      "age": 25, "score": None},
+]
+
+Expected Output:
+[
+    {"row": 0, "errors": []},
+    {"row": 1, "errors": ["age: expected int, got str"]},
+    {"row": 2, "errors": ["name: empty value", "score: expected float, got NoneType"]}
+]</code></pre>`,
+    hint: `Iterate over records. For each record, iterate over schema fields. Check: is the field required and missing? Is it present but empty string? Is it present but wrong type? Collect errors per record.`,
+    solution: `<pre><code>def validate_records(records, schema):
+    results = []
+
+    for idx, record in enumerate(records):
+        errors = []
+        for field, rules in schema.items():
+            value = record.get(field)
+            required = rules.get("required", False)
+            expected_type = rules["type"]
+
+            # Missing field
+            if value is None and required:
+                if field in record:
+                    errors.append(
+                        f"{field}: expected {expected_type.__name__}, got NoneType"
+                    )
+                else:
+                    # field not present — ok if not required
+                    if required:
+                        errors.append(f"{field}: missing required field")
+                continue
+
+            # Empty string check (for required string fields)
+            if value == "" and required:
+                errors.append(f"{field}: empty value")
+                continue
+
+            # Skip type check if value is None and not required
+            if value is None:
+                continue
+
+            # Type mismatch
+            if not isinstance(value, expected_type):
+                actual = type(value).__name__
+                errors.append(
+                    f"{field}: expected {expected_type.__name__}, got {actual}"
+                )
+
+        results.append({"row": idx, "errors": errors})
+
+    return results</code></pre>`,
+    walkthrough: `This is a real-world pattern — schema validation before loading into a database. The tricky parts: distinguishing "field missing from dict" from "field present but None", handling empty strings separately, and using <code>type().__name__</code> for readable error messages. In an interview, start with the simplest checks and add edge cases incrementally.`,
+    concepts: ["isinstance()", "type().__name__", "schema-driven validation", "error accumulation pattern"]
+  },
+  {
+    id: 10,
+    title: "Two-Pass Data Pipeline",
+    difficulty: "hard",
+    skills: "generators · chaining transforms · functional style",
+    body: `<p>Build a mini pipeline: read raw records → clean → validate → enrich → output. Each stage is a separate function. Chain them together cleanly using generators.</p>
+<pre><code>Input:
+raw_records = [
+    '{"name": " Alice ", "amount": "150.50", "country": "US"}',
+    '{"name": "Bob", "amount": "invalid", "country": "UK"}',
+    '{"name": "", "amount": "200", "country": "IN"}',
+    '{"name": "Charlie", "amount": "300.25", "country": "US"}',
+]
+
+Pipeline stages:
+1. Parse: JSON string → dict
+2. Clean: strip whitespace from name, convert amount to float
+3. Validate: reject if name empty or amount not numeric
+4. Enrich: add a "currency" field based on country (US→USD, UK→GBP, IN→INR)
+
+Expected Output (valid records only):
+[
+    {"name": "Alice",   "amount": 150.5,  "country": "US", "currency": "USD"},
+    {"name": "Charlie", "amount": 300.25, "country": "US", "currency": "USD"}
+]</code></pre>`,
+    hint: `Write each stage as a generator function that takes an iterable and yields transformed items. Chain them: <code>enrich(validate(clean(parse(raw_records))))</code>. Each generator processes one record at a time — no intermediate lists.`,
+    solution: `<pre><code>import json
+
+def parse(records):
+    for raw in records:
+        try:
+            yield json.loads(raw)
+        except json.JSONDecodeError:
+            continue  # skip malformed JSON
+
+def clean(records):
+    for rec in records:
+        rec["name"] = rec.get("name", "").strip()
+        try:
+            rec["amount"] = float(rec["amount"])
+        except (ValueError, TypeError):
+            rec["amount"] = None
+        yield rec
+
+def validate(records):
+    for rec in records:
+        if not rec["name"]:
+            continue
+        if rec["amount"] is None:
+            continue
+        yield rec
+
+CURRENCY_MAP = {"US": "USD", "UK": "GBP", "IN": "INR", "EU": "EUR"}
+
+def enrich(records):
+    for rec in records:
+        rec["currency"] = CURRENCY_MAP.get(rec.get("country"), "UNKNOWN")
+        yield rec
+
+# Chain them together:
+def run_pipeline(raw_records):
+    pipeline = enrich(validate(clean(parse(raw_records))))
+    return list(pipeline)
+
+# Usage:
+result = run_pipeline(raw_records)</code></pre>`,
+    walkthrough: `This pattern mirrors real data pipelines — each stage is independently testable, composable, and memory-efficient. The generator chaining means records flow through one at a time (no intermediate lists). This is exactly how you'd explain pipeline architecture thinking in an interview, even without Spark. The interviewer wants to see that you think in stages, handle errors at each stage, and keep concerns separated.`,
+    concepts: ["generators as pipeline stages", "function composition", "separation of concerns", "error handling per stage", "lazy evaluation"]
+  }
+];
+
+// Render navigation
+const nav = document.getElementById('nav');
+const container = document.getElementById('problems-container');
+
+problems.forEach((p, i) => {
+  const btn = document.createElement('button');
+  btn.textContent = `P${p.id}`;
+  btn.onclick = () => showProblem(i);
+  if (i === 0) btn.classList.add('active');
+  nav.appendChild(btn);
+});
+
+// Render problems
+problems.forEach((p, i) => {
+  const div = document.createElement('div');
+  div.className = `problem ${i === 0 ? 'active' : ''}`;
+  div.id = `problem-${i}`;
+  div.innerHTML = `
+    <div class="problem-header">
+      <span class="problem-number">P${p.id}</span>
+      <span class="difficulty ${p.difficulty}">${p.difficulty}</span>
+    </div>
+    <h2 class="problem-title">${p.title}</h2>
+    <p class="skills-tested">${p.skills}</p>
+
+    <div class="section-label">Problem</div>
+    <div class="problem-body">${p.body}</div>
+
+    <button class="toggle-btn" onclick="toggleHint(${i})">Show hint</button>
+    <button class="toggle-btn" onclick="toggleSolution(${i})">Show solution</button>
+
+    <div class="hidden-content" id="hint-${i}">
+      <div class="hint-box">
+        <div class="section-label">Hint</div>
+        <p>${p.hint}</p>
+      </div>
+    </div>
+
+    <div class="hidden-content" id="solution-${i}">
+      <div class="solution-box">
+        <div class="section-label">Solution</div>
+        ${p.solution}
+        <div class="walkthrough">
+          <div class="section-label" style="margin-bottom:0.35rem">Why this works</div>
+          <p>${p.walkthrough}</p>
+        </div>
+        <div class="concepts-strip">
+          ${p.concepts.map(c => `<span class="concept-tag">${c}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  container.appendChild(div);
+});
+
+function showProblem(index) {
+  document.querySelectorAll('.problem').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.problem-nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(`problem-${index}`).classList.add('active');
+  nav.children[index].classList.add('active');
+}
+
+function toggleHint(index) {
+  const el = document.getElementById(`hint-${index}`);
+  el.classList.toggle('visible');
+}
+
+function toggleSolution(index) {
+  const el = document.getElementById(`solution-${index}`);
+  el.classList.toggle('visible');
+}
+</script>
+</body>
+</html>
