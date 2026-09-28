@@ -1,0 +1,1918 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Python Practice Lab</title>
+<style>
+/* ===== Charcoal Ember — Token System ===== */
+:root {
+  --bg: #faf6f0;
+  --bg-secondary: #f0ebe3;
+  --surface: #ffffff;
+  --surface-hover: #f5f0e8;
+  --border: #e0d5c5;
+  --border-hover: #d0c5b5;
+  --text: #2c2418;
+  --text-secondary: #5a4d3e;
+  --text-muted: #8a7d6e;
+  --accent: #c47830;
+  --accent-dim: rgba(196,120,48,0.12);
+  --accent-glow: rgba(196,120,48,0.25);
+  --green: #27ae60;
+  --green-dim: rgba(39,174,96,0.1);
+  --green-border: rgba(39,174,96,0.35);
+  --orange: #e67e22;
+  --orange-dim: rgba(230,126,34,0.1);
+  --orange-border: rgba(230,126,34,0.35);
+  --red: #c0392b;
+  --red-dim: rgba(192,57,43,0.1);
+  --blue: #2980b9;
+  --blue-dim: rgba(41,128,185,0.1);
+  --purple: #8e44ad;
+  --purple-dim: rgba(142,68,173,0.1);
+  --yellow: #f39c12;
+  --mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  --sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f0f0f;
+    --bg-secondary: #1a1a1a;
+    --surface: #1e1e1e;
+    --surface-hover: #252525;
+    --border: #2a2520;
+    --border-hover: #3d3530;
+    --text: #e8e0d4;
+    --text-secondary: #a89b8c;
+    --text-muted: #6b6156;
+    --accent: #d4873f;
+    --accent-dim: rgba(212,135,63,0.15);
+    --accent-glow: rgba(212,135,63,0.30);
+    --green: #27ae60;
+    --green-dim: rgba(39,174,96,0.12);
+    --green-border: rgba(39,174,96,0.3);
+    --orange: #e67e22;
+    --orange-dim: rgba(230,126,34,0.12);
+    --orange-border: rgba(230,126,34,0.3);
+    --red: #e74c3c;
+    --red-dim: rgba(231,76,60,0.12);
+    --blue: #3498db;
+    --blue-dim: rgba(52,152,219,0.12);
+    --purple: #9b59b6;
+    --purple-dim: rgba(155,89,182,0.12);
+    --yellow: #f1c40f;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --surface: #1e1e1e;
+  --surface-hover: #252525;
+  --border: #2a2520;
+  --border-hover: #3d3530;
+  --text: #e8e0d4;
+  --text-secondary: #a89b8c;
+  --text-muted: #6b6156;
+  --accent: #d4873f;
+  --accent-dim: rgba(212,135,63,0.15);
+  --accent-glow: rgba(212,135,63,0.30);
+  --green: #27ae60;
+  --green-dim: rgba(39,174,96,0.12);
+  --green-border: rgba(39,174,96,0.3);
+  --orange: #e67e22;
+  --orange-dim: rgba(230,126,34,0.12);
+  --orange-border: rgba(230,126,34,0.3);
+  --red: #e74c3c;
+  --red-dim: rgba(231,76,60,0.12);
+  --blue: #3498db;
+  --blue-dim: rgba(52,152,219,0.12);
+  --purple: #9b59b6;
+  --purple-dim: rgba(155,89,182,0.12);
+  --yellow: #f1c40f;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  padding-inline: 16px;
+  padding-block: 0;
+}
+
+.page-wrap {
+  max-width: 880px;
+  margin: 0 auto;
+  padding-block: 2rem 4rem;
+}
+
+/* ===== Scroll Progress Bar ===== */
+.scroll-progress {
+  position: fixed;
+  top: env(safe-area-inset-top, 0px);
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--yellow));
+  z-index: 1000;
+  transition: width 0.1s linear;
+}
+
+/* ===== Theme Toggle ===== */
+.theme-toggle {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--ease);
+}
+.theme-toggle:hover { border-color: var(--accent); box-shadow: 0 0 12px var(--accent-dim); }
+
+/* ===== Hero ===== */
+.hero {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg) 60%, var(--accent-dim) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 2rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--yellow) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero .subtitle {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ===== Progress Dashboard ===== */
+.progress-dashboard {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.progress-bar-wrap {
+  flex: 1;
+  min-width: 180px;
+}
+
+.progress-bar-outer {
+  width: 100%;
+  height: 8px;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.progress-bar-inner {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--green));
+  border-radius: 4px;
+  transition: width 0.4s var(--ease);
+  width: 0%;
+}
+
+.progress-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+}
+
+.stat-chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.stat-chip {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.stat-chip .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-solved { background: var(--green); }
+.dot-revisit { background: var(--orange); }
+.dot-unsolved { background: var(--text-muted); }
+
+/* ===== Category Strip ===== */
+.category-strip {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.cat-badge {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 4px;
+  border: 1px solid;
+}
+
+.cat-core { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.cat-gen { background: var(--green-dim); color: var(--green); border-color: var(--green-border); }
+.cat-pandas { background: var(--orange-dim); color: var(--orange); border-color: var(--orange-border); }
+
+/* ===== Filter Row ===== */
+.filter-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.filter-btn {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.filter-btn:hover { border-color: var(--accent); color: var(--text); }
+.filter-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+/* ===== Problem Nav ===== */
+.problem-nav {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.nav-btn {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.35rem 0.7rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  position: relative;
+}
+
+.nav-btn:hover { border-color: var(--accent); color: var(--text); background: var(--surface-hover); }
+.nav-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+.nav-btn.cat-generators { border-color: var(--green-border); }
+.nav-btn.cat-generators.active { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+.nav-btn.cat-pandas { border-color: var(--orange-border); }
+.nav-btn.cat-pandas.active { background: var(--orange-dim); border-color: var(--orange); color: var(--orange); }
+
+/* Status indicator on nav buttons */
+.nav-btn .status-dot {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--bg);
+}
+
+.nav-btn .status-dot.solved { background: var(--green); }
+.nav-btn .status-dot.revisit { background: var(--orange); }
+
+/* ===== Problem Card ===== */
+.problem {
+  display: none;
+  animation: fadeIn 0.25s var(--ease);
+}
+
+.problem.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.problem-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.problem-number {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  flex-shrink: 0;
+}
+
+.difficulty {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.difficulty.medium { color: var(--orange); background: var(--orange-dim); }
+.difficulty.hard { color: var(--red); background: var(--red-dim); }
+
+.problem-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.01em;
+}
+
+.skills-tested {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-family: var(--mono);
+  margin-bottom: 1rem;
+}
+
+/* ===== Status Buttons (per problem) ===== */
+.status-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.status-row-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 0.25rem;
+}
+
+.status-btn {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.status-btn.unsolved {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+}
+.status-btn.unsolved:hover { border-color: var(--text-muted); }
+.status-btn.unsolved.active { border-color: var(--text-muted); background: var(--bg-secondary); color: var(--text-secondary); }
+
+.status-btn.solved {
+  border: 1px solid var(--green-border);
+  background: transparent;
+  color: var(--green);
+}
+.status-btn.solved:hover { background: var(--green-dim); }
+.status-btn.solved.active { background: var(--green-dim); border-color: var(--green); font-weight: 600; }
+
+.status-btn.revisit {
+  border: 1px solid var(--orange-border);
+  background: transparent;
+  color: var(--orange);
+}
+.status-btn.revisit:hover { background: var(--orange-dim); }
+.status-btn.revisit.active { background: var(--orange-dim); border-color: var(--orange); font-weight: 600; }
+
+/* ===== Section Label ===== */
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+/* ===== Problem Body ===== */
+.problem-body {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.problem-body p { margin-bottom: 0.75rem; }
+.problem-body p:last-child { margin-bottom: 0; }
+
+pre {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+  white-space: pre;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.84em;
+  background: var(--bg-secondary);
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+}
+
+pre code { background: none; padding: 0; }
+
+/* ===== Toggle Buttons ===== */
+.toggle-btn {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.toggle-btn:hover { border-color: var(--accent); color: var(--text); }
+
+.hidden-content {
+  display: none;
+  margin-top: 0.75rem;
+  animation: fadeIn 0.25s var(--ease);
+}
+
+.hidden-content.visible { display: block; }
+
+/* ===== Hint & Solution Boxes ===== */
+.hint-box {
+  background: var(--orange-dim);
+  border-left: 3px solid var(--orange);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.hint-box .section-label { color: var(--orange); }
+
+.solution-box {
+  background: var(--green-dim);
+  border-left: 3px solid var(--green);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.solution-box .section-label { color: var(--green); }
+
+.solution-box pre {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.walkthrough {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--green-border);
+  font-size: 0.9rem;
+}
+
+.walkthrough p { margin-bottom: 0.5rem; }
+
+.concepts-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 1rem;
+}
+
+.concept-tag {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--purple);
+  background: var(--purple-dim);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* ===== Navigation Arrows ===== */
+.nav-arrows {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.arrow-btn {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.arrow-btn:hover { border-color: var(--accent); color: var(--accent); }
+.arrow-btn:disabled { opacity: 0.35; cursor: default; }
+.arrow-btn:disabled:hover { border-color: var(--border); color: var(--text-secondary); }
+
+/* ===== Footer ===== */
+.footer-note {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.reset-btn {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--red-dim);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--red);
+  cursor: pointer;
+  margin-top: 0.75rem;
+  transition: all 0.2s var(--ease);
+}
+
+.reset-btn:hover { background: var(--red-dim); }
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ===== Mobile ===== */
+@media (max-width: 600px) {
+  .hero { padding: 1.25rem; }
+  .hero h1 { font-size: 1.3rem; }
+  .progress-dashboard { flex-direction: column; align-items: stretch; }
+  .stat-chips { justify-content: center; }
+  .nav-arrows { gap: 0.75rem; }
+  .arrow-btn { flex: 1; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀</button>
+
+<div class="page-wrap">
+  <div class="hero">
+    <h1>Python Data Transformation Practice</h1>
+    <p class="subtitle">16 problems calibrated for Senior DE live coding — pure Python, no Spark</p>
+
+    <div class="progress-dashboard">
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-outer">
+          <div class="progress-bar-inner" id="progressBar"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">0 / 16 completed</div>
+      </div>
+      <div class="stat-chips">
+        <div class="stat-chip"><span class="dot dot-solved"></span> <span id="countSolved">0</span> Solved</div>
+        <div class="stat-chip"><span class="dot dot-revisit"></span> <span id="countRevisit">0</span> Revisit</div>
+        <div class="stat-chip"><span class="dot dot-unsolved"></span> <span id="countUnsolved">16</span> Unsolved</div>
+      </div>
+    </div>
+
+    <div class="category-strip">
+      <span class="cat-badge cat-core">P1–P10 · Core Python</span>
+      <span class="cat-badge cat-gen">P11–P13 · Generators</span>
+      <span class="cat-badge cat-pandas">P14–P16 · Pandas</span>
+    </div>
+  </div>
+
+  <div class="filter-row" id="filterRow">
+    <button class="filter-btn active" data-filter="all">All (16)</button>
+    <button class="filter-btn" data-filter="unsolved">Unsolved</button>
+    <button class="filter-btn" data-filter="solved">Solved</button>
+    <button class="filter-btn" data-filter="revisit">Revisit</button>
+  </div>
+
+  <div class="problem-nav" id="nav"></div>
+  <div id="problems-container"></div>
+
+  <div class="nav-arrows">
+    <button class="arrow-btn" id="prevBtn" disabled>← Prev</button>
+    <button class="arrow-btn" id="nextBtn">Next →</button>
+  </div>
+
+  <div class="footer-note">
+    Target: 15–20 min per problem. Practice in your IDE with AI/Copilot off. Talk through your approach out loud before writing code.
+    <br><button class="reset-btn" id="resetBtn">Reset all progress</button>
+  </div>
+</div>
+
+<script>
+const problems = [
+  {
+    id: 1, title: "Flatten Nested Transactions", difficulty: "medium", category: "core",
+    skills: "nested dicts · list comprehension · json traversal",
+    body: `<p>You receive a list of customer records, each containing a nested list of transactions. Write a function that flattens this into a single list of dicts, each containing the customer name and individual transaction details.</p>
+<pre><code>Input:
+customers = [
+    {
+        "name": "Alice",
+        "transactions": [
+            {"id": "T1", "amount": 150.0, "currency": "USD"},
+            {"id": "T2", "amount": 89.50, "currency": "EUR"}
+        ]
+    },
+    {
+        "name": "Bob",
+        "transactions": [
+            {"id": "T3", "amount": 200.0, "currency": "USD"}
+        ]
+    }
+]
+
+Expected Output:
+[
+    {"customer": "Alice", "id": "T1", "amount": 150.0, "currency": "USD"},
+    {"customer": "Alice", "id": "T2", "amount": 89.50, "currency": "EUR"},
+    {"customer": "Bob",   "id": "T3", "amount": 200.0, "currency": "USD"}
+]</code></pre>
+<p><strong>Follow-up:</strong> What if some customers have no transactions key, or transactions is None?</p>`,
+    hint: `Think about a nested loop — outer loop over customers, inner loop over transactions. For each transaction, merge the customer name into it. For the follow-up, use <code>.get("transactions") or []</code> to handle missing/None.`,
+    solution: `<pre><code>def flatten_transactions(customers):
+    result = []
+    for customer in customers:
+        name = customer["name"]
+        for txn in customer.get("transactions") or []:
+            result.append({
+                "customer": name,
+                **txn
+            })
+    return result
+
+# One-liner version:
+def flatten_transactions_v2(customers):
+    return [
+        {"customer": c["name"], **txn}
+        for c in customers
+        for txn in (c.get("transactions") or [])
+    ]</code></pre>`,
+    walkthrough: `The <code>**txn</code> unpacking spreads transaction fields into the new dict. Using <code>.get("transactions") or []</code> handles both missing keys and None values. The list comprehension version shows fluency but the explicit loop is clearer during an interview — use whichever you're more comfortable explaining.`,
+    concepts: ["dict unpacking", "nested loops", "defensive .get()", "list comprehension"]
+  },
+  {
+    id: 2, title: "Deduplicate by Latest Timestamp", difficulty: "medium", category: "core",
+    skills: "defaultdict · sorting · dict operations",
+    body: `<p>Given a list of event records with possible duplicates (same <code>event_id</code>), keep only the record with the latest <code>timestamp</code> for each event.</p>
+<pre><code>Input:
+events = [
+    {"event_id": "E1", "timestamp": "2024-03-15T10:00:00", "status": "pending"},
+    {"event_id": "E2", "timestamp": "2024-03-15T09:00:00", "status": "done"},
+    {"event_id": "E1", "timestamp": "2024-03-15T14:00:00", "status": "done"},
+    {"event_id": "E3", "timestamp": "2024-03-15T08:00:00", "status": "pending"},
+    {"event_id": "E2", "timestamp": "2024-03-15T12:00:00", "status": "failed"},
+]
+
+Expected Output (order doesn't matter):
+[
+    {"event_id": "E1", "timestamp": "2024-03-15T14:00:00", "status": "done"},
+    {"event_id": "E2", "timestamp": "2024-03-15T12:00:00", "status": "failed"},
+    {"event_id": "E3", "timestamp": "2024-03-15T08:00:00", "status": "pending"}
+]</code></pre>
+<p><strong>Follow-up:</strong> What if there are millions of records? How would you optimize memory?</p>`,
+    hint: `Iterate once, maintaining a dict keyed by event_id. For each record, compare timestamps and keep the later one. ISO timestamps sort lexicographically, so you can compare them as strings.`,
+    solution: `<pre><code>def dedup_latest(events):
+    latest = {}
+    for event in events:
+        eid = event["event_id"]
+        if eid not in latest or event["timestamp"] > latest[eid]["timestamp"]:
+            latest[eid] = event
+    return list(latest.values())
+
+# Follow-up: for millions of records in a file,
+# use a generator to stream without loading all at once:
+import json
+
+def dedup_from_file(filepath):
+    latest = {}  # only stores one record per event_id
+    with open(filepath) as f:
+        for line in f:
+            event = json.loads(line)
+            eid = event["event_id"]
+            if eid not in latest or event["timestamp"] > latest[eid]["timestamp"]:
+                latest[eid] = event
+    return list(latest.values())</code></pre>`,
+    walkthrough: `This is O(n) time and O(unique keys) space — optimal. The key insight is that ISO 8601 timestamps compare correctly as strings, so no datetime parsing needed. For the follow-up, streaming from a file line-by-line keeps memory to O(unique event_ids) instead of O(total records).`,
+    concepts: ["dict as lookup", "string comparison for ISO timestamps", "streaming / generators", "O(n) single-pass"]
+  },
+  {
+    id: 3, title: "Group and Aggregate Sales", difficulty: "medium", category: "core",
+    skills: "defaultdict · Counter · sorting with lambda",
+    body: `<p>Given a list of sales records, produce a summary: for each <code>region</code>, the total revenue, number of transactions, and the top-selling product (by total amount).</p>
+<pre><code>Input:
+sales = [
+    {"region": "APAC", "product": "Widget",  "amount": 500},
+    {"region": "EMEA", "product": "Gadget",  "amount": 300},
+    {"region": "APAC", "product": "Gizmo",   "amount": 700},
+    {"region": "APAC", "product": "Widget",  "amount": 200},
+    {"region": "EMEA", "product": "Widget",  "amount": 450},
+    {"region": "EMEA", "product": "Gadget",  "amount": 150},
+]
+
+Expected Output:
+{
+    "APAC": {"total_revenue": 1400, "num_transactions": 3, "top_product": "Gizmo"},
+    "EMEA": {"total_revenue": 900,  "num_transactions": 3, "top_product": "Widget"}
+}</code></pre>`,
+    hint: `Use a <code>defaultdict</code> to accumulate per-region. For top product, you need a nested grouping: region → product → total amount. Then find the max within each region.`,
+    solution: `<pre><code>from collections import defaultdict
+
+def summarize_sales(sales):
+    region_totals = defaultdict(lambda: {"revenue": 0, "count": 0})
+    product_revenue = defaultdict(lambda: defaultdict(int))
+
+    for s in sales:
+        region = s["region"]
+        region_totals[region]["revenue"] += s["amount"]
+        region_totals[region]["count"] += 1
+        product_revenue[region][s["product"]] += s["amount"]
+
+    result = {}
+    for region, totals in region_totals.items():
+        top_product = max(product_revenue[region],
+                         key=product_revenue[region].get)
+        result[region] = {
+            "total_revenue": totals["revenue"],
+            "num_transactions": totals["count"],
+            "top_product": top_product
+        }
+    return result</code></pre>`,
+    walkthrough: `Two defaultdicts let you accumulate in a single pass. The nested <code>defaultdict(int)</code> for product_revenue handles the two-level grouping cleanly. <code>max(dict, key=dict.get)</code> is a common pattern to find the key with the highest value — worth memorizing.`,
+    concepts: ["defaultdict", "nested defaultdict", "max() with key=", "single-pass aggregation"]
+  },
+  {
+    id: 4, title: "Parse and Clean CSV Data", difficulty: "medium", category: "core",
+    skills: "csv module · error handling · type conversion",
+    body: `<p>Read a CSV string (simulating a file), clean the data, and return structured records. Handle: leading/trailing whitespace, empty rows, invalid amounts (non-numeric), and missing required fields.</p>
+<pre><code>Input (as a string — imagine reading from a file):
+csv_data = """name,email,amount,date
+Alice, alice@example.com, 150.50, 2024-01-15
+Bob, bob@example.com, , 2024-01-16
+, charlie@example.com, 200, 2024-01-17
+Dave, dave@example.com, not_a_number, 2024-01-18
+Eve, eve@example.com, 300.75, 2024-01-19
+
+"""
+
+Expected Output:
+valid = [
+    {"name": "Alice", "email": "alice@example.com", "amount": 150.50, "date": "2024-01-15"},
+    {"name": "Eve",   "email": "eve@example.com",   "amount": 300.75, "date": "2024-01-19"}
+]
+errors = [
+    {"row": 3, "reason": "missing amount", "data": {"name": "Bob", ...}},
+    {"row": 4, "reason": "missing name",   "data": {"name": "",   ...}},
+    {"row": 5, "reason": "invalid amount", "data": {"name": "Dave", ...}}
+]</code></pre>
+<p><strong>Follow-up:</strong> How would you modify this to process a 10GB file?</p>`,
+    hint: `Use <code>csv.DictReader</code> with <code>io.StringIO</code> to simulate file reading. Strip all values. Validate each row: check for empty required fields, try <code>float()</code> conversion for amount. Separate valid and error records.`,
+    solution: `<pre><code>import csv
+import io
+
+def parse_and_clean(csv_data):
+    valid, errors = [], []
+    reader = csv.DictReader(io.StringIO(csv_data))
+
+    for row_num, row in enumerate(reader, start=2):
+        cleaned = {k: v.strip() for k, v in row.items()}
+        if not any(cleaned.values()):
+            continue
+        if not cleaned.get("name"):
+            errors.append({"row": row_num, "reason": "missing name", "data": cleaned})
+            continue
+        if not cleaned.get("amount"):
+            errors.append({"row": row_num, "reason": "missing amount", "data": cleaned})
+            continue
+        try:
+            cleaned["amount"] = float(cleaned["amount"])
+        except ValueError:
+            errors.append({"row": row_num, "reason": "invalid amount", "data": cleaned})
+            continue
+        valid.append(cleaned)
+    return valid, errors
+
+# For a 10GB file — yield instead of appending:
+def parse_large_file(filepath):
+    with open(filepath) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            cleaned = {k: v.strip() for k, v in row.items()}
+            if cleaned.get("name") and cleaned.get("amount"):
+                try:
+                    cleaned["amount"] = float(cleaned["amount"])
+                    yield cleaned
+                except ValueError:
+                    pass</code></pre>`,
+    walkthrough: `<code>csv.DictReader</code> handles header parsing automatically. The validation chain uses early <code>continue</code> to keep the happy path clean. For the 10GB follow-up: csv.DictReader already streams (doesn't load the file), and switching to <code>yield</code> makes the function a generator — the caller processes one row at a time.`,
+    concepts: ["csv.DictReader", "io.StringIO", "try/except for type validation", "generators for large files", "early return pattern"]
+  },
+  {
+    id: 5, title: "Nested JSON Flattening", difficulty: "hard", category: "core",
+    skills: "recursion · dict operations · key building",
+    body: `<p>Write a function that takes an arbitrarily nested JSON-like dict and flattens it into a single-level dict with dot-separated keys.</p>
+<pre><code>Input:
+data = {
+    "user": {
+        "name": "Alice",
+        "address": {
+            "city": "Bengaluru",
+            "zip": "560001"
+        },
+        "scores": [85, 92, 78]
+    },
+    "active": True
+}
+
+Expected Output:
+{
+    "user.name": "Alice",
+    "user.address.city": "Bengaluru",
+    "user.address.zip": "560001",
+    "user.scores": [85, 92, 78],
+    "active": True
+}</code></pre>
+<p><strong>Follow-up:</strong> What if you also want to flatten lists, producing keys like <code>user.scores.0</code>, <code>user.scores.1</code>?</p>`,
+    hint: `Use recursion. Base case: value is not a dict → add to result with the full key path. Recursive case: value is a dict → recurse with updated prefix. Build the key prefix with dots.`,
+    solution: `<pre><code>def flatten_json(data, prefix="", separator="."):
+    result = {}
+    for key, value in data.items():
+        full_key = f"{prefix}{separator}{key}" if prefix else key
+        if isinstance(value, dict):
+            result.update(flatten_json(value, full_key, separator))
+        else:
+            result[full_key] = value
+    return result
+
+# Follow-up: also flatten lists
+def flatten_json_deep(data, prefix="", sep="."):
+    result = {}
+    if isinstance(data, dict):
+        for key, value in data.items():
+            full_key = f"{prefix}{sep}{key}" if prefix else key
+            result.update(flatten_json_deep(value, full_key, sep))
+    elif isinstance(data, list):
+        for i, item in enumerate(data):
+            full_key = f"{prefix}{sep}{i}" if prefix else str(i)
+            result.update(flatten_json_deep(item, full_key, sep))
+    else:
+        result[prefix] = data
+    return result</code></pre>`,
+    walkthrough: `This is a classic recursion problem that appears in DE interviews because it mirrors real ETL work — flattening API responses for database storage. The follow-up version handles both dicts and lists recursively. Key patterns: <code>isinstance()</code> for type checking, <code>dict.update()</code> for merging results, and building the key prefix through recursion.`,
+    concepts: ["recursion", "isinstance()", "dict.update()", "key prefix building", "handling mixed types"]
+  },
+  {
+    id: 6, title: "Sliding Window: Moving Average", difficulty: "medium", category: "core",
+    skills: "deque · generators · edge cases",
+    body: `<p>Compute a sliding window moving average over a stream of numbers. Given a list of values and a window size <code>k</code>, return the moving average at each position (starting from when the window is full).</p>
+<pre><code>Input:
+values = [10, 20, 30, 40, 50, 60, 70]
+k = 3
+
+Expected Output:
+[20.0, 30.0, 40.0, 50.0, 60.0]
+# Explanation:
+# (10+20+30)/3=20, (20+30+40)/3=30, (30+40+50)/3=40, ...</code></pre>
+<p><strong>Follow-up:</strong> Implement as a generator that could process an infinite stream. What's the time complexity?</p>`,
+    hint: `Maintain a running sum. When the window is full, subtract the element leaving and add the new one. Use <code>collections.deque(maxlen=k)</code> to automatically evict old elements.`,
+    solution: `<pre><code>from collections import deque
+
+def moving_average(values, k):
+    result = []
+    window = deque(maxlen=k)
+    window_sum = 0
+    for val in values:
+        if len(window) == k:
+            window_sum -= window[0]
+        window.append(val)
+        window_sum += val
+        if len(window) == k:
+            result.append(window_sum / k)
+    return result
+
+# Generator version for infinite streams:
+def moving_average_stream(stream, k):
+    window = deque(maxlen=k)
+    window_sum = 0
+    for val in stream:
+        if len(window) == k:
+            window_sum -= window[0]
+        window.append(val)
+        window_sum += val
+        if len(window) == k:
+            yield window_sum / k</code></pre>`,
+    walkthrough: `The running sum trick gives O(1) per element instead of O(k) — you don't re-sum the window each time. <code>deque(maxlen=k)</code> automatically drops the oldest element when full, but we subtract it from the sum before it's evicted. The generator version uses <code>yield</code> so it works on infinite streams with constant memory.`,
+    concepts: ["deque with maxlen", "running sum optimization", "generators for streaming", "O(n) time O(k) space"]
+  },
+  {
+    id: 7, title: "Merge Overlapping Intervals", difficulty: "medium", category: "core",
+    skills: "sorting · interval logic · tuple unpacking",
+    body: `<p>Given a list of time intervals (as tuples or lists), merge all overlapping intervals. This models real DE problems like merging overlapping session logs or time ranges.</p>
+<pre><code>Input:
+intervals = [(1, 3), (2, 6), (8, 10), (15, 18), (9, 11)]
+
+Expected Output:
+[(1, 6), (8, 11), (15, 18)]</code></pre>
+<p><strong>Follow-up:</strong> What if intervals are given as ISO timestamp strings instead of integers?</p>`,
+    hint: `Sort by start time first. Then iterate: if the current interval overlaps with the last merged interval (current start ≤ last end), extend the last merged interval. Otherwise, start a new merged interval.`,
+    solution: `<pre><code>def merge_intervals(intervals):
+    if not intervals:
+        return []
+    sorted_iv = sorted(intervals, key=lambda x: x[0])
+    merged = [list(sorted_iv[0])]
+    for start, end in sorted_iv[1:]:
+        if start <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], end)
+        else:
+            merged.append([start, end])
+    return [tuple(iv) for iv in merged]
+
+# Follow-up: ISO timestamps work the same way
+# because they sort lexicographically:
+def merge_time_intervals(intervals):
+    if not intervals:
+        return []
+    sorted_iv = sorted(intervals, key=lambda x: x[0])
+    merged = [list(sorted_iv[0])]
+    for start, end in sorted_iv[1:]:
+        if start <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], end)
+        else:
+            merged.append([start, end])
+    return [tuple(iv) for iv in merged]</code></pre>`,
+    walkthrough: `Sort first, then single pass — O(n log n) total. The overlap check is <code>start <= last_end</code>. Using <code>max()</code> for the end handles the case where one interval is fully contained within another. This is a LeetCode classic (Problem 56) but also genuinely useful in DE for session merging and event consolidation.`,
+    concepts: ["sorting with lambda", "greedy algorithm", "interval merging", "tuple unpacking"]
+  },
+  {
+    id: 8, title: "Log File Parser with Regex", difficulty: "medium", category: "core",
+    skills: "regex · file parsing · Counter · datetime",
+    body: `<p>Parse web server log entries to extract the timestamp, HTTP method, path, and status code. Then find: how many requests per status code, and the top 3 most requested paths.</p>
+<pre><code>Input (log lines):
+logs = [
+    '2024-03-15T10:23:45 GET /api/users 200',
+    '2024-03-15T10:23:46 POST /api/orders 201',
+    '2024-03-15T10:23:47 GET /api/users 200',
+    '2024-03-15T10:23:48 GET /api/products 500',
+    '2024-03-15T10:23:49 GET /api/users 200',
+    '2024-03-15T10:23:50 DELETE /api/orders/123 404',
+    '2024-03-15T10:23:51 POST /api/orders 201',
+    '2024-03-15T10:23:52 GET /api/products 200',
+]
+
+Expected Output:
+status_counts = {200: 4, 201: 2, 500: 1, 404: 1}
+top_paths = [("/api/users", 3), ("/api/orders", 2), ("/api/products", 2)]</code></pre>`,
+    hint: `Use <code>re.match()</code> or simply <code>str.split()</code> — these logs are space-delimited so regex isn't strictly necessary, but knowing both approaches is valuable. Use <code>Counter</code> for both aggregations, and <code>.most_common(3)</code> for top paths.`,
+    solution: `<pre><code>import re
+from collections import Counter
+
+def parse_logs(logs):
+    pattern = r'(\\S+)\\s+(GET|POST|PUT|DELETE|PATCH)\\s+(\\S+)\\s+(\\d{3})'
+    status_counts = Counter()
+    path_counts = Counter()
+    for line in logs:
+        match = re.match(pattern, line)
+        if match:
+            timestamp, method, path, status = match.groups()
+            status_counts[int(status)] += 1
+            path_counts[path] += 1
+    top_paths = path_counts.most_common(3)
+    return dict(status_counts), top_paths
+
+# Simpler version without regex (for well-structured logs):
+def parse_logs_simple(logs):
+    status_counts = Counter()
+    path_counts = Counter()
+    for line in logs:
+        parts = line.strip().split()
+        if len(parts) == 4:
+            _, method, path, status = parts
+            status_counts[int(status)] += 1
+            path_counts[path] += 1
+    return dict(status_counts), path_counts.most_common(3)</code></pre>`,
+    walkthrough: `In an interview, offering both approaches — regex for messy logs, split() for clean ones — shows judgment. <code>Counter.most_common(n)</code> returns the n most frequent items as (element, count) tuples, which is exactly what "top N" questions want. Knowing when to use regex vs split() is a seniority signal.`,
+    concepts: ["re.match()", "Counter", ".most_common()", "str.split()", "structured vs unstructured parsing"]
+  },
+  {
+    id: 9, title: "Build a Schema Validator", difficulty: "hard", category: "core",
+    skills: "type checking · recursion · error collection",
+    body: `<p>Write a function that validates a list of records against a schema definition. The schema specifies field names, expected types, and whether fields are required. Collect all validation errors.</p>
+<pre><code>schema = {
+    "name":   {"type": str,   "required": True},
+    "age":    {"type": int,   "required": True},
+    "email":  {"type": str,   "required": False},
+    "score":  {"type": float, "required": True},
+}
+
+records = [
+    {"name": "Alice", "age": 30, "score": 95.5},
+    {"name": "Bob",   "age": "twenty", "email": "bob@x.com", "score": 88.0},
+    {"name": "",      "age": 25, "score": None},
+]
+
+Expected Output:
+[
+    {"row": 0, "errors": []},
+    {"row": 1, "errors": ["age: expected int, got str"]},
+    {"row": 2, "errors": ["name: empty value", "score: expected float, got NoneType"]}
+]</code></pre>`,
+    hint: `Iterate over records. For each record, iterate over schema fields. Check: is the field required and missing? Is it present but empty string? Is it present but wrong type? Collect errors per record.`,
+    solution: `<pre><code>def validate_records(records, schema):
+    results = []
+    for idx, record in enumerate(records):
+        errors = []
+        for field, rules in schema.items():
+            value = record.get(field)
+            required = rules.get("required", False)
+            expected_type = rules["type"]
+            if value is None and required:
+                if field in record:
+                    errors.append(f"{field}: expected {expected_type.__name__}, got NoneType")
+                else:
+                    errors.append(f"{field}: missing required field")
+                continue
+            if value == "" and required:
+                errors.append(f"{field}: empty value")
+                continue
+            if value is None:
+                continue
+            if not isinstance(value, expected_type):
+                actual = type(value).__name__
+                errors.append(f"{field}: expected {expected_type.__name__}, got {actual}")
+        results.append({"row": idx, "errors": errors})
+    return results</code></pre>`,
+    walkthrough: `This is a real-world pattern — schema validation before loading into a database. The tricky parts: distinguishing "field missing from dict" from "field present but None", handling empty strings separately, and using <code>type().__name__</code> for readable error messages. In an interview, start with the simplest checks and add edge cases incrementally.`,
+    concepts: ["isinstance()", "type().__name__", "schema-driven validation", "error accumulation pattern"]
+  },
+  {
+    id: 10, title: "Two-Pass Data Pipeline", difficulty: "hard", category: "core",
+    skills: "generators · chaining transforms · functional style",
+    body: `<p>Build a mini pipeline: read raw records → clean → validate → enrich → output. Each stage is a separate function. Chain them together cleanly using generators.</p>
+<pre><code>Input:
+raw_records = [
+    '{"name": " Alice ", "amount": "150.50", "country": "US"}',
+    '{"name": "Bob", "amount": "invalid", "country": "UK"}',
+    '{"name": "", "amount": "200", "country": "IN"}',
+    '{"name": "Charlie", "amount": "300.25", "country": "US"}',
+]
+
+Pipeline stages:
+1. Parse: JSON string → dict
+2. Clean: strip whitespace from name, convert amount to float
+3. Validate: reject if name empty or amount not numeric
+4. Enrich: add a "currency" field based on country (US→USD, UK→GBP, IN→INR)
+
+Expected Output (valid records only):
+[
+    {"name": "Alice",   "amount": 150.5,  "country": "US", "currency": "USD"},
+    {"name": "Charlie", "amount": 300.25, "country": "US", "currency": "USD"}
+]</code></pre>`,
+    hint: `Write each stage as a generator function that takes an iterable and yields transformed items. Chain them: <code>enrich(validate(clean(parse(raw_records))))</code>. Each generator processes one record at a time — no intermediate lists.`,
+    solution: `<pre><code>import json
+
+def parse(records):
+    for raw in records:
+        try:
+            yield json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+
+def clean(records):
+    for rec in records:
+        rec["name"] = rec.get("name", "").strip()
+        try:
+            rec["amount"] = float(rec["amount"])
+        except (ValueError, TypeError):
+            rec["amount"] = None
+        yield rec
+
+def validate(records):
+    for rec in records:
+        if not rec["name"]:
+            continue
+        if rec["amount"] is None:
+            continue
+        yield rec
+
+CURRENCY_MAP = {"US": "USD", "UK": "GBP", "IN": "INR", "EU": "EUR"}
+
+def enrich(records):
+    for rec in records:
+        rec["currency"] = CURRENCY_MAP.get(rec.get("country"), "UNKNOWN")
+        yield rec
+
+def run_pipeline(raw_records):
+    pipeline = enrich(validate(clean(parse(raw_records))))
+    return list(pipeline)</code></pre>`,
+    walkthrough: `This pattern mirrors real data pipelines — each stage is independently testable, composable, and memory-efficient. The generator chaining means records flow through one at a time (no intermediate lists). This is exactly how you'd explain pipeline architecture thinking in an interview, even without Spark.`,
+    concepts: ["generators as pipeline stages", "function composition", "separation of concerns", "error handling per stage", "lazy evaluation"]
+  },
+  {
+    id: 11, title: "Stream Large File in Chunks", difficulty: "medium", category: "generators",
+    skills: "generators · yield · file I/O · memory efficiency",
+    body: `<p>Write a generator function that reads a large JSONL file (one JSON object per line) and yields batches of <code>n</code> records at a time. This is a core pattern in DE — you never load a 50GB file into memory at once.</p>
+<pre><code>Input (imagine a file with thousands of lines):
+# events.jsonl
+{"event_id": "E1", "type": "click", "ts": "2024-03-15T10:00:00"}
+{"event_id": "E2", "type": "view",  "ts": "2024-03-15T10:00:01"}
+{"event_id": "E3", "type": "click", "ts": "2024-03-15T10:00:02"}
+{"event_id": "E4", "type": "purchase", "ts": "2024-03-15T10:00:03"}
+{"event_id": "E5", "type": "click", "ts": "2024-03-15T10:00:04"}
+
+batch_size = 2
+
+Expected behavior (each yield):
+Batch 1: [{"event_id": "E1", ...}, {"event_id": "E2", ...}]
+Batch 2: [{"event_id": "E3", ...}, {"event_id": "E4", ...}]
+Batch 3: [{"event_id": "E5", ...}]  # last batch can be smaller</code></pre>
+<p><strong>Follow-up:</strong> How would you add a filter (e.g., only "click" events) without breaking the generator pattern?</p>`,
+    hint: `Build a batch list. Append each parsed record. When the list hits size <code>n</code>, <code>yield</code> it and reset. After the loop ends, yield any remaining records in the final partial batch.`,
+    solution: `<pre><code>import json
+
+def read_jsonl_batches(filepath, batch_size):
+    batch = []
+    with open(filepath) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            batch.append(json.loads(line))
+            if len(batch) == batch_size:
+                yield batch
+                batch = []
+    if batch:  # don't forget the last partial batch
+        yield batch
+
+# Follow-up: add filtering without breaking the generator
+def read_jsonl_filtered(filepath, batch_size, predicate=None):
+    batch = []
+    with open(filepath) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            record = json.loads(line)
+            if predicate and not predicate(record):
+                continue
+            batch.append(record)
+            if len(batch) == batch_size:
+                yield batch
+                batch = []
+    if batch:
+        yield batch
+
+# Usage with filter:
+clicks = read_jsonl_filtered(
+    "events.jsonl", 1000,
+    predicate=lambda r: r["type"] == "click"
+)</code></pre>`,
+    walkthrough: `The critical detail interviewers look for: <code>if batch:</code> after the loop to yield the final partial batch — forgetting this loses data silently. This pattern is the foundation of every streaming ETL: read → batch → process → repeat. Memory stays at O(batch_size) no matter how large the file is. The predicate follow-up shows you can compose behaviors without nested generators.`,
+    concepts: ["yield for batching", "JSONL streaming", "O(batch_size) memory", "predicate filtering", "partial final batch"]
+  },
+  {
+    id: 12, title: "Generator Pipeline: Filter → Transform → Aggregate", difficulty: "hard", category: "generators",
+    skills: "generator chaining · yield from · itertools · send()",
+    body: `<p>Build a multi-stage generator pipeline that processes a stream of sensor readings. Each stage is a separate generator, and they chain together lazily — nothing runs until you consume the final output.</p>
+<pre><code>Input:
+readings = [
+    {"sensor": "temp_1", "value": 22.5, "unit": "C", "quality": "good"},
+    {"sensor": "temp_1", "value": 999,  "unit": "C", "quality": "error"},
+    {"sensor": "hum_1",  "value": 45.0, "unit": "%", "quality": "good"},
+    {"sensor": "temp_2", "value": 18.3, "unit": "C", "quality": "good"},
+    {"sensor": "temp_1", "value": 23.1, "unit": "C", "quality": "good"},
+    {"sensor": "hum_1",  "value": 50.2, "unit": "%", "quality": "good"},
+    {"sensor": "temp_2", "value": 17.9, "unit": "C", "quality": "good"},
+]
+
+Pipeline:
+1. filter_quality  → drop records where quality != "good"
+2. convert_units   → convert Celsius to Fahrenheit (value * 9/5 + 32)
+3. group_by_sensor → yield (sensor_id, [values]) when sensor changes or stream ends
+
+Expected final output (after consuming all stages):
+{
+    "temp_1": {"count": 2, "avg": 72.77},
+    "hum_1":  {"count": 2, "avg": 47.6},
+    "temp_2": {"count": 2, "avg": 63.38}
+}
+# Note: humidity values pass through convert_units unchanged (only unit="C" converts)</code></pre>`,
+    hint: `Write each stage as a generator that takes an iterable. <code>filter_quality</code> yields records where quality is "good". <code>convert_units</code> checks the unit field. For the final aggregation, use <code>defaultdict(list)</code> to group then compute stats. Chain: <code>aggregate(convert(filter(readings)))</code>.`,
+    solution: `<pre><code>from collections import defaultdict
+
+def filter_quality(stream):
+    for reading in stream:
+        if reading["quality"] == "good":
+            yield reading
+
+def convert_units(stream):
+    for reading in stream:
+        if reading["unit"] == "C":
+            reading = {
+                **reading,
+                "value": round(reading["value"] * 9/5 + 32, 2),
+                "unit": "F"
+            }
+        yield reading
+
+def aggregate_by_sensor(stream):
+    groups = defaultdict(list)
+    for reading in stream:
+        groups[reading["sensor"]].append(reading["value"])
+    return {
+        sensor: {
+            "count": len(vals),
+            "avg": round(sum(vals) / len(vals), 2)
+        }
+        for sensor, vals in groups.items()
+    }
+
+def run_sensor_pipeline(readings):
+    pipeline = convert_units(filter_quality(readings))
+    return aggregate_by_sensor(pipeline)
+
+# Bonus: generic pipe() helper
+def pipe(data, *stages):
+    for stage in stages:
+        data = stage(data)
+    return data
+
+result = pipe(readings, filter_quality, convert_units, aggregate_by_sensor)</code></pre>`,
+    walkthrough: `Each generator is a single-responsibility stage — testable in isolation, composable in any order. The <code>pipe()</code> helper is a pattern from functional programming: it applies each stage to the result of the previous one. Notice how <code>convert_units</code> creates a new dict (<code>{**reading, ...}</code>) instead of mutating the input — this prevents side effects between pipeline stages.`,
+    concepts: ["generator chaining", "dict spread to avoid mutation", "pipe() pattern", "lazy evaluation", "defaultdict aggregation"]
+  },
+  {
+    id: 13, title: "Infinite Sequence Generator with Backpressure", difficulty: "hard", category: "generators",
+    skills: "yield · itertools.islice · generator expressions · memory patterns",
+    body: `<p>Write a generator that produces an infinite stream of synthetic event data (simulating a message queue or Kafka topic). Then write consumer functions that can: take the first N events, take events until a condition, and sample every Kth event — all without loading everything into memory.</p>
+<pre><code>Requirements:
+1. event_stream() — infinite generator, yields events with incrementing IDs
+2. take_n(stream, n) — consume exactly n events
+3. take_until(stream, predicate) — consume until predicate returns True
+4. sample_every(stream, k) — yield every kth event (skip others)
+
+Expected behavior:
+stream = event_stream()
+first_5 = take_n(stream, 5)
+# [{"id": 1, "type": "click", ...}, ..., {"id": 5, ...}]
+
+stream2 = event_stream()
+until_purchase = take_until(stream2, lambda e: e["type"] == "purchase")
+# all events up to and including the first "purchase"
+
+stream3 = event_stream()
+sampled = take_n(sample_every(stream3, 10), 3)
+# every 10th event, take 3 of them → events with id 10, 20, 30</code></pre>
+<p><strong>Follow-up:</strong> How would you handle a generator that reads from a real network socket? What happens if you never close it?</p>`,
+    hint: `Use <code>while True</code> with <code>yield</code> for the infinite stream. <code>itertools.islice</code> can replace <code>take_n</code>. For <code>sample_every</code>, use <code>enumerate</code> and yield when <code>index % k == 0</code>. Remember: generators are lazy — the infinite loop only runs when you pull from it.`,
+    solution: `<pre><code>import random
+import itertools
+
+def event_stream(start_id=1):
+    event_types = ["click", "view", "purchase", "scroll", "logout"]
+    current_id = start_id
+    while True:
+        yield {
+            "id": current_id,
+            "type": random.choice(event_types),
+            "ts": f"2024-03-15T{10 + current_id // 3600:02d}:"
+                  f"{(current_id % 3600) // 60:02d}:"
+                  f"{current_id % 60:02d}",
+        }
+        current_id += 1
+
+def take_n(stream, n):
+    return list(itertools.islice(stream, n))
+
+def take_until(stream, predicate):
+    result = []
+    for item in stream:
+        result.append(item)
+        if predicate(item):
+            break
+    return result
+
+def sample_every(stream, k):
+    for i, item in enumerate(stream, 1):
+        if i % k == 0:
+            yield item
+
+# Follow-up: resource cleanup with contextmanager
+from contextlib import contextmanager
+
+@contextmanager
+def managed_stream(source_func, *args):
+    gen = source_func(*args)
+    try:
+        yield gen
+    finally:
+        gen.close()  # sends GeneratorExit
+
+with managed_stream(event_stream) as stream:
+    batch = take_n(stream, 100)
+# generator is properly closed here</code></pre>`,
+    walkthrough: `This is the Python version of how Kafka consumers work — infinite stream, consumer controls how much to pull. <code>itertools.islice</code> is the idiomatic way to take N from any iterable. The <code>sample_every</code> generator composes with <code>take_n</code> — you can stack generators endlessly. The follow-up about resource cleanup shows seniority: in production, generators reading from sockets or DB cursors must be closed, or you leak connections.`,
+    concepts: ["infinite generators", "itertools.islice", "generator composition", "contextmanager cleanup", "backpressure pattern"]
+  },
+  {
+    id: 14, title: "DataFrame Cleaning and Merging", difficulty: "medium", category: "pandas",
+    skills: "pandas · merge · fillna · dtypes · method chaining",
+    body: `<p>You have two DataFrames: <code>orders</code> (sales data with some messy values) and <code>products</code> (product catalog). Clean the orders data, merge with products, and produce a summary.</p>
+<pre><code>import pandas as pd
+
+orders = pd.DataFrame({
+    "order_id":    ["O1", "O2", "O3", "O4", "O5", "O6"],
+    "product_id":  ["P1", "P2", "P1", "P3", "P2", "P99"],
+    "quantity":    [2, None, 1, 3, 2, 1],
+    "price":       ["10.50", "twenty", "10.50", "30.00", "20.00", "5.00"],
+    "order_date":  ["2024-01-15", "2024-01-16", "2024-01-16",
+                    "2024-01-17", "2024-01-17", "2024-01-18"],
+})
+
+products = pd.DataFrame({
+    "product_id":   ["P1", "P2", "P3"],
+    "product_name": ["Widget", "Gadget", "Gizmo"],
+    "category":     ["Hardware", "Software", "Hardware"],
+})
+
+Expected Output (after clean + merge):
+   order_id product_id  quantity  price order_date product_name  category  total
+0       O1         P1       2.0  10.50 2024-01-15       Widget  Hardware  21.00
+1       O3         P1       1.0  10.50 2024-01-16       Widget  Hardware  10.50
+2       O4         P3       3.0  30.00 2024-01-17        Gizmo  Hardware  90.00
+3       O5         P2       2.0  20.00 2024-01-17       Gadget  Software  40.00
+
+Dropped: O2 (invalid price), O6 (no matching product)</code></pre>
+<p><strong>Follow-up:</strong> How would you handle this if orders had 100M rows and didn't fit in memory?</p>`,
+    hint: `Use <code>pd.to_numeric(errors='coerce')</code> to convert price — invalid values become NaN. Drop NaN rows. Use <code>merge(how='inner')</code> to keep only orders with matching products. Compute total = quantity × price.`,
+    solution: `<pre><code>import pandas as pd
+
+def clean_and_merge(orders, products):
+    df = orders.copy()
+    df["price"] = pd.to_numeric(df["price"], errors="coerce")
+    df = df.dropna(subset=["price", "quantity"])
+    df["quantity"] = df["quantity"].astype(int)
+    df["order_date"] = pd.to_datetime(df["order_date"])
+    df = df.merge(products, on="product_id", how="inner")
+    df["total"] = df["quantity"] * df["price"]
+    return df.reset_index(drop=True)
+
+# Method-chaining version (more idiomatic Pandas):
+def clean_and_merge_v2(orders, products):
+    return (
+        orders
+        .assign(
+            price=lambda d: pd.to_numeric(d["price"], errors="coerce"),
+            order_date=lambda d: pd.to_datetime(d["order_date"]),
+        )
+        .dropna(subset=["price", "quantity"])
+        .assign(quantity=lambda d: d["quantity"].astype(int))
+        .merge(products, on="product_id", how="inner")
+        .assign(total=lambda d: d["quantity"] * d["price"])
+        .reset_index(drop=True)
+    )
+
+# Follow-up: for 100M rows, use chunked reading:
+def process_large_orders(filepath, products, chunksize=100_000):
+    chunks = []
+    for chunk in pd.read_csv(filepath, chunksize=chunksize):
+        cleaned = clean_and_merge(chunk, products)
+        chunks.append(cleaned)
+    return pd.concat(chunks, ignore_index=True)</code></pre>`,
+    walkthrough: `<code>pd.to_numeric(errors='coerce')</code> is the Pandas equivalent of a try/except for type conversion — invalid values become NaN instead of raising an error. The method-chaining version using <code>.assign()</code> is how experienced Pandas users write transforms. For the follow-up, <code>pd.read_csv(chunksize=N)</code> returns an iterator of DataFrames, letting you process 100M rows in constant memory.`,
+    concepts: ["pd.to_numeric(errors='coerce')", "dropna(subset=)", "merge(how='inner')", ".assign() chaining", "chunked reading"]
+  },
+  {
+    id: 15, title: "GroupBy Aggregation and Reshaping", difficulty: "medium", category: "pandas",
+    skills: "pandas · groupby · agg · pivot_table · multi-level operations",
+    body: `<p>Given a DataFrame of daily sales, compute multiple aggregations per group and reshape the result. This is the Pandas version of SQL's GROUP BY + window functions.</p>
+<pre><code>import pandas as pd
+
+sales = pd.DataFrame({
+    "date":     ["2024-01", "2024-01", "2024-01", "2024-02", "2024-02",
+                 "2024-02", "2024-03", "2024-03"],
+    "region":   ["East", "West", "East", "East", "West",
+                 "East", "West", "East"],
+    "product":  ["A", "A", "B", "A", "B", "B", "A", "A"],
+    "revenue":  [100, 150, 200, 120, 180, 90, 160, 110],
+})
+
+Tasks:
+1. Total revenue per region per month
+2. Each region's percentage of monthly total
+3. Month-over-month growth per region
+4. Pivot: regions as columns, months as rows, revenue as values</code></pre>`,
+    hint: `<code>groupby(["date","region"]).agg()</code> for task 1. Use <code>transform("sum")</code> to get the monthly total for percentage calculation. <code>pct_change()</code> or <code>shift()</code> for MoM growth. <code>pivot_table()</code> for the reshape.`,
+    solution: `<pre><code>import pandas as pd
+
+sales = pd.DataFrame({
+    "date":    ["2024-01","2024-01","2024-01","2024-02","2024-02",
+                "2024-02","2024-03","2024-03"],
+    "region":  ["East","West","East","East","West","East","West","East"],
+    "product": ["A","A","B","A","B","B","A","A"],
+    "revenue": [100, 150, 200, 120, 180, 90, 160, 110],
+})
+
+# Task 1: total revenue per region per month
+monthly = (
+    sales.groupby(["date", "region"], as_index=False)["revenue"].sum()
+)
+
+# Task 2: each region's % of monthly total
+monthly["monthly_total"] = monthly.groupby("date")["revenue"].transform("sum")
+monthly["pct_of_month"] = (monthly["revenue"] / monthly["monthly_total"] * 100).round(1)
+
+# Task 3: MoM growth per region
+monthly["prev_month"] = monthly.groupby("region")["revenue"].shift(1)
+monthly["mom_growth"] = (
+    ((monthly["revenue"] - monthly["prev_month"]) / monthly["prev_month"] * 100).round(1)
+)
+
+# Task 4: pivot — regions as columns, months as rows
+pivot = sales.pivot_table(index="date", columns="region",
+                          values="revenue", aggfunc="sum")
+
+# Named aggregation (multiple agg functions):
+summary = (
+    sales.groupby(["date", "region"])
+    .agg(
+        total_revenue=("revenue", "sum"),
+        num_products=("product", "nunique"),
+        avg_revenue=("revenue", "mean"),
+    )
+    .reset_index()
+)</code></pre>`,
+    walkthrough: `<code>transform("sum")</code> is the key trick — it computes the group-level aggregate but broadcasts it back to the original DataFrame shape, so you can divide without a manual join. <code>shift(1)</code> within a group gives the previous row's value, enabling MoM calculation. <code>pivot_table</code> is the Pandas equivalent of SQL's CASE WHEN + GROUP BY pivot. Named aggregation with <code>.agg(name=("col", "func"))</code> is the cleanest way to compute multiple metrics per group.`,
+    concepts: ["groupby().agg()", "transform() vs agg()", "shift() for lag", "pivot_table()", "named aggregation"]
+  },
+  {
+    id: 16, title: "Handle Missing Data and Multi-DataFrame Joins", difficulty: "hard", category: "pandas",
+    skills: "pandas · fillna · merge strategies · indicator · concat",
+    body: `<p>You have three DataFrames: <code>users</code>, <code>logins</code>, and <code>purchases</code>. Find: users who logged in but never purchased, fill missing profile data with defaults, and flag suspicious patterns (login without profile).</p>
+<pre><code>import pandas as pd
+import numpy as np
+
+users = pd.DataFrame({
+    "user_id": [1, 2, 3, 4, 5],
+    "name":    ["Alice", "Bob", np.nan, "Dave", "Eve"],
+    "plan":    ["pro", np.nan, "free", "pro", np.nan],
+    "signup":  ["2024-01-01", "2024-01-05", "2024-02-10", "2024-02-15", "2024-03-01"],
+})
+
+logins = pd.DataFrame({
+    "user_id":  [1, 2, 2, 3, 6, 1, 4],
+    "login_ts": ["2024-03-01", "2024-03-02", "2024-03-05",
+                 "2024-03-03", "2024-03-04", "2024-03-06", "2024-03-07"],
+})
+
+purchases = pd.DataFrame({
+    "user_id":    [1, 1, 4],
+    "product":    ["Widget", "Gadget", "Gizmo"],
+    "purchase_ts":["2024-03-01", "2024-03-06", "2024-03-07"],
+})
+
+Expected:
+1. Users who logged in but never purchased: [Bob(2), user_3(3), unknown(6)]
+2. Cleaned users DF with name filled as "Unknown" and plan filled as "free"
+3. Suspicious logins: user_id=6 (logged in but no user profile)
+4. Full activity summary per user: login_count, purchase_count, days_since_signup</code></pre>
+<p><strong>Follow-up:</strong> What's the difference between <code>merge</code>, <code>join</code>, and <code>concat</code>? When would you use each?</p>`,
+    hint: `Use <code>merge(how='left', indicator=True)</code> — the <code>_merge</code> column tells you which rows matched. Anti-join: filter where <code>_merge == 'left_only'</code>. Use <code>fillna()</code> for defaults. Compare login user_ids against user user_ids with set difference for suspicious logins.`,
+    solution: `<pre><code>import pandas as pd
+import numpy as np
+
+users = pd.DataFrame({
+    "user_id": [1, 2, 3, 4, 5],
+    "name":    ["Alice", "Bob", np.nan, "Dave", "Eve"],
+    "plan":    ["pro", np.nan, "free", "pro", np.nan],
+    "signup":  ["2024-01-01","2024-01-05","2024-02-10","2024-02-15","2024-03-01"],
+})
+logins = pd.DataFrame({
+    "user_id":  [1, 2, 2, 3, 6, 1, 4],
+    "login_ts": ["2024-03-01","2024-03-02","2024-03-05",
+                 "2024-03-03","2024-03-04","2024-03-06","2024-03-07"],
+})
+purchases = pd.DataFrame({
+    "user_id":    [1, 1, 4],
+    "product":    ["Widget", "Gadget", "Gizmo"],
+    "purchase_ts":["2024-03-01","2024-03-06","2024-03-07"],
+})
+
+# 1. Anti-join: logged in but never purchased
+login_users = logins[["user_id"]].drop_duplicates()
+purchase_users = purchases[["user_id"]].drop_duplicates()
+logged_no_purchase = login_users.merge(
+    purchase_users, on="user_id", how="left", indicator=True
+).query('_merge == "left_only"')["user_id"].tolist()
+# [2, 3, 6]
+
+# 2. Clean users — fill missing values
+users_clean = users.assign(
+    name=users["name"].fillna("Unknown"),
+    plan=users["plan"].fillna("free"),
+    signup=pd.to_datetime(users["signup"]),
+)
+
+# 3. Suspicious logins — user_id not in users table
+known_ids = set(users["user_id"])
+login_ids = set(logins["user_id"])
+suspicious = login_ids - known_ids  # {6}
+
+# 4. Full activity summary
+login_counts = logins.groupby("user_id").size().reset_index(name="login_count")
+purchase_counts = purchases.groupby("user_id").size().reset_index(name="purchase_count")
+
+summary = (
+    users_clean
+    .merge(login_counts, on="user_id", how="left")
+    .merge(purchase_counts, on="user_id", how="left")
+    .assign(
+        login_count=lambda d: d["login_count"].fillna(0).astype(int),
+        purchase_count=lambda d: d["purchase_count"].fillna(0).astype(int),
+        days_since_signup=lambda d: (pd.Timestamp("2024-03-10") - d["signup"]).dt.days,
+    )
+)
+
+# Follow-up:
+# merge()  — SQL-style join on columns, any join type
+# join()   — joins on INDEX (not columns), left join default
+# concat() — stacks DataFrames vertically (axis=0) or horizontally (axis=1)</code></pre>`,
+    walkthrough: `The anti-join using <code>merge(indicator=True)</code> + <code>.query('_merge == "left_only"')</code> is the Pandas equivalent of SQL's <code>LEFT JOIN WHERE right.key IS NULL</code>. The set difference trick (<code>login_ids - known_ids</code>) is the fastest way to find orphan references. The summary builds up with left merges and <code>fillna(0)</code> — exactly what you'd do in SQL with LEFT JOINs and COALESCE.`,
+    concepts: ["anti-join with indicator=True", "fillna() for defaults", ".query() filtering", "set operations", "merge vs join vs concat"]
+  }
+];
+
+// ===== State Management =====
+const STORAGE_KEY = 'python-practice-progress-v2';
+let statusMap = {}; // { problemId: 'unsolved' | 'solved' | 'revisit' }
+let currentIndex = 0;
+let activeFilter = 'all';
+
+function loadProgress() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) { statusMap = JSON.parse(saved); }
+  } catch (e) { /* proceed without stored data */ }
+  // Fill in any missing entries
+  problems.forEach(p => {
+    if (!statusMap[p.id]) statusMap[p.id] = 'unsolved';
+  });
+}
+
+function saveProgress() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(statusMap)); }
+  catch (e) { /* storage unavailable */ }
+}
+
+function getVisibleProblems() {
+  if (activeFilter === 'all') return problems;
+  return problems.filter(p => statusMap[p.id] === activeFilter);
+}
+
+// ===== Render Functions =====
+function updateProgressDashboard() {
+  const solved = Object.values(statusMap).filter(s => s === 'solved').length;
+  const revisit = Object.values(statusMap).filter(s => s === 'revisit').length;
+  const unsolved = 16 - solved - revisit;
+  const pct = Math.round((solved / 16) * 100);
+
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${solved} / 16 completed · ${pct}%`;
+  document.getElementById('countSolved').textContent = solved;
+  document.getElementById('countRevisit').textContent = revisit;
+  document.getElementById('countUnsolved').textContent = unsolved;
+
+  // Update filter counts
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  filterBtns.forEach(btn => {
+    const f = btn.dataset.filter;
+    if (f === 'all') btn.textContent = `All (${16})`;
+    else if (f === 'solved') btn.textContent = `Solved (${solved})`;
+    else if (f === 'revisit') btn.textContent = `Revisit (${revisit})`;
+    else if (f === 'unsolved') btn.textContent = `Unsolved (${unsolved})`;
+  });
+}
+
+function renderNav() {
+  const nav = document.getElementById('nav');
+  nav.innerHTML = '';
+  const visible = getVisibleProblems();
+
+  visible.forEach((p, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn';
+    if (p.category === 'generators') btn.classList.add('cat-generators');
+    else if (p.category === 'pandas') btn.classList.add('cat-pandas');
+    if (i === currentIndex) btn.classList.add('active');
+    btn.textContent = `P${p.id}`;
+    btn.onclick = () => showProblem(i);
+
+    // Status dot
+    const st = statusMap[p.id];
+    if (st === 'solved' || st === 'revisit') {
+      const dot = document.createElement('span');
+      dot.className = `status-dot ${st}`;
+      btn.appendChild(dot);
+    }
+
+    nav.appendChild(btn);
+  });
+}
+
+function renderProblems() {
+  const container = document.getElementById('problems-container');
+  container.innerHTML = '';
+  const visible = getVisibleProblems();
+
+  if (visible.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:3rem;color:var(--text-muted);font-family:var(--mono);font-size:0.85rem;">No problems in this filter. Try a different view.</div>`;
+    return;
+  }
+
+  visible.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = `problem ${i === currentIndex ? 'active' : ''}`;
+    div.id = `problem-${i}`;
+
+    const st = statusMap[p.id];
+
+    div.innerHTML = `
+      <div class="problem-header">
+        <span class="problem-number">${p.id}</span>
+        <span class="difficulty ${p.difficulty}">${p.difficulty}</span>
+      </div>
+      <h2 class="problem-title">${p.title}</h2>
+      <p class="skills-tested">${p.skills}</p>
+
+      <div class="status-row">
+        <span class="status-row-label">Mark as:</span>
+        <button class="status-btn unsolved ${st === 'unsolved' ? 'active' : ''}" onclick="setStatus(${p.id}, 'unsolved')">○ Unsolved</button>
+        <button class="status-btn solved ${st === 'solved' ? 'active' : ''}" onclick="setStatus(${p.id}, 'solved')">✓ Solved</button>
+        <button class="status-btn revisit ${st === 'revisit' ? 'active' : ''}" onclick="setStatus(${p.id}, 'revisit')">↻ Revisit</button>
+      </div>
+
+      <div class="section-label">Problem</div>
+      <div class="problem-body">${p.body}</div>
+
+      <button class="toggle-btn" onclick="toggleSection('hint-${i}', this)">Show hint</button>
+      <button class="toggle-btn" onclick="toggleSection('solution-${i}', this)">Show solution</button>
+
+      <div class="hidden-content" id="hint-${i}">
+        <div class="hint-box">
+          <div class="section-label">Hint</div>
+          <p>${p.hint}</p>
+        </div>
+      </div>
+
+      <div class="hidden-content" id="solution-${i}">
+        <div class="solution-box">
+          <div class="section-label">Solution</div>
+          ${p.solution}
+          <div class="walkthrough">
+            <div class="section-label" style="margin-bottom:0.35rem">Why this works</div>
+            <p>${p.walkthrough}</p>
+          </div>
+          <div class="concepts-strip">
+            ${p.concepts.map(c => `<span class="concept-tag">${c}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  updateNavArrows();
+}
+
+function showProblem(index) {
+  const visible = getVisibleProblems();
+  if (index < 0 || index >= visible.length) return;
+  currentIndex = index;
+
+  document.querySelectorAll('.problem').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+  const el = document.getElementById(`problem-${index}`);
+  if (el) el.classList.add('active');
+
+  const navBtns = document.querySelectorAll('.nav-btn');
+  if (navBtns[index]) navBtns[index].classList.add('active');
+
+  updateNavArrows();
+}
+
+function updateNavArrows() {
+  const visible = getVisibleProblems();
+  document.getElementById('prevBtn').disabled = currentIndex <= 0;
+  document.getElementById('nextBtn').disabled = currentIndex >= visible.length - 1;
+}
+
+function setStatus(problemId, status) {
+  statusMap[problemId] = status;
+  saveProgress();
+  updateProgressDashboard();
+  renderNav();
+  renderProblems();
+}
+
+function toggleSection(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const visible = el.classList.toggle('visible');
+  if (btn) {
+    const isHint = id.includes('hint');
+    btn.textContent = visible
+      ? (isHint ? 'Hide hint' : 'Hide solution')
+      : (isHint ? 'Show hint' : 'Show solution');
+  }
+}
+
+// ===== Filter Logic =====
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    currentIndex = 0;
+    renderNav();
+    renderProblems();
+  });
+});
+
+// ===== Nav Arrows =====
+document.getElementById('prevBtn').addEventListener('click', () => {
+  if (currentIndex > 0) showProblem(currentIndex - 1);
+});
+document.getElementById('nextBtn').addEventListener('click', () => {
+  const visible = getVisibleProblems();
+  if (currentIndex < visible.length - 1) showProblem(currentIndex + 1);
+});
+
+// ===== Reset =====
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (!window._resetConfirm) {
+    window._resetConfirm = true;
+    document.getElementById('resetBtn').textContent = 'Confirm reset? Click again';
+    setTimeout(() => {
+      window._resetConfirm = false;
+      document.getElementById('resetBtn').textContent = 'Reset all progress';
+    }, 3000);
+    return;
+  }
+  window._resetConfirm = false;
+  statusMap = {};
+  problems.forEach(p => { statusMap[p.id] = 'unsolved'; });
+  saveProgress();
+  activeFilter = 'all';
+  currentIndex = 0;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+  updateProgressDashboard();
+  renderNav();
+  renderProblems();
+  document.getElementById('resetBtn').textContent = 'Reset all progress';
+});
+
+// ===== Theme Toggle =====
+const toggle = document.getElementById('themeToggle');
+function getTheme() {
+  try { return localStorage.getItem('py-practice-theme'); } catch(e) { return null; }
+}
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  toggle.textContent = t === 'dark' ? '☀' : '☾';
+  try { localStorage.setItem('py-practice-theme', t); } catch(e) { /* ok */ }
+}
+(function initTheme() {
+  const saved = getTheme();
+  if (saved) { setTheme(saved); }
+  else {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    toggle.textContent = prefersDark ? '☀' : '☾';
+  }
+})();
+toggle.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  if (current === 'dark') setTheme('light');
+  else setTheme('dark');
+});
+
+// ===== Scroll Progress =====
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
+// ===== Keyboard Navigation =====
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  const visible = getVisibleProblems();
+  if (e.key === 'ArrowLeft' && currentIndex > 0) {
+    e.preventDefault();
+    showProblem(currentIndex - 1);
+  } else if (e.key === 'ArrowRight' && currentIndex < visible.length - 1) {
+    e.preventDefault();
+    showProblem(currentIndex + 1);
+  }
+});
+
+// ===== Init =====
+loadProgress();
+updateProgressDashboard();
+renderNav();
+renderProblems();
+</script>
+
+</body></html>

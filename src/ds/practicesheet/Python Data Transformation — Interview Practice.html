@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -296,7 +297,13 @@ pre code { background: none; padding: 0; }
 <body>
 
 <h1>Python Data Transformation Practice</h1>
-<p class="subtitle">10 problems calibrated for Senior DE live coding interviews — pure Python, no Spark</p>
+<p class="subtitle">16 problems calibrated for Senior DE live coding interviews — pure Python, no Spark</p>
+
+<div class="category-strip" style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+  <span style="font-family:var(--mono);font-size:0.72rem;padding:0.18rem 0.55rem;border-radius:4px;background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent);">P1–P10 · Core Python</span>
+  <span style="font-family:var(--mono);font-size:0.72rem;padding:0.18rem 0.55rem;border-radius:4px;background:var(--green-dim);color:var(--green);border:1px solid var(--green);">P11–P13 · Generators</span>
+  <span style="font-family:var(--mono);font-size:0.72rem;padding:0.18rem 0.55rem;border-radius:4px;background:var(--orange-dim);color:var(--orange);border:1px solid var(--orange);">P14–P16 · Pandas</span>
+</div>
 
 <div class="problem-nav" id="nav"></div>
 <div id="problems-container"></div>
@@ -876,6 +883,514 @@ def run_pipeline(raw_records):
 result = run_pipeline(raw_records)</code></pre>`,
     walkthrough: `This pattern mirrors real data pipelines — each stage is independently testable, composable, and memory-efficient. The generator chaining means records flow through one at a time (no intermediate lists). This is exactly how you'd explain pipeline architecture thinking in an interview, even without Spark. The interviewer wants to see that you think in stages, handle errors at each stage, and keep concerns separated.`,
     concepts: ["generators as pipeline stages", "function composition", "separation of concerns", "error handling per stage", "lazy evaluation"]
+  },
+  {
+    id: 11,
+    title: "Stream Large File in Chunks",
+    difficulty: "medium",
+    skills: "generators · yield · file I/O · memory efficiency",
+    category: "generators",
+    body: `<p>Write a generator function that reads a large JSONL file (one JSON object per line) and yields batches of <code>n</code> records at a time. This is a core pattern in DE — you never load a 50GB file into memory at once.</p>
+<pre><code>Input (imagine a file with thousands of lines):
+# events.jsonl
+{"event_id": "E1", "type": "click", "ts": "2024-03-15T10:00:00"}
+{"event_id": "E2", "type": "view",  "ts": "2024-03-15T10:00:01"}
+{"event_id": "E3", "type": "click", "ts": "2024-03-15T10:00:02"}
+{"event_id": "E4", "type": "purchase", "ts": "2024-03-15T10:00:03"}
+{"event_id": "E5", "type": "click", "ts": "2024-03-15T10:00:04"}
+
+batch_size = 2
+
+Expected behavior (each yield):
+Batch 1: [{"event_id": "E1", ...}, {"event_id": "E2", ...}]
+Batch 2: [{"event_id": "E3", ...}, {"event_id": "E4", ...}]
+Batch 3: [{"event_id": "E5", ...}]  # last batch can be smaller</code></pre>
+<p><strong>Follow-up:</strong> How would you add a filter (e.g., only "click" events) without breaking the generator pattern?</p>`,
+    hint: `Build a batch list. Append each parsed record. When the list hits size <code>n</code>, <code>yield</code> it and reset. After the loop ends, yield any remaining records in the final partial batch.`,
+    solution: `<pre><code>import json
+
+def read_jsonl_batches(filepath, batch_size):
+    batch = []
+    with open(filepath) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            batch.append(json.loads(line))
+            if len(batch) == batch_size:
+                yield batch
+                batch = []
+    if batch:  # don't forget the last partial batch
+        yield batch
+
+# Usage — processes arbitrarily large files in constant memory:
+for batch in read_jsonl_batches("events.jsonl", batch_size=1000):
+    process_batch(batch)  # e.g., insert into DB
+
+# Follow-up: add filtering without breaking the generator
+def read_jsonl_filtered(filepath, batch_size, predicate=None):
+    batch = []
+    with open(filepath) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            record = json.loads(line)
+            if predicate and not predicate(record):
+                continue
+            batch.append(record)
+            if len(batch) == batch_size:
+                yield batch
+                batch = []
+    if batch:
+        yield batch
+
+# Usage with filter:
+clicks = read_jsonl_filtered(
+    "events.jsonl", 1000,
+    predicate=lambda r: r["type"] == "click"
+)</code></pre>`,
+    walkthrough: `The critical detail interviewers look for: <code>if batch:</code> after the loop to yield the final partial batch — forgetting this loses data silently. This pattern is the foundation of every streaming ETL: read → batch → process → repeat. Memory stays at O(batch_size) no matter how large the file is. The predicate follow-up shows you can compose behaviors without nested generators.`,
+    concepts: ["yield for batching", "JSONL streaming", "O(batch_size) memory", "predicate filtering", "partial final batch"]
+  },
+  {
+    id: 12,
+    title: "Generator Pipeline: Filter → Transform → Aggregate",
+    difficulty: "hard",
+    skills: "generator chaining · yield from · itertools · send()",
+    body: `<p>Build a multi-stage generator pipeline that processes a stream of sensor readings. Each stage is a separate generator, and they chain together lazily — nothing runs until you consume the final output.</p>
+<pre><code>Input:
+readings = [
+    {"sensor": "temp_1", "value": 22.5, "unit": "C", "quality": "good"},
+    {"sensor": "temp_1", "value": 999,  "unit": "C", "quality": "error"},
+    {"sensor": "hum_1",  "value": 45.0, "unit": "%", "quality": "good"},
+    {"sensor": "temp_2", "value": 18.3, "unit": "C", "quality": "good"},
+    {"sensor": "temp_1", "value": 23.1, "unit": "C", "quality": "good"},
+    {"sensor": "hum_1",  "value": 50.2, "unit": "%", "quality": "good"},
+    {"sensor": "temp_2", "value": 17.9, "unit": "C", "quality": "good"},
+]
+
+Pipeline:
+1. filter_quality  → drop records where quality != "good"
+2. convert_units   → convert Celsius to Fahrenheit (value * 9/5 + 32)
+3. group_by_sensor → yield (sensor_id, [values]) when sensor changes or stream ends
+
+Expected final output (after consuming all stages):
+{
+    "temp_1": {"count": 2, "avg": 72.77},
+    "hum_1":  {"count": 2, "avg": 47.6},
+    "temp_2": {"count": 2, "avg": 63.38}
+}
+# Note: humidity values pass through convert_units unchanged (only unit="C" converts)</code></pre>`,
+    hint: `Write each stage as a generator that takes an iterable. <code>filter_quality</code> yields records where quality is "good". <code>convert_units</code> checks the unit field. For the final aggregation, use <code>defaultdict(list)</code> to group then compute stats. Chain: <code>aggregate(convert(filter(readings)))</code>.`,
+    solution: `<pre><code>from collections import defaultdict
+
+def filter_quality(stream):
+    """Drop bad-quality readings."""
+    for reading in stream:
+        if reading["quality"] == "good":
+            yield reading
+
+def convert_units(stream):
+    """Convert Celsius to Fahrenheit; leave others unchanged."""
+    for reading in stream:
+        if reading["unit"] == "C":
+            reading = {
+                **reading,
+                "value": round(reading["value"] * 9/5 + 32, 2),
+                "unit": "F"
+            }
+        yield reading
+
+def aggregate_by_sensor(stream):
+    """Collect all readings, group by sensor, compute stats."""
+    groups = defaultdict(list)
+    for reading in stream:
+        groups[reading["sensor"]].append(reading["value"])
+
+    return {
+        sensor: {
+            "count": len(vals),
+            "avg": round(sum(vals) / len(vals), 2)
+        }
+        for sensor, vals in groups.items()
+    }
+
+# Chain the pipeline:
+def run_sensor_pipeline(readings):
+    pipeline = convert_units(filter_quality(readings))
+    return aggregate_by_sensor(pipeline)
+
+result = run_sensor_pipeline(readings)
+
+# Bonus: make it configurable with a generic pipe() helper
+def pipe(data, *stages):
+    for stage in stages:
+        data = stage(data)
+    return data
+
+result = pipe(
+    readings,
+    filter_quality,
+    convert_units,
+    aggregate_by_sensor
+)</code></pre>`,
+    walkthrough: `Each generator is a single-responsibility stage — testable in isolation, composable in any order. The <code>pipe()</code> helper is a pattern from functional programming: it applies each stage to the result of the previous one. Notice how <code>convert_units</code> creates a new dict (<code>{**reading, ...}</code>) instead of mutating the input — this prevents side effects between pipeline stages. The aggregation stage is the "sink" — it consumes the entire stream and returns a final result, which is the natural end of a generator pipeline.`,
+    concepts: ["generator chaining", "dict spread to avoid mutation", "pipe() pattern", "lazy evaluation", "defaultdict aggregation"]
+  },
+  {
+    id: 13,
+    title: "Infinite Sequence Generator with Backpressure",
+    difficulty: "hard",
+    skills: "yield · itertools.islice · generator expressions · memory patterns",
+    body: `<p>Write a generator that produces an infinite stream of synthetic event data (simulating a message queue or Kafka topic). Then write consumer functions that can: take the first N events, take events until a condition, and sample every Kth event — all without loading everything into memory.</p>
+<pre><code>Requirements:
+1. event_stream() — infinite generator, yields events with incrementing IDs
+2. take_n(stream, n) — consume exactly n events
+3. take_until(stream, predicate) — consume until predicate returns True
+4. sample_every(stream, k) — yield every kth event (skip others)
+
+Expected behavior:
+stream = event_stream()
+first_5 = take_n(stream, 5)
+# [{"id": 1, "type": "click", ...}, ..., {"id": 5, ...}]
+
+stream2 = event_stream()
+until_purchase = take_until(stream2, lambda e: e["type"] == "purchase")
+# all events up to and including the first "purchase"
+
+stream3 = event_stream()
+sampled = take_n(sample_every(stream3, 10), 3)
+# every 10th event, take 3 of them → events with id 10, 20, 30</code></pre>
+<p><strong>Follow-up:</strong> How would you handle a generator that reads from a real network socket? What happens if you never close it?</p>`,
+    hint: `Use <code>while True</code> with <code>yield</code> for the infinite stream. <code>itertools.islice</code> can replace <code>take_n</code>. For <code>sample_every</code>, use <code>enumerate</code> and yield when <code>index % k == 0</code>. Remember: generators are lazy — the infinite loop only runs when you pull from it.`,
+    solution: `<pre><code>import random
+import itertools
+
+def event_stream(start_id=1):
+    """Infinite generator — simulates a message queue."""
+    event_types = ["click", "view", "purchase", "scroll", "logout"]
+    current_id = start_id
+    while True:
+        yield {
+            "id": current_id,
+            "type": random.choice(event_types),
+            "ts": f"2024-03-15T{10 + current_id // 3600:02d}:"
+                  f"{(current_id % 3600) // 60:02d}:"
+                  f"{current_id % 60:02d}",
+        }
+        current_id += 1
+
+def take_n(stream, n):
+    """Consume exactly n items from a generator."""
+    return list(itertools.islice(stream, n))
+
+def take_until(stream, predicate):
+    """Consume until predicate is True (inclusive)."""
+    result = []
+    for item in stream:
+        result.append(item)
+        if predicate(item):
+            break
+    return result
+
+def sample_every(stream, k):
+    """Yield every kth item, skip others. Returns a generator."""
+    for i, item in enumerate(stream, 1):
+        if i % k == 0:
+            yield item
+
+# Compose them:
+stream = event_stream()
+first_5 = take_n(stream, 5)
+
+stream2 = event_stream()
+sampled = take_n(sample_every(stream2, 10), 3)
+# Gets events at positions 10, 20, 30
+
+# Follow-up: resource cleanup with contextmanager
+from contextlib import contextmanager
+
+@contextmanager
+def managed_stream(source_func, *args):
+    gen = source_func(*args)
+    try:
+        yield gen
+    finally:
+        gen.close()  # sends GeneratorExit
+
+with managed_stream(event_stream) as stream:
+    batch = take_n(stream, 100)
+# generator is properly closed here</code></pre>`,
+    walkthrough: `This is the Python version of how Kafka consumers work — infinite stream, consumer controls how much to pull. <code>itertools.islice</code> is the idiomatic way to take N from any iterable (safer than a manual counter). The <code>sample_every</code> generator composes with <code>take_n</code> — you can stack generators endlessly. The follow-up about resource cleanup shows seniority: in production, generators reading from sockets or DB cursors must be closed, or you leak connections. <code>gen.close()</code> sends <code>GeneratorExit</code> into the generator.`,
+    concepts: ["infinite generators", "itertools.islice", "generator composition", "contextmanager cleanup", "backpressure pattern"]
+  },
+  {
+    id: 14,
+    title: "DataFrame Cleaning and Merging",
+    difficulty: "medium",
+    skills: "pandas · merge · fillna · dtypes · method chaining",
+    body: `<p>You have two DataFrames: <code>orders</code> (sales data with some messy values) and <code>products</code> (product catalog). Clean the orders data, merge with products, and produce a summary.</p>
+<pre><code>import pandas as pd
+
+orders = pd.DataFrame({
+    "order_id":    ["O1", "O2", "O3", "O4", "O5", "O6"],
+    "product_id":  ["P1", "P2", "P1", "P3", "P2", "P99"],
+    "quantity":    [2, None, 1, 3, 2, 1],
+    "price":       ["10.50", "twenty", "10.50", "30.00", "20.00", "5.00"],
+    "order_date":  ["2024-01-15", "2024-01-16", "2024-01-16",
+                    "2024-01-17", "2024-01-17", "2024-01-18"],
+})
+
+products = pd.DataFrame({
+    "product_id":   ["P1", "P2", "P3"],
+    "product_name": ["Widget", "Gadget", "Gizmo"],
+    "category":     ["Hardware", "Software", "Hardware"],
+})
+
+Expected Output (after clean + merge):
+   order_id product_id  quantity  price order_date product_name  category  total
+0       O1         P1       2.0  10.50 2024-01-15       Widget  Hardware  21.00
+1       O3         P1       1.0  10.50 2024-01-16       Widget  Hardware  10.50
+2       O4         P3       3.0  30.00 2024-01-17        Gizmo  Hardware  90.00
+3       O5         P2       2.0  20.00 2024-01-17       Gadget  Software  40.00
+
+Dropped: O2 (invalid price), O6 (no matching product)</code></pre>
+<p><strong>Follow-up:</strong> How would you handle this if orders had 100M rows and didn't fit in memory?</p>`,
+    hint: `Use <code>pd.to_numeric(errors='coerce')</code> to convert price — invalid values become NaN. Drop NaN rows. Use <code>merge(how='inner')</code> to keep only orders with matching products. Compute total = quantity × price.`,
+    solution: `<pre><code>import pandas as pd
+
+def clean_and_merge(orders, products):
+    df = orders.copy()
+
+    # 1. Convert price to numeric — invalid values → NaN
+    df["price"] = pd.to_numeric(df["price"], errors="coerce")
+
+    # 2. Drop rows with NaN in critical columns
+    df = df.dropna(subset=["price", "quantity"])
+
+    # 3. Ensure correct dtypes
+    df["quantity"] = df["quantity"].astype(int)
+    df["order_date"] = pd.to_datetime(df["order_date"])
+
+    # 4. Inner merge — drops orders with no matching product
+    df = df.merge(products, on="product_id", how="inner")
+
+    # 5. Compute total
+    df["total"] = df["quantity"] * df["price"]
+
+    return df.reset_index(drop=True)
+
+# Method-chaining version (more idiomatic Pandas):
+def clean_and_merge_v2(orders, products):
+    return (
+        orders
+        .assign(
+            price=lambda d: pd.to_numeric(d["price"], errors="coerce"),
+            order_date=lambda d: pd.to_datetime(d["order_date"]),
+        )
+        .dropna(subset=["price", "quantity"])
+        .assign(quantity=lambda d: d["quantity"].astype(int))
+        .merge(products, on="product_id", how="inner")
+        .assign(total=lambda d: d["quantity"] * d["price"])
+        .reset_index(drop=True)
+    )
+
+# Follow-up: for 100M rows, use chunked reading:
+def process_large_orders(filepath, products, chunksize=100_000):
+    chunks = []
+    for chunk in pd.read_csv(filepath, chunksize=chunksize):
+        cleaned = clean_and_merge(chunk, products)
+        chunks.append(cleaned)
+    return pd.concat(chunks, ignore_index=True)</code></pre>`,
+    walkthrough: `<code>pd.to_numeric(errors='coerce')</code> is the Pandas equivalent of a try/except for type conversion — invalid values become NaN instead of raising an error. The method-chaining version using <code>.assign()</code> is how experienced Pandas users write transforms — each step is explicit and the chain reads top to bottom. For the follow-up, <code>pd.read_csv(chunksize=N)</code> returns an iterator of DataFrames, letting you process 100M rows in constant memory.`,
+    concepts: ["pd.to_numeric(errors='coerce')", "dropna(subset=)", "merge(how='inner')", ".assign() chaining", "chunked reading"]
+  },
+  {
+    id: 15,
+    title: "GroupBy Aggregation and Reshaping",
+    difficulty: "medium",
+    skills: "pandas · groupby · agg · pivot_table · multi-level operations",
+    body: `<p>Given a DataFrame of daily sales, compute multiple aggregations per group and reshape the result. This is the Pandas version of SQL's GROUP BY + window functions.</p>
+<pre><code>import pandas as pd
+
+sales = pd.DataFrame({
+    "date":     ["2024-01", "2024-01", "2024-01", "2024-02", "2024-02",
+                 "2024-02", "2024-03", "2024-03"],
+    "region":   ["East", "West", "East", "East", "West",
+                 "East", "West", "East"],
+    "product":  ["A", "A", "B", "A", "B", "B", "A", "A"],
+    "revenue":  [100, 150, 200, 120, 180, 90, 160, 110],
+})
+
+Tasks:
+1. Total revenue per region per month
+2. Each region's percentage of monthly total
+3. Month-over-month growth per region
+4. Pivot: regions as columns, months as rows, revenue as values</code></pre>`,
+    hint: `<code>groupby(["date","region"]).agg()</code> for task 1. Use <code>transform("sum")</code> to get the monthly total for percentage calculation. <code>pct_change()</code> or <code>shift()</code> for MoM growth. <code>pivot_table()</code> for the reshape.`,
+    solution: `<pre><code>import pandas as pd
+
+sales = pd.DataFrame({
+    "date":    ["2024-01","2024-01","2024-01","2024-02","2024-02",
+                "2024-02","2024-03","2024-03"],
+    "region":  ["East","West","East","East","West","East","West","East"],
+    "product": ["A","A","B","A","B","B","A","A"],
+    "revenue": [100, 150, 200, 120, 180, 90, 160, 110],
+})
+
+# Task 1: total revenue per region per month
+monthly = (
+    sales
+    .groupby(["date", "region"], as_index=False)["revenue"]
+    .sum()
+)
+# date    region  revenue
+# 2024-01 East    300
+# 2024-01 West    150
+# 2024-02 East    210
+# 2024-02 West    180
+# 2024-03 East    110
+# 2024-03 West    160
+
+# Task 2: each region's % of monthly total
+monthly["monthly_total"] = monthly.groupby("date")["revenue"].transform("sum")
+monthly["pct_of_month"] = (monthly["revenue"] / monthly["monthly_total"] * 100).round(1)
+
+# Task 3: MoM growth per region
+monthly["prev_month"] = monthly.groupby("region")["revenue"].shift(1)
+monthly["mom_growth"] = (
+    ((monthly["revenue"] - monthly["prev_month"]) / monthly["prev_month"] * 100)
+    .round(1)
+)
+
+# Task 4: pivot — regions as columns, months as rows
+pivot = sales.pivot_table(
+    index="date",
+    columns="region",
+    values="revenue",
+    aggfunc="sum"
+)
+#          East  West
+# 2024-01   300   150
+# 2024-02   210   180
+# 2024-03   110   160
+
+# Named aggregation (multiple agg functions):
+summary = (
+    sales
+    .groupby(["date", "region"])
+    .agg(
+        total_revenue=("revenue", "sum"),
+        num_products=("product", "nunique"),
+        avg_revenue=("revenue", "mean"),
+    )
+    .reset_index()
+)</code></pre>`,
+    walkthrough: `<code>transform("sum")</code> is the key trick — it computes the group-level aggregate but broadcasts it back to the original DataFrame shape, so you can divide without a manual join. <code>shift(1)</code> within a group gives the previous row's value, enabling MoM calculation. <code>pivot_table</code> is the Pandas equivalent of SQL's CASE WHEN + GROUP BY pivot. Named aggregation with <code>.agg(name=("col", "func"))</code> is the cleanest way to compute multiple metrics per group.`,
+    concepts: ["groupby().agg()", "transform() vs agg()", "shift() for lag", "pivot_table()", "named aggregation"]
+  },
+  {
+    id: 16,
+    title: "Handle Missing Data and Multi-DataFrame Joins",
+    difficulty: "hard",
+    skills: "pandas · fillna · merge strategies · indicator · concat",
+    body: `<p>You have three DataFrames: <code>users</code>, <code>logins</code>, and <code>purchases</code>. Find: users who logged in but never purchased, fill missing profile data with defaults, and flag suspicious patterns (login without profile).</p>
+<pre><code>import pandas as pd
+import numpy as np
+
+users = pd.DataFrame({
+    "user_id": [1, 2, 3, 4, 5],
+    "name":    ["Alice", "Bob", np.nan, "Dave", "Eve"],
+    "plan":    ["pro", np.nan, "free", "pro", np.nan],
+    "signup":  ["2024-01-01", "2024-01-05", "2024-02-10", "2024-02-15", "2024-03-01"],
+})
+
+logins = pd.DataFrame({
+    "user_id":  [1, 2, 2, 3, 6, 1, 4],
+    "login_ts": ["2024-03-01", "2024-03-02", "2024-03-05",
+                 "2024-03-03", "2024-03-04", "2024-03-06", "2024-03-07"],
+})
+
+purchases = pd.DataFrame({
+    "user_id":    [1, 1, 4],
+    "product":    ["Widget", "Gadget", "Gizmo"],
+    "purchase_ts":["2024-03-01", "2024-03-06", "2024-03-07"],
+})
+
+Expected:
+1. Users who logged in but never purchased: [Bob(2), user_3(3), unknown(6)]
+2. Cleaned users DF with name filled as "Unknown" and plan filled as "free"
+3. Suspicious logins: user_id=6 (logged in but no user profile)
+4. Full activity summary per user: login_count, purchase_count, days_since_signup</code></pre>
+<p><strong>Follow-up:</strong> What's the difference between <code>merge</code>, <code>join</code>, and <code>concat</code>? When would you use each?</p>`,
+    hint: `Use <code>merge(how='left', indicator=True)</code> — the <code>_merge</code> column tells you which rows matched. Anti-join: filter where <code>_merge == 'left_only'</code>. Use <code>fillna()</code> for defaults. Compare login user_ids against user user_ids with set difference for suspicious logins.`,
+    solution: `<pre><code>import pandas as pd
+import numpy as np
+
+# --- Setup (same as above) ---
+users = pd.DataFrame({
+    "user_id": [1, 2, 3, 4, 5],
+    "name":    ["Alice", "Bob", np.nan, "Dave", "Eve"],
+    "plan":    ["pro", np.nan, "free", "pro", np.nan],
+    "signup":  ["2024-01-01","2024-01-05","2024-02-10","2024-02-15","2024-03-01"],
+})
+logins = pd.DataFrame({
+    "user_id":  [1, 2, 2, 3, 6, 1, 4],
+    "login_ts": ["2024-03-01","2024-03-02","2024-03-05",
+                 "2024-03-03","2024-03-04","2024-03-06","2024-03-07"],
+})
+purchases = pd.DataFrame({
+    "user_id":    [1, 1, 4],
+    "product":    ["Widget", "Gadget", "Gizmo"],
+    "purchase_ts":["2024-03-01","2024-03-06","2024-03-07"],
+})
+
+# 1. Users who logged in but never purchased (anti-join)
+login_users = logins[["user_id"]].drop_duplicates()
+purchase_users = purchases[["user_id"]].drop_duplicates()
+
+logged_no_purchase = login_users.merge(
+    purchase_users, on="user_id", how="left", indicator=True
+).query('_merge == "left_only"')["user_id"].tolist()
+# [2, 3, 6]
+
+# 2. Clean users — fill missing values
+users_clean = users.assign(
+    name=users["name"].fillna("Unknown"),
+    plan=users["plan"].fillna("free"),
+    signup=pd.to_datetime(users["signup"]),
+)
+
+# 3. Suspicious logins — user_id not in users table
+known_ids = set(users["user_id"])
+login_ids = set(logins["user_id"])
+suspicious = login_ids - known_ids  # {6}
+
+# 4. Full activity summary
+login_counts = logins.groupby("user_id").size().reset_index(name="login_count")
+purchase_counts = purchases.groupby("user_id").size().reset_index(name="purchase_count")
+
+summary = (
+    users_clean
+    .merge(login_counts, on="user_id", how="left")
+    .merge(purchase_counts, on="user_id", how="left")
+    .assign(
+        login_count=lambda d: d["login_count"].fillna(0).astype(int),
+        purchase_count=lambda d: d["purchase_count"].fillna(0).astype(int),
+        days_since_signup=lambda d: (pd.Timestamp("2024-03-10") - d["signup"]).dt.days,
+    )
+)
+
+# Follow-up summary:
+# merge()  — SQL-style join on columns, any join type
+#            Use when: combining tables on a shared key
+# join()   — joins on INDEX (not columns), left join default
+#            Use when: both DFs are indexed on the join key
+# concat() — stacks DataFrames vertically (axis=0) or horizontally (axis=1)
+#            Use when: combining same-shaped data (e.g., monthly files)</code></pre>`,
+    walkthrough: `The anti-join using <code>merge(indicator=True)</code> + <code>.query('_merge == "left_only"')</code> is the Pandas equivalent of SQL's <code>LEFT JOIN WHERE right.key IS NULL</code>. The set difference trick (<code>login_ids - known_ids</code>) is the fastest way to find orphan references. The summary builds up with left merges and <code>fillna(0)</code> — exactly what you'd do in SQL with LEFT JOINs and COALESCE. Knowing the merge/join/concat distinction is a frequent interview question.`,
+    concepts: ["anti-join with indicator=True", "fillna() for defaults", ".query() filtering", "set operations", "merge vs join vs concat"]
   }
 ];
 
@@ -888,6 +1403,14 @@ problems.forEach((p, i) => {
   btn.textContent = `P${p.id}`;
   btn.onclick = () => showProblem(i);
   if (i === 0) btn.classList.add('active');
+  // Color-code by category
+  if (p.category === 'generators') {
+    btn.style.borderColor = 'var(--green)';
+    btn.style.color = 'var(--green)';
+  } else if (p.category === 'pandas') {
+    btn.style.borderColor = 'var(--orange)';
+    btn.style.color = 'var(--orange)';
+  }
   nav.appendChild(btn);
 });
 
@@ -953,3 +1476,5 @@ function toggleSolution(index) {
 </script>
 </body>
 </html>
+
+</body></html>
