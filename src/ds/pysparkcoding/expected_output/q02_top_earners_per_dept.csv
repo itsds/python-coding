@@ -1,0 +1,8 @@
+empid,name,dept_name,total_salary,rank
+103,Rahul Verma,Analytics,904000.0,1
+106,Ananya Rao,Analytics,867000.0,2
+105,Vikram Desai,Engineering,945000.0,1
+101,Amit Sharma,Engineering,697000.0,2
+109,Suresh Kumar,Management,1185000.0,1
+108,Deepa Iyer,Operations,900000.0,1
+110,Meena Joshi,Operations,507000.0,2

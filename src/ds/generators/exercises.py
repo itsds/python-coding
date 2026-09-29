@@ -17,6 +17,7 @@ Tips:
   - The function resumes from where it paused on the next iteration.
   - Think of each stage as: receive item -> process -> yield result.
 """
+import csv
 
 
 # ============================================================
@@ -206,8 +207,14 @@ def transform_orders(records):
 #   order_id, product, amount (float), amount_with_tax (float)
 # ============================================================
 def get_all_orders_with_tax():
-    # YOUR CODE HERE
-    pass
+    list_output=[]
+    with open("data/orders.csv") as f:
+
+        for row in f:
+            if row.strip():
+                list_output.append(row)
+
+        return list_output
 
 
 # ============================================================
@@ -383,7 +390,7 @@ if __name__ == "__main__":
         print(order)
 
     # --- Exercise 8 ---
-    # print("Ex 8:", get_all_orders_with_tax())
+    print("Ex 8:", get_all_orders_with_tax())
 
     # --- Exercise 9 ---
     # print("Ex 9:", total_order_amount())

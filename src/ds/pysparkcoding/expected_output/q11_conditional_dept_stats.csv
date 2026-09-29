@@ -1,0 +1,5 @@
+dept_name,employee_count,avg_salary,max_salary,high_earner_count
+Analytics,4,63145.83,75333.33,3
+Engineering,5,59066.67,78750.0,1
+Management,2,98750.0,98750.0,1
+Operations,4,48750.0,75000.0,1

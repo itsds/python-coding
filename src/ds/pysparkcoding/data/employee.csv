@@ -1,0 +1,16 @@
+empid,name,dob,department_id,manager_id
+101,Amit Sharma,1985-03-15,10,105
+102,Priya Nair,1990-07-22,10,105
+103,Rahul Verma,1988-11-30,20,106
+104,Sneha Gupta,1992-01-10,20,106
+105,Vikram Desai,1980-06-05,10,109
+106,Ananya Rao,1983-09-18,20,109
+107,Kiran Patel,1995-04-25,30,108
+108,Deepa Iyer,1978-12-01,30,109
+109,Suresh Kumar,1975-08-14,40,
+110,Meena Joshi,1991-05-20,30,108
+111,Arjun Reddy,1993-02-28,10,105
+112,Kavita Singh,1987-10-12,20,106
+113,Rohan Das,1994-06-30,40,109
+114,Lakshmi Pillai,1989-03-08,10,105
+115,Nikhil Menon,1996-09-17,30,108

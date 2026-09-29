@@ -1,0 +1,9 @@
+[
+    {"sensor": "temp_1", "value": 22.5, "unit": "C", "quality": "good"},
+    {"sensor": "temp_1", "value": 999,  "unit": "C", "quality": "error"},
+    {"sensor": "hum_1",  "value": 45.0, "unit": "%", "quality": "good"},
+    {"sensor": "temp_2", "value": 18.3, "unit": "C", "quality": "good"},
+    {"sensor": "temp_1", "value": 23.1, "unit": "C", "quality": "good"},
+    {"sensor": "hum_1",  "value": 50.2, "unit": "%", "quality": "good"},
+    {"sensor": "temp_2", "value": 17.9, "unit": "C", "quality": "good"}
+]
