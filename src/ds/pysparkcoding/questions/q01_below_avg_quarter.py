@@ -23,9 +23,13 @@ HINTS:
     - Join and filter
 ================================================================================
 """
+from pyspark.sql import functions as F, Window
 from pyspark.sql import SparkSession
 import os
 import sys
+
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DateType
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # ---------- BOILERPLATE (DO NOT MODIFY) ----------
@@ -38,14 +42,42 @@ spark.sparkContext.setLogLevel("WARN")
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
 
-employee = spark.read.csv(f"{DATA_DIR}/employee.csv", header=True, inferSchema=True)
+emp_schema=StructType([StructField("empid",IntegerType(),True),
+                       StructField("name",StringType(),True),
+                       StructField("dob",DateType(),True),
+                       StructField("department_id",IntegerType(),True),
+                       StructField("manager_id",IntegerType(),True)])
+
+print("DATA_DIR" + DATA_DIR)
+
+employee = spark.read.schema(emp_schema).csv(f"{DATA_DIR}/employee.csv")
 salary = spark.read.csv(f"{DATA_DIR}/salary.csv", header=True, inferSchema=True)
 department = spark.read.csv(f"{DATA_DIR}/department.csv", header=True, inferSchema=True)
 
 # ---------- YOUR CODE BELOW ----------
 
+quarter_sal=salary.withColumn("quarter",
+                              F.concat(F.col("year"),
+                                       F.lit("-Q"),
+                                       F.ceil(F.col("month") / 3).cast("int")))
 
 
+quarter_window = Window.partitionBy("quarter")
+result_df = (
+    quarter_sal
+    .withColumn("avg_quarter_salary", F.avg("amount").over(quarter_window))
+    .filter(F.col("amount") < F.col("avg_quarter_salary"))
+)
+
+final_df = result_df.join(
+    F.broadcast(employee),
+    on="empid",
+    how="inner"
+).select(
+    "empid", "name", "quarter", "amount", "avg_quarter_salary"
+)
+
+final_df.show(truncate=False)
 
 # ---------- VALIDATE ----------
 # Uncomment the line below when you're ready to check your answer.
