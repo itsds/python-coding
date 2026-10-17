@@ -1,4 +1,3 @@
-from pandas import value_counts
 
 events = [
    {"user_id": 1, "event_time": "2024-01-01T10:00:00", "value": 100},
