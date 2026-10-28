@@ -1,0 +1,847 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Python Fluency Drills — 51 Questions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EEF4F5;--surface:#FFFFFF;--surface-2:#E3ECEE;--ink:#0E2530;--ink-2:#4A6570;--line:#C6D6DA;
+  --src:#E2513B;--col:#EA7A1E;--kafka:#C98F00;--stream:#0C9483;--lake:#2A6FCB;--serve:#C4326B;--ops:#5B6E77;
+  --bronze:#A2652F;--silver:#76878F;--gold:#B88C08;
+  --good:#1D8655;--warn:#B8740C;--bad:#C43535;
+  --code-bg:#0E2028;--code-ink:#D5E9EE;--code-dim:#7FA2AC;--code-key:#7FD8C8;--code-str:#FFC48A;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --spectrum:linear-gradient(90deg,var(--src),var(--col) 20%,var(--kafka) 40%,var(--stream) 60%,var(--lake) 80%,var(--serve));
+  --radius:14px;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#091317;--surface:#0E1C21;--surface-2:#142730;--ink:#E1EDF0;--ink-2:#93ADB5;--line:#21373E;
+    --src:#FF7860;--col:#FF9C4A;--kafka:#F3C243;--stream:#31D2BC;--lake:#61A6FF;--serve:#FF6EA3;--ops:#8DA2AA;
+    --bronze:#D49158;--silver:#A9B9C1;--gold:#EDC23A;
+    --good:#3DCB87;--warn:#F0AA3C;--bad:#FF6B6B;
+    --code-bg:#061015;--code-ink:#D5E9EE;--code-dim:#6F929C;--code-key:#7FE3D2;--code-str:#FFC48A;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#091317;--surface:#0E1C21;--surface-2:#142730;--ink:#E1EDF0;--ink-2:#93ADB5;--line:#21373E;
+  --src:#FF7860;--col:#FF9C4A;--kafka:#F3C243;--stream:#31D2BC;--lake:#61A6FF;--serve:#FF6EA3;--ops:#8DA2AA;
+  --bronze:#D49158;--silver:#A9B9C1;--gold:#EDC23A;
+  --good:#3DCB87;--warn:#F0AA3C;--bad:#FF6B6B;
+  --code-bg:#061015;--code-ink:#D5E9EE;--code-dim:#6F929C;--code-key:#7FE3D2;--code-str:#FFC48A;
+}
+
+*,*:before,*:after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.68 var(--f-body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+::selection{background:color-mix(in srgb,var(--stream) 30%,transparent)}
+:focus-visible{outline:2px solid var(--lake);outline-offset:2px;border-radius:4px}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px)+56px)}
+[hidden]{display:none!important}
+a{color:inherit}
+
+.gutter{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1140px;margin:0 auto}
+
+/* ── stage colour hooks ── */
+.s-src{--sc:var(--src)}.s-col{--sc:var(--col)}.s-kafka{--sc:var(--kafka)}.s-stream{--sc:var(--stream)}
+.s-lake{--sc:var(--lake)}.s-serve{--sc:var(--serve)}.s-ops{--sc:var(--ops)}
+
+/* ── sticky rail ── */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.rail-inner{display:flex;align-items:center;gap:14px;padding-block:10px}
+.rail-brand{font-family:var(--f-display);font-weight:700;font-size:15px;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.rail-brand i{width:22px;height:8px;border-radius:4px;background:var(--spectrum);display:inline-block}
+.rail-nav{flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+.rail-nav::-webkit-scrollbar{display:none}
+.rail-nav ol{list-style:none;margin:0;padding:0;display:flex;gap:4px}
+.rail-nav a{display:flex;align-items:center;gap:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--ink-2);padding:5px 10px;border-radius:999px;white-space:nowrap;transition:background .2s,color .2s;cursor:pointer}
+.rail-nav a::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--sc,var(--ops))}
+.rail-nav a:hover{background:var(--surface-2);color:var(--ink)}
+.rail-nav a.on{background:color-mix(in srgb,var(--sc) 16%,var(--surface));color:var(--ink)}
+.theme-btn{flex:none;font:600 13px var(--f-body);color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:7px}
+.theme-btn:hover{border-color:var(--ink-2)}
+.theme-btn span.sw{width:14px;height:14px;border-radius:50%;background:linear-gradient(90deg,var(--ink) 50%,var(--surface) 50%);border:1px solid var(--ink-2)}
+
+/* ── hero ── */
+.hero{padding-block:64px 36px}
+.kicker{font:600 12.5px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.hero h1{font-family:var(--f-display);font-weight:800;font-size:clamp(40px,7vw,78px);line-height:.98;letter-spacing:-.025em;margin:14px 0 18px;text-wrap:balance;max-width:14ch}
+.hero h1 em{font-style:normal;background:var(--spectrum);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{font-size:19px;max-width:62ch;color:var(--ink-2);margin:0}
+.spectrum-bar{height:10px;border-radius:6px;background:var(--spectrum);margin:34px 0 10px}
+.spectrum-labels{display:grid;grid-template-columns:repeat(6,1fr);font:500 11.5px var(--f-mono);color:var(--ink-2);gap:6px}
+.spectrum-labels span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:34px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.tile b{display:block;font-family:var(--f-display);font-size:28px;font-weight:700;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.tile span{font-size:13px;color:var(--ink-2)}
+.tile b.c-src{color:var(--src)}.tile b.c-stream{color:var(--stream)}.tile b.c-lake{color:var(--lake)}.tile b.c-kafka{color:var(--kafka)}
+
+/* ── progress bar ── */
+.pbar{height:8px;border-radius:6px;background:var(--surface-2);margin:28px 0 8px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;border-radius:6px;background:var(--spectrum);transition:width .5s}
+@media(prefers-reduced-motion:reduce){.pbar i{transition:none}}
+#ptxt{font:500 13px var(--f-mono);color:var(--ink-2)}
+
+/* ── sections ── */
+section.stage{padding-block:56px 20px;border-top:1px solid var(--line);scroll-margin-top:64px}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:4px 20px;align-items:end;margin-bottom:22px}
+.sec-num{grid-row:span 2;font-family:var(--f-display);font-weight:800;font-size:64px;line-height:.85;color:var(--sc);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.eyebrow{font:600 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--sc)}
+.sec-head h2{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,3.6vw,38px);line-height:1.1;letter-spacing:-.015em;margin:0;text-wrap:balance}
+.prose{max-width:760px}
+
+/* ── how-to note ── */
+.note{background:color-mix(in srgb,var(--sc,var(--ops)) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--sc,var(--ops)) 32%,var(--surface));border-radius:12px;padding:16px 18px;margin:22px 0;max-width:760px}
+.note .tag-label{display:inline-block;font:700 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--bg);background:var(--sc,var(--ops));padding:3px 8px;border-radius:6px;margin-bottom:8px}
+.note p{margin:0}
+
+/* ── toolbar ── */
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:18px 0}
+button,select{font:500 13px var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:7px 12px;cursor:pointer}
+button:hover,select:hover{border-color:var(--ink-2)}
+
+/* ── cards ── */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:14px 0;min-width:0}
+.card.solved{border-color:var(--good);box-shadow:inset 4px 0 0 var(--good)}
+.card.tried{border-color:var(--kafka);box-shadow:inset 4px 0 0 var(--kafka)}
+.card.revisit{border-color:var(--bad);box-shadow:inset 4px 0 0 var(--bad)}
+.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.meta select{margin-left:auto}
+
+/* number badge */
+.num{font:600 12px var(--f-mono);padding:4px 11px;border-radius:999px;color:var(--bg)}
+.num.drill{background:var(--src)}
+.num.drill::before{content:"TASK "}
+.num.lab{background:var(--stream)}
+.num.lab::before{content:"P"}
+
+/* difficulty + category tags */
+.tag{font:600 .72rem var(--f-mono);padding:3px 10px;border-radius:999px;white-space:nowrap}
+.tag.E{background:color-mix(in srgb,var(--good) 16%,var(--surface));color:var(--good)}
+.tag.M{background:color-mix(in srgb,var(--kafka) 18%,var(--surface));color:var(--kafka)}
+.tag.H{background:color-mix(in srgb,var(--bad) 15%,var(--surface));color:var(--bad)}
+.tag.co{background:color-mix(in srgb,var(--serve) 14%,var(--surface));color:var(--serve)}
+.tag.core{background:color-mix(in srgb,var(--stream) 14%,var(--surface));color:var(--stream)}
+.tag.generators{background:color-mix(in srgb,var(--kafka) 14%,var(--surface));color:var(--kafka)}
+.tag.pandas{background:color-mix(in srgb,var(--lake) 14%,var(--surface));color:var(--lake)}
+.tag.cn{background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);font-weight:500}
+
+/* ── card content ── */
+h3{font-family:var(--f-display);font-weight:700;font-size:21px;letter-spacing:-.005em;margin:12px 0 4px;text-wrap:balance}
+.card p{margin:4px 0 10px;max-width:72ch}
+.skills{font:500 .8rem var(--f-mono);color:var(--ink-2)}
+
+/* code blocks */
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:14px 16px;overflow-x:auto;font:400 13.2px/1.65 var(--f-mono);margin:8px 0;max-width:860px;tab-size:4}
+pre .c{color:var(--code-dim)}
+pre .k{color:var(--code-key)}
+pre .s{color:var(--code-str)}
+pre code{background:none!important;padding:0!important;border:none!important;font:inherit}
+code{font-family:var(--f-mono);font-size:.86em;background:var(--surface-2);border:1px solid var(--line);padding:1px 6px;border-radius:6px}
+
+/* hint / solution details */
+details{background:color-mix(in srgb,var(--kafka) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--kafka) 32%,var(--surface));border-radius:10px;padding:8px 14px;margin:8px 0}
+summary{cursor:pointer;font-weight:600;font-family:var(--f-body)}
+details.sol{background:color-mix(in srgb,var(--stream) 8%,var(--surface));border-color:color-mix(in srgb,var(--stream) 32%,var(--surface))}
+.why{border-top:1px solid var(--line);margin-top:10px;padding-top:8px}
+.why b{color:var(--stream)}
+.cons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.lbody code,.why code,details code{font:500 .88em var(--f-mono);background:color-mix(in srgb,var(--stream) 12%,var(--surface));padding:1px 6px;border-radius:5px;border:none}
+.lbody ul{margin:6px 0 10px;padding-left:22px}
+li::marker{color:var(--sc,var(--ink-2))}
+
+/* copy starter button */
+.cp{border:0;color:var(--bg);background:var(--src);margin-top:4px;font-weight:600;border-radius:999px;padding:8px 16px}
+.cp:hover{opacity:.9}
+.cp::before{content:"▶ "}
+
+/* lab copy starter button */
+.lcp{display:block;width:100%;background:color-mix(in srgb,var(--src) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--src) 32%,var(--surface));border-radius:10px;padding:8px 14px;margin:8px 0;cursor:pointer;font-weight:600;font-family:var(--f-body);color:var(--src);text-align:left;font-size:inherit}
+.lcp:hover{background:color-mix(in srgb,var(--src) 16%,var(--surface))}
+.lcp::before{content:"▶ "}
+
+/* ── learnings sticky note ── */
+:root{--sticky:color-mix(in srgb,var(--lake) 10%,var(--surface));--stickyb:color-mix(in srgb,var(--lake) 35%,var(--surface));--stickyt:var(--lake)}
+details.note-learn{background:var(--sticky);border:1px solid var(--stickyb);border-radius:4px 4px 12px 4px;box-shadow:2px 4px 10px rgba(0,0,0,.14)}
+details.note-learn summary{color:var(--stickyt)}
+details.note-learn textarea{display:block;width:100%;min-height:84px;margin:8px 0 2px;padding:8px 2px;background:transparent;color:var(--ink);border:0;border-top:1px dashed var(--stickyb);font:500 .95rem/1.55 var(--f-body);resize:vertical}
+details.note-learn textarea::placeholder{color:var(--stickyt);opacity:.55}
+details.note-learn textarea:focus-visible{outline:none;background:rgba(255,255,255,.12)}
+.ns{font:500 .72rem var(--f-mono);color:var(--stickyt);min-height:1.1em;text-align:right}
+
+/* ── jump buttons (lab) ── */
+.cats{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.jump{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.jump button{padding:4px 10px;font:600 .75rem var(--f-mono)}
+.jump button.solved{border-color:var(--good);color:var(--good)}
+.jump button.tried{border-color:var(--kafka);color:var(--kafka)}
+.jump button.revisit{border-color:var(--bad);color:var(--bad)}
+
+/* ── footer ── */
+footer{padding-block:40px 60px;color:var(--ink-2);font-size:13.5px;border-top:1px solid var(--line);margin-top:40px}
+
+/* ── responsive ── */
+@media(max-width:640px){
+  body{font-size:16px}
+  .hero{padding-block:40px 24px}
+  .sec-num{font-size:46px}
+  .rail-brand b{display:none}
+  .spectrum-labels{font-size:10px}
+  .meta select{margin-left:0}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style></head><body>
+
+<!-- ── HERO ── -->
+<header class="hero gutter"><div class="wrap">
+  <div class="kicker">agent online · data engineer interview · python basics</div>
+  <h1>Python Fluency <em>Drills</em></h1>
+  <p class="lede">30 drills on for, dict, set and list, plus 21 data-transformation problems for Senior DE live coding. Think in Java, type in Python — until it feels automatic.</p>
+  <div class="spectrum-bar"></div>
+  <div class="spectrum-labels"><span>Fundamentals</span><span>Patterns</span><span>Algorithms</span><span>Transforms</span><span>Generators</span><span>Pandas</span></div>
+  <div class="tiles">
+    <div class="tile"><b class="c-src">30</b><span>Core drills</span></div>
+    <div class="tile"><b class="c-stream">21</b><span>Lab problems</span></div>
+    <div class="tile"><b class="c-kafka">51</b><span>Total questions</span></div>
+    <div class="tile"><b class="c-lake">28</b><span>Cheat-sheet cards</span></div>
+  </div>
+  <div class="pbar"><i id="pb"></i></div>
+  <div id="ptxt"></div>
+</div></header>
+
+<!-- ── STICKY RAIL ── -->
+<nav class="rail gutter"><div class="wrap rail-inner">
+  <div class="rail-brand"><i></i><b>PyDrills</b></div>
+  <div class="rail-nav"><ol>
+    <li class="s-src"><a data-tab="practice" class="on">Drills · 30</a></li>
+    <li class="s-stream"><a data-tab="lab">Lab · 21</a></li>
+    <li class="s-lake"><a data-tab="cheat">Cheat sheet</a></li>
+  </ol></div>
+  <button class="theme-btn" id="th"><span class="sw"></span><span id="th-label">Dark</span></button>
+</div></nav>
+
+<!-- ── MAIN ── -->
+<main class="gutter"><div class="wrap">
+
+<!-- ▸ SECTION 01 — DRILLS -->
+<section id="practice" class="stage s-src">
+  <div class="sec-head"><span class="sec-num">01</span><span class="eyebrow">Fundamentals · Drills</span><h2>Core Python Practice</h2></div>
+  <div class="note"><span class="tag-label">How to use</span><p>Press "Copy starter", paste into a new PyCharm file, write the function from memory (no looking up!), run it, and compare with the expected output. Update each task's status as you go: Queued → Running → Done. Anything that took over 10 minutes goes to Retry. Progress is saved in this browser.</p></div>
+  <div class="tools"><label>Show <select id="flt"><option value="all">All tasks</option><option value="todo">Queued</option><option value="tried">Running</option><option value="solved">Done</option><option value="revisit">Retry</option></select></label><button id="rs">Reset progress</button></div>
+  <div id="list"></div>
+</section>
+
+<!-- ▸ SECTION 02 — LAB -->
+<section id="lab" class="stage s-stream" hidden>
+  <div class="sec-head"><span class="sec-num">02</span><span class="eyebrow">Transformation · Lab</span><h2>Data Transformation Practice</h2></div>
+  <div class="note"><span class="tag-label">Lab brief</span><p>21 problems calibrated for Senior DE live coding — pure Python, no Spark. Target: 15–20 min per problem. Practice in your IDE with AI/Copilot off. Talk through your approach out loud before writing code. Mark each problem as you go; progress is saved in this browser.</p></div>
+  <div class="cats"><span class="tag core">P1–P10, P17–P21 · Core Python</span><span class="tag generators">P11–P13 · Generators</span><span class="tag pandas">P14–P16 · Pandas</span></div>
+  <div class="tools"><label>Show <select id="lflt"><option value="all">All problems</option><option value="todo">Queued</option><option value="tried">Running</option><option value="solved">Done</option><option value="revisit">Retry</option></select></label><button id="rl">Reset lab progress</button></div>
+  <div class="jump" id="lj"></div>
+  <div id="ll"></div>
+</section>
+
+<!-- ▸ SECTION 03 — CHEAT SHEET -->
+<section id="cheat" class="stage s-lake" hidden>
+  <div class="sec-head"><span class="sec-num">03</span><span class="eyebrow">Reference · Patterns</span><h2>Cheat Sheet</h2></div>
+  <div class="prose"><p>Your notes, with the file placeholders filled in and a few extra patterns that cover most interview questions, plus generator, regex and pandas patterns from the Transformation Lab.</p></div>
+  <div id="cl"></div>
+</section>
+
+</div></main>
+
+<footer class="gutter"><div class="wrap">Python Fluency Drills — 51 questions · Pipeline Spectrum theme · Progress saved locally</div></footer>
+
+<script>
+const Q=[
+['VegaPay','M','Pivot marks by subject','Given student → subject → marks, return subject → student → marks.',`marks = {\n    "s1": {"Math": 85, "English": 78},\n    "s2": {"Math": 92, "English": 88},\n    "s3": {"Math": 87, "English": 80},\n}`,`{'Math': {'s1': 85, 's2': 92, 's3': 87}, 'English': {'s1': 78, 's2': 88, 's3': 80}}`,'Nested loop over .items(); result.setdefault(subject, {})[student] = score.','pivot_marks(marks)'],
+['Altimetrik','M','Total transaction value per customer (huge file)','Millions of customers, uneven volumes. Read the file line by line (never load it all) and aggregate into a dict. Create a small transactions.jsonl in PyCharm first, then be ready to explain why memory stays O(customers).',`# transactions.jsonl, one JSON object per line:\n# {"customer_id": "c1", "amount": 120.5}\n# {"customer_id": "c2", "amount": 40}\n# {"customer_id": "c1", "amount": 50}\npath = "transactions.jsonl"`,`{'c1': 170.5, 'c2': 40}`,'with open(path) as f: for line in f: json.loads(line); totals[c] = totals.get(c, 0) + amt. Skip blank lines.','total_per_customer(path)'],
+['IntellectSoft','M','Dedupe events + running total per user','Drop exact duplicate events, order by event_time, and add a running_total per user_id.',`events = [\n    {"user_id": 1, "event_time": "2024-01-01T10:00:00", "value": 100},\n    {"user_id": 1, "event_time": "2024-01-01T10:00:00", "value": 100},\n    {"user_id": 1, "event_time": "2024-01-01T10:01:00", "value": 200},\n    {"user_id": 2, "event_time": "2024-01-01T10:00:00", "value": 50},\n]`,`[{'user_id': 1, 'event_time': '2024-01-01T10:00:00', 'value': 100, 'running_total': 100}, {'user_id': 2, 'event_time': '2024-01-01T10:00:00', 'value': 50, 'running_total': 50}, {'user_id': 1, 'event_time': '2024-01-01T10:01:00', 'value': 200, 'running_total': 300}]`,'Dedupe with a set of (user_id, event_time, value) tuples; sort by event_time (ISO strings sort correctly); keep totals = {} per user.','running_totals(events)'],
+['STRAIVE','E','Character count dictionary','Count every character into a dict. Dict order follows first appearance; equality ignores order.',`s = "banana"`,`{'b': 1, 'a': 3, 'n': 2}`,'d[ch] = d.get(ch, 0) + 1. Then redo it with collections.Counter.','char_count(s)'],
+['LTM','M','Longest substring without repeating characters','Return its length in O(n) time (sliding window).',`s = "abcabcbb"`,`3`,'last_seen = {} plus a left pointer. If ch was seen at or after left, set left = last_seen[ch] + 1.','longest_unique(s)'],
+['','E','First non-repeating character','Return the first character that appears exactly once, else None.',`s = "swiss"`,`'w'`,'Count first, then loop over s again and return the first with count 1.','first_unique(s)'],
+['','E','Two Sum','Return the indices of the two numbers that add up to target.',`nums = [2, 7, 11, 15]\ntarget = 9`,`[0, 1]`,'One pass with seen = {value: index}; check target - n in seen.','two_sum(nums, target)'],
+['','M','Group anagrams','Group words that are anagrams of each other.',`words = ["eat", "tea", "tan", "ate", "nat", "bat"]`,`[['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]`,'key = "".join(sorted(w)); groups.setdefault(key, []).append(w); return list(groups.values()).','group_anagrams(words)'],
+['','E','Remove duplicates, keep order','Remove duplicates while keeping first-occurrence order.',`nums = [3, 1, 3, 2, 1]`,`[3, 1, 2]`,'A seen set plus a result list. One-liner afterwards: list(dict.fromkeys(nums)).','dedupe(nums)'],
+['','E','Invert a dict with duplicate values','Map each value to the list of keys that had it.',`d = {"a": 1, "b": 2, "c": 1}`,`{1: ['a', 'c'], 2: ['b']}`,'for k, v in d.items(): out.setdefault(v, []).append(k)','invert_dict(d)'],
+['','M','Top-k frequent words','Return the k most frequent words as (word, count), highest first.',`text = "the cat and the hat and the bat"\nk = 2`,`[('the', 3), ('and', 2)]`,'split(), count in a dict, then sorted(counts.items(), key=lambda kv: kv[1], reverse=True)[:k].','top_words(text, k)'],
+['','E','Find duplicates in a list','Return the values that appear more than once (each only once).',`nums = [1, 2, 3, 2, 4, 3, 5]`,`[2, 3]`,'Keep a seen set; when n is already in seen and not yet in the result, append it.','find_duplicates(nums)'],
+['','E','Common elements of two lists','Return the sorted common values, without repeats.',`a = [1, 2, 2, 3]\nb = [2, 2, 3, 4]`,`[2, 3]`,'sorted(set(a) & set(b))','common(a, b)'],
+['','E','Valid anagram','Return True if b is an anagram of a.',`a = "listen"\nb = "silent"`,`True`,'Compare sorted strings first, then try the dict-count approach.','is_anagram(a, b)'],
+['','E','Merge two dicts, summing values','Keys in both dicts get their values added.',`d1 = {"a": 1, "b": 2}\nd2 = {"b": 3, "c": 4}`,`{'a': 1, 'b': 5, 'c': 4}`,'Copy d1, then for k, v in d2.items(): out[k] = out.get(k, 0) + v','merge_sum(d1, d2)'],
+['','M','Flatten a nested dict','Join nested keys with a dot.',`nested = {"a": {"b": 1, "c": {"d": 2}}, "e": 3}`,`{'a.b': 1, 'a.c.d': 2, 'e': 3}`,'Recursive helper(prefix, d): if isinstance(v, dict) recurse, else store prefix + key.','flatten(nested)'],
+['','M','Highest-paid employee per department','Return department → name of the top earner.',`rows = [\n    {"name": "Asha", "dept": "HR", "salary": 50},\n    {"name": "Meena", "dept": "HR", "salary": 40},\n    {"name": "Ravi", "dept": "IT", "salary": 90},\n    {"name": "Tom", "dept": "IT", "salary": 70},\n]`,`{'HR': 'Asha', 'IT': 'Ravi'}`,'best = {}; replace best[dept] when the new salary is larger; then map each dept to its name.','top_earner(rows)'],
+['','E','Second largest unique number','Ignore duplicates; return None if there are fewer than two unique values.',`nums = [5, 1, 5, 3, 9, 9]`,`5`,'sorted(set(nums), reverse=True), then check len before indexing [1].','second_largest(nums)'],
+['','E','Move zeros to the end','Keep the order of the non-zero values.',`nums = [0, 1, 0, 3, 12]`,`[1, 3, 12, 0, 0]`,'Build non_zero with a loop, then add [0] * (len(nums) - len(non_zero)).','move_zeros(nums)'],
+['','E','Longest common prefix','Return the longest prefix shared by all words.',`words = ["flower", "flow", "flight"]`,`'fl'`,'prefix = words[0]; while not w.startswith(prefix): prefix = prefix[:-1]','common_prefix(words)'],
+['','E','Count log levels','The level is the first word of each line.',`logs = ["INFO start", "ERROR db", "INFO ok", "WARN slow", "ERROR net"]`,`{'INFO': 2, 'ERROR': 2, 'WARN': 1}`,'line.split()[0] gives the level; count with d.get(level, 0) + 1.','level_counts(logs)'],
+['','M','Average salary per department (CSV)','Read the CSV with the csv module. Create emp.csv in PyCharm first.',`# emp.csv\n# name,dept,salary\n# Asha,HR,50\n# Meena,HR,40\n# Ravi,IT,90\n# Tom,IT,70\npath = "emp.csv"`,`{'HR': 45.0, 'IT': 80.0}`,'csv.DictReader; keep sums and counts per dept; cast salary with float().','avg_salary(path)'],
+['','E','Latest event per user','Return user → the latest timestamp.',`events = [\n    {"user": 1, "ts": "2024-01-01T10:00:00"},\n    {"user": 2, "ts": "2024-01-01T09:30:00"},\n    {"user": 1, "ts": "2024-01-01T10:01:00"},\n]`,`{1: '2024-01-01T10:01:00', 2: '2024-01-01T09:30:00'}`,'ISO strings compare correctly: keep ts if user not in out or ts > out[user].','latest_per_user(events)'],
+['','M','Subarrays with sum k','Count contiguous subarrays whose sum equals k.',`nums = [1, 2, 3]\nk = 3`,`2`,'Prefix sum plus a dict of prefix counts (start with {0: 1}); count += seen.get(total - k, 0).','count_subarrays(nums, k)'],
+['','E','Clean records','Drop records without an id; fill a missing city with "Unknown".',`records = [{"id": 1, "city": "Pune"}, {"id": None, "city": "Delhi"}, {"id": 2}]`,`[{'id': 1, 'city': 'Pune'}, {'id': 2, 'city': 'Unknown'}]`,'Skip when rec.get("id") is None; build a new dict with rec.get("city", "Unknown").','clean(records)'],
+['','E','Valid parentheses','Return True if every bracket is closed in the right order.',`s = "{[()]}"`,`True`,'Use a list as a stack; pairs = {")": "(", "]": "[", "}": "{"}; pop when you see a closer.','is_valid(s)'],
+['','M','Merge overlapping intervals','Merge intervals that overlap.',`intervals = [[1, 3], [2, 6], [8, 10], [15, 18]]`,`[[1, 6], [8, 10], [15, 18]]`,'Sort by start; if start <= merged[-1][1], extend with max(); otherwise append.','merge_intervals(intervals)'],
+['','M','Order totals from a JSON file','Read the JSON file and return customer → total of price × qty. Create orders.json in PyCharm first.',`# orders.json\n# [{"order_id": 1, "customer": "c1", "items": [{"price": 10, "qty": 2}, {"price": 5, "qty": 1}]},\n#  {"order_id": 2, "customer": "c2", "items": [{"price": 7, "qty": 3}]}]\npath = "orders.json"`,`{'c1': 25, 'c2': 21}`,'json.load(f) gives a list of dicts; sum(i["price"] * i["qty"] for i in order["items"]).','order_totals(path)'],
+['','E','Customers who bought both products','Return the sorted customers who bought both product a and product b.',`orders = [("c1", "A"), ("c2", "A"), ("c1", "B"), ("c3", "B")]\na = "A"\nb = "B"`,`['c1']`,'Build two sets with comprehensions, then sorted(set_a & set_b).','bought_both(orders, a, b)'],
+['','M','Schema drift between two records','Compare two records and report added, removed and changed keys (sorted).',`old = {"id": 1, "name": "A", "age": 30}\nnew = {"id": 1, "name": "B", "city": "X"}`,`{'added': ['city'], 'removed': ['age'], 'changed': ['name']}`,'Set operations on keys: new.keys() - old.keys(), old.keys() - new.keys(); changed = keys in both with different values.','diff_records(old, new)']];
+const C=[
+['Sort a string','s = "banana"\nsorted_str = "".join(sorted(s))   # "aaabnn"'],
+['Empty containers','empty_list = []\nempty_set = set()    # {} would create a dict!\nempty_dict = {}'],
+['Loops','for item in my_list:             # list, set, dict (keys)\n    ...\nfor i in range(len(my_list)):\n    ...\nfor i, x in enumerate(my_list):\n    ...'],
+['len()','len("abc"); len([1, 2]); len({1, 2}); len({"a": 1})   # str, list, set, dict'],
+['Sort a list','nums.sort()                 # in place\nnums.sort(reverse=True)\nsorted(nums)               # new list\nrows.sort(key=lambda r: r["salary"])'],
+['Key and value','for k, v in d.items():\n    ...\nd.keys(); d.values()'],
+['.jsonl file','import json\nwith open("data.jsonl") as f:\n    for line in f:                # streams one line at a time\n        if not line.strip():\n            continue\n        rec = json.loads(line)\nwith open("out.jsonl", "w") as f:\n    f.write(json.dumps(rec) + "\\n")'],
+['.json file','import json\nwith open("data.json") as f:\n    data = json.load(f)\nwith open("out.json", "w") as f:\n    json.dump(data, f, indent=2)'],
+['.csv file','import csv\nwith open("emp.csv", newline="") as f:\n    for row in csv.DictReader(f):   # row is a dict\n        print(row["name"], float(row["salary"]))\nwith open("out.csv", "w", newline="") as f:\n    w = csv.writer(f)\n    w.writerow(["a", "b"])'],
+['Count and group (the two patterns behind most questions)','counts[ch] = counts.get(ch, 0) + 1          # count\ngroups.setdefault(k, []).append(v)           # group\nfrom collections import defaultdict, Counter\nd = defaultdict(list); c = Counter("banana")'],
+['Duplicates: tuple key + dict (the best pattern)','def dedupe(rows):\n    seen = {}                                                # key -> row\n    for row in rows:\n        key = (row["customer"], row["sku"])                  # tuple = hashable, equal by value\n        if key not in seen or row["ts"] > seen[key]["ts"]:   # keep latest\n            seen[key] = row                                  # overwrite keeps the key\'s first slot\n    return list(seen.values())                               # list(), not the raw .values() view\n\n# Same loop. Only the collision rule changes:\nif key not in seen: seen[key] = row                          # keep first\ncounts[key] = counts.get(key, 0) + 1                         # count duplicates\ntotals[key] = totals.get(key, 0) + row["amount"]             # sum / aggregate\ngroups.setdefault(key, []).append(row)                       # group all rows\nif key in seen_keys:                                         # exact dupes only: a set is enough\n    continue\nseen_keys.add(key)'],
+['Dedup gotchas (say these out loud)','# Assigning to an existing key overwrites blindly, so always compare timestamps\n# Key must be hashable: str, int, tuple are OK; list or dict -> TypeError\nkey = (row["customer"], tuple(row["tags"]))                  # convert a list part to a tuple\n# A dict match uses hash() and ==, not the memory address (is)\n("A", "sku") == ("A", "sku")                                 # True, so the same key\n# Normalise messy keys first\nkey = (row["customer"].strip().lower(), row["sku"])\n# Ties: ">" keeps the first row seen, ">=" keeps the last\n# Memory = one entry per distinct key. Too many? chunks, sort + compare neighbours, or Spark\n# SQL twin: ROW_NUMBER() OVER (PARTITION BY customer, sku ORDER BY ts DESC) = 1'],
+['dict.values() is a view, not a list','res = latest.values()              # dict_values: a live view, not a list\nlen(res)                           # works\nfor row in res: ...                # works\nres[0]                             # TypeError: not subscriptable\nres == expected                    # False, even with identical rows\nres.sort()                         # AttributeError\n\nreturn list(latest.values())       # when the task asks for a list\nlist(d.keys()); list(d.items())    # same rule for keys() and items()'],
+['Sort a dict by value','sorted(d.items(), key=lambda kv: kv[1], reverse=True)[:2]'],
+['Strings and slicing','s[::-1]   s[1:4]   s.split()   " ".join(words)\ns.lower()   ch.isalpha()   s.startswith("ab")'],
+['Sets','seen = set()\nif x in seen: ...\nseen.add(x)\na & b    a | b    a - b       # intersection, union, difference'],
+['Comprehensions','[x * 2 for x in nums if x > 0]\n{k: v for k, v in d.items()}'],
+["Counter, top-N and nested counts","from collections import Counter, defaultdict\nCounter(words).most_common(3)                 # [(word, count), ...]\ntop = max(d, key=d.get)                       # key with the biggest value\nby = defaultdict(lambda: defaultdict(int))    # by[region][product] += amount\ntot = defaultdict(lambda: {\"revenue\": 0, \"count\": 0})"],["Dict unpacking, safe get, keep latest","row = {\"customer\": name, **txn}               # copy txn and add a key\nmerged = {**d1, **d2}                         # later keys win\nfor t in c.get(\"transactions\") or []:         # safe when missing or None\n    ...\nif k not in latest or r[\"ts\"] > latest[k][\"ts\"]:   # ISO timestamps compare as strings\n    latest[k] = r"],["Parse CSV text with error rows","import csv, io\nfor n, row in enumerate(csv.DictReader(io.StringIO(text)), start=2):   # row 1 is the header\n    row = {k: v.strip() for k, v in row.items()}\n    try:\n        row[\"amount\"] = float(row[\"amount\"])\n    except ValueError:\n        errors.append({\"row\": n, \"reason\": \"invalid amount\"})"],["Generators: stream in batches","def batches(path, size):\n    batch = []\n    with open(path) as f:\n        for line in f:\n            if not line.strip():\n                continue\n            batch.append(json.loads(line))\n            if len(batch) == size:\n                yield batch\n                batch = []\n    if batch:                      # do not forget the last partial batch\n        yield batch"],["Generators: chain, slice, clean up","import itertools\nout = convert(filter_good(stream))           # chained generators, nothing runs until iterated\nfirst_n = list(itertools.islice(stream, n))  # take n from an infinite stream\nyield from other_gen                         # delegate to another generator\ngen.close()                                  # raises GeneratorExit inside the generator\nfrom contextlib import contextmanager        # try / yield / finally around a generator"],["Sliding window with deque","from collections import deque\nwindow = deque(maxlen=k)                     # old items fall off automatically\nif len(window) == k: window_sum -= window[0] # remove the item about to drop\nwindow.append(val); window_sum += val"],["Regex for log lines","import re\nm = re.match(r'(\\S+)\\s+(GET|POST)\\s+(\\S+)\\s+(\\d{3})', line)\nif m:\n    ts, method, path, status = m.groups()"],["Pandas: clean, merge, chunk","import pandas as pd\ndf[\"price\"] = pd.to_numeric(df[\"price\"], errors=\"coerce\")   # bad values become NaN\ndf = df.dropna(subset=[\"price\"]); df[\"qty\"] = df[\"qty\"].astype(int)\ndf[\"d\"] = pd.to_datetime(df[\"d\"])\ndf = df.merge(products, on=\"product_id\", how=\"inner\")       # or how=\"left\"\ndf = df.assign(total=lambda d: d[\"qty\"] * d[\"price\"])       # chain with .assign()\nfor chunk in pd.read_csv(path, chunksize=100_000): ...      # big files"],["Pandas: groupby, pivot, shift","df.groupby([\"date\", \"region\"], as_index=False)[\"revenue\"].sum()\ndf.groupby(\"date\")[\"revenue\"].transform(\"sum\")     # same length as df, for % of total\ndf.groupby(\"region\")[\"revenue\"].shift(1)           # previous row per group (MoM growth)\ndf.pivot_table(index=\"date\", columns=\"region\", values=\"revenue\", aggfunc=\"sum\")\ndf.groupby(\"region\").agg(total=(\"revenue\", \"sum\"), n=(\"product\", \"nunique\"))"],["Pandas: missing data and joins","df[\"name\"].fillna(\"Unknown\")\na.merge(b, on=\"id\", how=\"left\", indicator=True).query('_merge == \"left_only\"')   # anti-join\norphans = set(a[\"id\"]) - set(b[\"id\"])             # fastest way to find unmatched ids\n# merge() joins on columns, join() joins on the index, concat() stacks frames (axis=0 / axis=1)"],
+['Java \u2192 Python','HashMap<K,V>   -> dict    map.getOrDefault(k, 0) -> d.get(k, 0)\nHashSet<T>     -> set     map.computeIfAbsent    -> d.setdefault(k, [])\nArrayList<T>   -> list    StringBuilder          -> parts list + "".join(parts)\nfor (int i...) -> range   Collections.sort(l)    -> l.sort()']];
+const L=[{"id":1,"title":"Flatten Nested Transactions","difficulty":"medium","category":"core","skills":"nested dicts \u00b7 list comprehension \u00b7 json traversal","body":"<p>You receive a list of customer records, each containing a nested list of transactions. Write a function that flattens this into a single list of dicts, each containing the customer name and individual transaction details.<\/p>\n<pre><code>Input:\ncustomers = [\n    {\n        \"name\": \"Alice\",\n        \"transactions\": [\n            {\"id\": \"T1\", \"amount\": 150.0, \"currency\": \"USD\"},\n            {\"id\": \"T2\", \"amount\": 89.50, \"currency\": \"EUR\"}\n        ]\n    },\n    {\n        \"name\": \"Bob\",\n        \"transactions\": [\n            {\"id\": \"T3\", \"amount\": 200.0, \"currency\": \"USD\"}\n        ]\n    }\n]\n\nExpected Output:\n[\n    {\"customer\": \"Alice\", \"id\": \"T1\", \"amount\": 150.0, \"currency\": \"USD\"},\n    {\"customer\": \"Alice\", \"id\": \"T2\", \"amount\": 89.50, \"currency\": \"EUR\"},\n    {\"customer\": \"Bob\",   \"id\": \"T3\", \"amount\": 200.0, \"currency\": \"USD\"}\n]<\/code><\/pre>\n<p><strong>Follow-up:<\/strong> What if some customers have no transactions key, or transactions is None?<\/p>","hint":"Think about a nested loop \u2014 outer loop over customers, inner loop over transactions. For each transaction, merge the customer name into it. For the follow-up, use <code>.get(\"transactions\") or []<\/code> to handle missing/None.","solution":"<pre><code>def flatten_transactions(customers):\n    result = []\n    for customer in customers:\n        name = customer[\"name\"]\n        for txn in customer.get(\"transactions\") or []:\n            result.append({\n                \"customer\": name,\n                **txn\n            })\n    return result\n\n# One-liner version:\ndef flatten_transactions_v2(customers):\n    return [\n        {\"customer\": c[\"name\"], **txn}\n        for c in customers\n        for txn in (c.get(\"transactions\") or [])\n    ]<\/code><\/pre>","walkthrough":"The <code>**txn<\/code> unpacking spreads transaction fields into the new dict. Using <code>.get(\"transactions\") or []<\/code> handles both missing keys and None values. The list comprehension version shows fluency but the explicit loop is clearer during an interview \u2014 use whichever you're more comfortable explaining.","concepts":["dict unpacking","nested loops","defensive .get()","list comprehension"]},{"id":2,"title":"Deduplicate by Latest Timestamp","difficulty":"medium","category":"core","skills":"defaultdict \u00b7 sorting \u00b7 dict operations","body":"<p>Given a list of event records with possible duplicates (same <code>event_id<\/code>), keep only the record with the latest <code>timestamp<\/code> for each event.<\/p>\n<pre><code>Input:\nevents = [\n    {\"event_id\": \"E1\", \"timestamp\": \"2024-03-15T10:00:00\", \"status\": \"pending\"},\n    {\"event_id\": \"E2\", \"timestamp\": \"2024-03-15T09:00:00\", \"status\": \"done\"},\n    {\"event_id\": \"E1\", \"timestamp\": \"2024-03-15T14:00:00\", \"status\": \"done\"},\n    {\"event_id\": \"E3\", \"timestamp\": \"2024-03-15T08:00:00\", \"status\": \"pending\"},\n    {\"event_id\": \"E2\", \"timestamp\": \"2024-03-15T12:00:00\", \"status\": \"failed\"},\n]\n\nExpected Output (order doesn't matter):\n[\n    {\"event_id\": \"E1\", \"timestamp\": \"2024-03-15T14:00:00\", \"status\": \"done\"},\n    {\"event_id\": \"E2\", \"timestamp\": \"2024-03-15T12:00:00\", \"status\": \"failed\"},\n    {\"event_id\": \"E3\", \"timestamp\": \"2024-03-15T08:00:00\", \"status\": \"pending\"}\n]<\/code><\/pre>\n<p><strong>Follow-up:<\/strong> What if there are millions of records? How would you optimize memory?<\/p>","hint":"Iterate once, maintaining a dict keyed by event_id. For each record, compare timestamps and keep the later one. ISO timestamps sort lexicographically, so you can compare them as strings.","solution":"<pre><code>def dedup_latest(events):\n    latest = {}\n    for event in events:\n        eid = event[\"event_id\"]\n        if eid not in latest or event[\"timestamp\"] > latest[eid][\"timestamp\"]:\n            latest[eid] = event\n    return list(latest.values())\n\n# Follow-up: for millions of records in a file,\n# use a generator to stream without loading all at once:\nimport json\n\ndef dedup_from_file(filepath):\n    latest = {}  # only stores one record per event_id\n    with open(filepath) as f:\n        for line in f:\n            event = json.loads(line)\n            eid = event[\"event_id\"]\n            if eid not in latest or event[\"timestamp\"] > latest[eid][\"timestamp\"]:\n                latest[eid] = event\n    return list(latest.values())<\/code><\/pre>","walkthrough":"This is O(n) time and O(unique keys) space \u2014 optimal. The key insight is that ISO 8601 timestamps compare correctly as strings, so no datetime parsing needed. For the follow-up, streaming from a file line-by-line keeps memory to O(unique event_ids) instead of O(total records).","concepts":["dict as lookup","string comparison for ISO timestamps","streaming / generators","O(n) single-pass"]},{"id":3,"title":"Group and Aggregate Sales","difficulty":"medium","category":"core","skills":"defaultdict \u00b7 Counter \u00b7 sorting with lambda","body":"<p>Given a list of sales records, produce a summary: for each <code>region<\/code>, the total revenue, number of transactions, and the top-selling product (by total amount).<\/p>\n<pre><code>Input:\nsales = [\n    {\"region\": \"APAC\", \"product\": \"Widget\",  \"amount\": 500},\n    {\"region\": \"EMEA\", \"product\": \"Gadget\",  \"amount\": 300},\n    {\"region\": \"APAC\", \"product\": \"Gizmo\",   \"amount\": 700},\n    {\"region\": \"APAC\", \"product\": \"Widget\",  \"amount\": 200},\n    {\"region\": \"EMEA\", \"product\": \"Widget\",  \"amount\": 450},\n    {\"region\": \"EMEA\", \"product\": \"Gadget\",  \"amount\": 150},\n]\n\nExpected Output:\n{\n    \"APAC\": {\"total_revenue\": 1400, \"num_transactions\": 3, \"top_product\": \"Gizmo\"},\n    \"EMEA\": {\"total_revenue\": 900,  \"num_transactions\": 3, \"top_product\": \"Widget\"}\n}<\/code><\/pre>","hint":"Use a <code>defaultdict<\/code> to accumulate per-region. For top product, you need a nested grouping: region \u2192 product \u2192 total amount. Then find the max within each region.","solution":"<pre><code>from collections import defaultdict\n\ndef summarize_sales(sales):\n    region_totals = defaultdict(lambda: {\"revenue\": 0, \"count\": 0})\n    product_revenue = defaultdict(lambda: defaultdict(int))\n\n    for s in sales:\n        region = s[\"region\"]\n        region_totals[region][\"revenue\"] += s[\"amount\"]\n        region_totals[region][\"count\"] += 1\n        product_revenue[region][s[\"product\"]] += s[\"amount\"]\n\n    result = {}\n    for region, totals in region_totals.items():\n        top_product = max(product_revenue[region],\n                         key=product_revenue[region].get)\n        result[region] = {\n            \"total_revenue\": totals[\"revenue\"],\n            \"num_transactions\": totals[\"count\"],\n            \"top_product\": top_product\n        }\n    return result<\/code><\/pre>","walkthrough":"Two defaultdicts let you accumulate in a single pass. The nested <code>defaultdict(int)<\/code> for product_revenue handles the two-level grouping cleanly. <code>max(dict, key=dict.get)<\/code> is a common pattern to find the key with the highest value \u2014 worth memorizing.","concepts":["defaultdict","nested defaultdict","max() with key=","single-pass aggregation"]},{"id":4,"title":"Parse and Clean CSV Data","difficulty":"medium","category":"core","skills":"csv module \u00b7 error handling \u00b7 type conversion","body":"<p>Read a CSV string (simulating a file), clean the data, and return structured records. Handle: leading/trailing whitespace, empty rows, invalid amounts (non-numeric), and missing required fields.<\/p>\n<pre><code>Input (as a string \u2014 imagine reading from a file):\ncsv_data = \"\"\"name,email,amount,date\nAlice, alice@example.com, 150.50, 2024-01-15\nBob, bob@example.com, , 2024-01-16\n, charlie@example.com, 200, 2024-01-17\nDave, dave@example.com, not_a_number, 2024-01-18\nEve, eve@example.com, 300.75, 2024-01-19\n\n\"\"\"\n\nExpected Output:\nvalid = [\n    {\"name\": \"Alice\", \"email\": \"alice@example.com\", \"amount\": 150.50, \"date\": \"2024-01-15\"},\n    {\"name\": \"Eve\",   \"email\": \"eve@example.com\",   \"amount\": 300.75, \"date\": \"2024-01-19\"}\n]\nerrors = [\n    {\"row\": 3, \"reason\": \"missing amount\", \"data\": {\"name\": \"Bob\", ...}},\n    {\"row\": 4, \"reason\": \"missing name\",   \"data\": {\"name\": \"\",   ...}},\n    {\"row\": 5, \"reason\": \"invalid amount\", \"data\": {\"name\": \"Dave\", ...}}\n]<\/code><\/pre>\n<p><strong>Follow-up:<\/strong> How would you modify this to process a 10GB file?<\/p>","hint":"Use <code>csv.DictReader<\/code> with <code>io.StringIO<\/code> to simulate file reading. Strip all values. Validate each row: check for empty required fields, try <code>float()<\/code> conversion for amount. Separate valid and error records.","solution":"<pre><code>import csv\nimport io\n\ndef parse_and_clean(csv_data):\n    valid, errors = [], []\n    reader = csv.DictReader(io.StringIO(csv_data))\n\n    for row_num, row in enumerate(reader, start=2):\n        cleaned = {k: v.strip() for k, v in row.items()}\n        if not any(cleaned.values()):\n            continue\n        if not cleaned.get(\"name\"):\n            errors.append({\"row\": row_num, \"reason\": \"missing name\", \"data\": cleaned})\n            continue\n        if not cleaned.get(\"amount\"):\n            errors.append({\"row\": row_num, \"reason\": \"missing amount\", \"data\": cleaned})\n            continue\n        try:\n            cleaned[\"amount\"] = float(cleaned[\"amount\"])\n        except ValueError:\n            errors.append({\"row\": row_num, \"reason\": \"invalid amount\", \"data\": cleaned})\n            continue\n        valid.append(cleaned)\n    return valid, errors\n\n# For a 10GB file \u2014 yield instead of appending:\ndef parse_large_file(filepath):\n    with open(filepath) as f:\n        reader = csv.DictReader(f)\n        for row in reader:\n            cleaned = {k: v.strip() for k, v in row.items()}\n            if cleaned.get(\"name\") and cleaned.get(\"amount\"):\n                try:\n                    cleaned[\"amount\"] = float(cleaned[\"amount\"])\n                    yield cleaned\n                except ValueError:\n                    pass<\/code><\/pre>","walkthrough":"<code>csv.DictReader<\/code> handles header parsing automatically. The validation chain uses early <code>continue<\/code> to keep the happy path clean. For the 10GB follow-up: csv.DictReader already streams (doesn't load the file), and switching to <code>yield<\/code> makes the function a generator \u2014 the caller processes one row at a time.","concepts":["csv.DictReader","io.StringIO","try/except for type validation","generators for large files","early return pattern"]},{"id":5,"title":"Nested JSON Flattening","difficulty":"hard","category":"core","skills":"recursion \u00b7 dict operations \u00b7 key building","body":"<p>Write a function that takes an arbitrarily nested JSON-like dict and flattens it into a single-level dict with dot-separated keys.<\/p>\n<pre><code>Input:\ndata = {\n    \"user\": {\n        \"name\": \"Alice\",\n        \"address\": {\n            \"city\": \"Bengaluru\",\n            \"zip\": \"560001\"\n        },\n        \"scores\": [85, 92, 78]\n    },\n    \"active\": True\n}\n\nExpected Output:\n{\n    \"user.name\": \"Alice\",\n    \"user.address.city\": \"Bengaluru\",\n    \"user.address.zip\": \"560001\",\n    \"user.scores\": [85, 92, 78],\n    \"active\": True\n}<\/code><\/pre>\n<p><strong>Follow-up:<\/strong> What if you also want to flatten lists, producing keys like <code>user.scores.0<\/code>, <code>user.scores.1<\/code>?<\/p>","hint":"Use recursion. Base case: value is not a dict \u2192 add to result with the full key path. Recursive case: value is a dict \u2192 recurse with updated prefix. Build the key prefix with dots.","solution":"<pre><code>def flatten_json(data, prefix=\"\", separator=\".\"):\n    result = {}\n    for key, value in data.items():\n        full_key = f\"{prefix}{separator}{key}\" if prefix else key\n        if isinstance(value, dict):\n            result.update(flatten_json(value, full_key, separator))\n        else:\n            result[full_key] = value\n    return result\n\n# Follow-up: also flatten lists\ndef flatten_json_deep(data, prefix=\"\", sep=\".\"):\n    result = {}\n    if isinstance(data, dict):\n        for key, value in data.items():\n            full_key = f\"{prefix}{sep}{key}\" if prefix else key\n            result.update(flatten_json_deep(value, full_key, sep))\n    elif isinstance(data, list):\n        for i, item in enumerate(data):\n            full_key = f\"{prefix}{sep}{i}\" if prefix else str(i)\n            result.update(flatten_json_deep(item, full_key, sep))\n    else:\n        result[prefix] = data\n    return result<\/code><\/pre>","walkthrough":"This is a classic recursion problem that appears in DE interviews because it mirrors real ETL work \u2014 flattening API responses for database storage. The follow-up version handles both dicts and lists recursively. Key patterns: <code>isinstance()<\/code> for type checking, <code>dict.update()<\/code> for merging results, and building the key prefix through recursion.","concepts":["recursion","isinstance()","dict.update()","key prefix building","handling mixed types"]},{"id":6,"title":"Sliding Window: Moving Average","difficulty":"medium","category":"core","skills":"deque \u00b7 generators \u00b7 edge cases","body":"<p>Compute a sliding window moving average over a stream of numbers. Given a list of values and a window size <code>k<\/code>, return the moving average at each position (starting from when the window is full).<\/p>\n<pre><code>Input:\nvalues = [10, 20, 30, 40, 50, 60, 70]\nk = 3\n\nExpected Output:\n[20.0, 30.0, 40.0, 50.0, 60.0]\n# Explanation:\n# (10+20+30)/3=20, (20+30+40)/3=30, (30+40+50)/3=40, ...<\/code><\/pre>\n<p><strong>Follow-up:<\/strong> Implement as a generator that could process an infinite stream. What's the time complexity?<\/p>","hint":"Maintain a running sum. When the window is full, subtract the element leaving and add the new one. Use <code>collections.deque(maxlen=k)<\/code> to automatically evict old elements.","solution":"<pre><code>from collections import deque\n\ndef moving_average(values, k):\n    result = []\n    window = deque(maxlen=k)\n    window_sum = 0\n    for val in values:\n        if len(window) == k:\n            window_sum -= window[0]\n        window.append(val)\n        window_sum += val\n        if len(window) == k:\n            result.append(window_sum / k)\n    return result\n\n# Generator version for infinite streams:\ndef moving_average_stream(stream, k):\n    window = deque(maxlen=k)\n    window_sum = 0\n    for val in stream:\n        if len(window) == k:\n            window_sum -= window[0]\n        window.append(val)\n        window_sum += val\n        if len(window) == k:\n            yield window_sum / k<\/code><\/pre>","walkthrough":"The running sum trick gives O(1) per element instead of O(k) \u2014 you don't re-sum the window each time. <code>deque(maxlen=k)<\/code> automatically drops the oldest element when full, but we subtract it from the sum before it's evicted. The generator version uses <code>yield<\/code> so it works on infinite streams with constant memory.","concepts":["deque with maxlen","running sum optimization","generators for streaming","O(n) time O(k) space"]},{"id":7,"title":"Merge Overlapping Intervals","difficulty":"medium","category":"core","skills":"sorting \u00b7 interval logic \u00b7 tuple unpacking","body":"<p>Given a list of time intervals (as tuples or lists), merge all overlapping intervals. This models real DE problems like merging overlapping session logs or time ranges.<\/p>\n<pre><code>Input:\nintervals = [(1, 3), (2, 6), (8, 10), (15, 18), (9, 11)]\n\nExpected Output:\n[(1, 6), (8, 11), (15, 18)]<\/code><\/pre>\n<p><strong>Follow-up:<\/strong> What if intervals are given as ISO timestamp strings instead of integers?<\/p>","hint":"Sort by start time first. Then iterate: if the current interval overlaps with the last merged interval (current start \u2264 last end), extend the last merged interval. Otherwise, start a new merged interval.","solution":"<pre><code>def merge_intervals(intervals):\n    if not intervals:\n        return []\n    sorted_iv = sorted(intervals, key=lambda x: x[0])\n    merged = [list(sorted_iv[0])]\n    for start, end in sorted_iv[1:]:\n        if start <= merged[-1][1]:\n            merged[-1][1] = max(merged[-1][1], end)\n        else:\n            merged.append([start, end])\n    return [tuple(iv) for iv in merged]\n\n# Follow-up: ISO timestamps work the same way\n# because they sort lexicographically:\ndef merge_time_intervals(intervals):\n    if not intervals:\n        return []\n    sorted_iv = sorted(intervals, key=lambda x: x[0])\n    merged = [list(sorted_iv[0])]\n    for start, end in sorted_iv[1:]:\n        if start <= merged[-1][1]:\n            merged[-1][1] = max(merged[-1][1], end)\n        else:\n            merged.append([start, end])\n    return [tuple(iv) for iv in merged]<\/code><\/pre>","walkthrough":"Sort first, then single pass \u2014 O(n log n) total. The overlap check is <code>start <= last_end<\/code>. Using <code>max()<\/code> for the end handles the case where one interval is fully contained within another. This is a LeetCode classic (Problem 56) but also genuinely useful in DE for session merging and event consolidation.","concepts":["sorting with lambda","greedy algorithm","interval merging","tuple unpacking"]},{"id":8,"title":"Log File Parser with Regex","difficulty":"medium","category":"core","skills":"regex \u00b7 file parsing \u00b7 Counter \u00b7 datetime","body":"<p>Parse web server log entries to extract the timestamp, HTTP method, path, and status code. Then find: how many requests per status code, and the top 3 most requested paths.<\/p>\n<pre><code>Input (log lines):\nlogs = [\n    '2024-03-15T10:23:45 GET /api/users 200',\n    '2024-03-15T10:23:46 POST /api/orders 201',\n    '2024-03-15T10:23:47 GET /api/users 200',\n    '2024-03-15T10:23:48 GET /api/products 500',\n    '2024-03-15T10:23:49 GET /api/users 200',\n    '2024-03-15T10:23:50 DELETE /api/orders/123 404',\n    '2024-03-15T10:23:51 POST /api/orders 201',\n    '2024-03-15T10:23:52 GET /api/products 200',\n]\n\nExpected Output:\nstatus_counts = {200: 4, 201: 2, 500: 1, 404: 1}\ntop_paths = [(\"/api/users\", 3), (\"/api/orders\", 2), (\"/api/products\", 2)]<\/code><\/pre>","hint":"Use <code>re.match()<\/code> or simply <code>str.split()<\/code> \u2014 these logs are space-delimited so regex isn't strictly necessary, but knowing both approaches is valuable. Use <code>Counter<\/code> for both aggregations, and <code>.most_common(3)<\/code> for top paths.","solution":"<pre><code>import re\nfrom collections import Counter\n\ndef parse_logs(logs):\n    pattern = r'(\\S+)\\s+(GET|POST|PUT|DELETE|PATCH)\\s+(\\S+)\\s+(\\d{3})'\n    status_counts = Counter()\n    path_counts = Counter()\n    for line in logs:\n        match = re.match(pattern, line)\n        if match:\n            timestamp, method, path, status = match.groups()\n            status_counts[int(status)] += 1\n            path_counts[path] += 1\n    top_paths = path_counts.most_common(3)\n    return dict(status_counts), top_paths\n\n# Simpler version without regex (for well-structured logs):\ndef parse_logs_simple(logs):\n    status_counts = Counter()\n    path_counts = Counter()\n    for line in logs:\n        parts = line.strip().split()\n        if len(parts) == 4:\n            _, method, path, status = parts\n            status_counts[int(status)] += 1\n            path_counts[path] += 1\n    return dict(status_counts), path_counts.most_common(3)<\/code><\/pre>","walkthrough":"In an interview, offering both approaches \u2014 regex for messy logs, split() for clean ones \u2014 shows judgment. <code>Counter.most_common(n)<\/code> returns the n most frequent items as (element, count) tuples, which is exactly what \"top N\" questions want. Knowing when to use regex vs split() is a seniority signal.","concepts":["re.match()","Counter",".most_common()","str.split()","structured vs unstructured parsing"]},{"id":9,"title":"Build a Schema Validator","difficulty":"hard","category":"core","skills":"type checking \u00b7 recursion \u00b7 error collection","body":"<p>Write a function that validates a list of records against a schema definition. The schema specifies field names, expected types, and whether fields are required. Collect all validation errors.<\/p>\n<pre><code>schema = {\n    \"name\":   {\"type\": str,   \"required\": True},\n    \"age\":    {\"type\": int,   \"required\": True},\n    \"email\":  {\"type\": str,   \"required\": False},\n    \"score\":  {\"type\": float, \"required\": True},\n}\n\nrecords = [\n    {\"name\": \"Alice\", \"age\": 30, \"score\": 95.5},\n    {\"name\": \"Bob\",   \"age\": \"twenty\", \"email\": \"bob@x.com\", \"score\": 88.0},\n    {\"name\": \"\",      \"age\": 25, \"score\": None},\n]\n\nExpected Output:\n[\n    {\"row\": 0, \"errors\": []},\n    {\"row\": 1, \"errors\": [\"age: expected int, got str\"]},\n    {\"row\": 2, \"errors\": [\"name: empty value\", \"score: expected float, got NoneType\"]}\n]<\/code><\/pre>","hint":"Iterate over records. For each record, iterate over schema fields. Check: is the field required and missing? Is it present but empty string? Is it present but wrong type? Collect errors per record.","solution":"<pre><code>def validate_records(records, schema):\n    results = []\n    for idx, record in enumerate(records):\n        errors = []\n        for field, rules in schema.items():\n            value = record.get(field)\n            required = rules.get(\"required\", False)\n            expected_type = rules[\"type\"]\n            if value is None and required:\n                if field in record:\n                    errors.append(f\"{field}: expected {expected_type.__name__}, got NoneType\")\n                else:\n                    errors.append(f\"{field}: missing required field\")\n                continue\n            if value == \"\" and required:\n                errors.append(f\"{field}: empty value\")\n                continue\n            if value is None:\n                continue\n            if not isinstance(value, expected_type):\n                actual = type(value).__name__\n                errors.append(f\"{field}: expected {expected_type.__name__}, got {actual}\")\n        results.append({\"row\": idx, \"errors\": errors})\n    return results<\/code><\/pre>","walkthrough":"This is a real-world pattern \u2014 schema validation before loading into a database. The tricky parts: distinguishing \"field missing from dict\" from \"field present but None\", handling empty strings separately, and using <code>type().__name__<\/code> for readable error messages. In an interview, start with the simplest checks and add edge cases incrementally.","concepts":["isinstance()","type().__name__","schema-driven validation","error accumulation pattern"]},{"id":10,"title":"Two-Pass Data Pipeline","difficulty":"hard","category":"core","skills":"generators \u00b7 chaining transforms \u00b7 functional style","body":"<p>Build a mini pipeline: read raw records \u2192 clean \u2192 validate \u2192 enrich \u2192 output. Each stage is a separate function. Chain them together cleanly using generators.<\/p>\n<pre><code>Input:\nraw_records = [\n    '{\"name\": \" Alice \", \"amount\": \"150.50\", \"country\": \"US\"}',\n    '{\"name\": \"Bob\", \"amount\": \"invalid\", \"country\": \"UK\"}',\n    '{\"name\": \"\", \"amount\": \"200\", \"country\": \"IN\"}',\n    '{\"name\": \"Charlie\", \"amount\": \"300.25\", \"country\": \"US\"}',\n]\n\nPipeline stages:\n1. Parse: JSON string \u2192 dict\n2. Clean: strip whitespace from name, convert amount to float\n3. Validate: reject if name empty or amount not numeric\n4. Enrich: add a \"currency\" field based on country (US\u2192USD, UK\u2192GBP, IN\u2192INR)\n\nExpected Output (valid records only):\n[\n    {\"name\": \"Alice\",   \"amount\": 150.5,  \"country\": \"US\", \"currency\": \"USD\"},\n    {\"name\": \"Charlie\", \"amount\": 300.25, \"country\": \"US\", \"currency\": \"USD\"}\n]<\/code><\/pre>","hint":"Write each stage as a generator function that takes an iterable and yields transformed items. Chain them: <code>enrich(validate(clean(parse(raw_records))))<\/code>. Each generator processes one record at a time \u2014 no intermediate lists.","solution":"<pre><code>import json\n\ndef parse(records):\n    for raw in records:\n        try:\n            yield json.loads(raw)\n        except json.JSONDecodeError:\n            continue\n\ndef clean(records):\n    for rec in records:\n        rec[\"name\"] = rec.get(\"name\", \"\").strip()\n        try:\n            rec[\"amount\"] = float(rec[\"amount\"])\n        except (ValueError, TypeError):\n            rec[\"amount\"] = None\n        yield rec\n\ndef validate(records):\n    for rec in records:\n        if not rec[\"name\"]:\n            continue\n        if rec[\"amount\"] is None:\n            continue\n        yield rec\n\nCURRENCY_MAP = {\"US\": \"USD\", \"UK\": \"GBP\", \"IN\": \"INR\", \"EU\": \"EUR\"}\n\ndef enrich(records):\n    for rec in records:\n        rec[\"currency\"] = CURRENCY_MAP.get(rec.get(\"country\"), \"UNKNOWN\")\n        yield rec\n\ndef run_pipeline(raw_records):\n    pipeline = enrich(validate(clean(parse(raw_records))))\n    return list(pipeline)<\/code><\/pre>","walkthrough":"This pattern mirrors real data pipelines \u2014 each stage is independently testable, composable, and memory-efficient. The generator chaining means records flow through one at a time (no intermediate lists). This is exactly how you'd explain pipeline architecture thinking in an interview, even without Spark.","concepts":["generators as pipeline stages","function composition","separation of concerns","error handling per stage","lazy evaluation"]},{"id":11,"title":"Stream Large File in Chunks","difficulty":"medium","category":"generators","skills":"generators \u00b7 yield \u00b7 file I/O \u00b7 memory efficiency","body":"<p>Write a generator function that reads a large JSONL file (one JSON object per line) and yields batches of <code>n<\/code> records at a time. This is a core pattern in DE \u2014 you never load a 50GB file into memory at once.<\/p>\n<pre><code>Input (imagine a file with thousands of lines):\n# events.jsonl\n{\"event_id\": \"E1\", \"type\": \"click\", \"ts\": \"2024-03-15T10:00:00\"}\n{\"event_id\": \"E2\", \"type\": \"view\",  \"ts\": \"2024-03-15T10:00:01\"}\n{\"event_id\": \"E3\", \"type\": \"click\", \"ts\": \"2024-03-15T10:00:02\"}\n{\"event_id\": \"E4\", \"type\": \"purchase\", \"ts\": \"2024-03-15T10:00:03\"}\n{\"event_id\": \"E5\", \"type\": \"click\", \"ts\": \"2024-03-15T10:00:04\"}\n\nbatch_size = 2\n\nExpected behavior (each yield):\nBatch 1: [{\"event_id\": \"E1\", ...}, {\"event_id\": \"E2\", ...}]\nBatch 2: [{\"event_id\": \"E3\", ...}, {\"event_id\": \"E4\", ...}]\nBatch 3: [{\"event_id\": \"E5\", ...}]  # last batch can be smaller<\/code><\/pre>\n<p><strong>Follow-up:<\/strong> How would you add a filter (e.g., only \"click\" events) without breaking the generator pattern?<\/p>","hint":"Build a batch list. Append each parsed record. When the list hits size <code>n<\/code>, <code>yield<\/code> it and reset. After the loop ends, yield any remaining records in the final partial batch.","solution":"<pre><code>import json\n\ndef read_jsonl_batches(filepath, batch_size):\n    batch = []\n    with open(filepath) as f:\n        for line in f:\n            line = line.strip()\n            if not line:\n                continue\n            batch.append(json.loads(line))\n            if len(batch) == batch_size:\n                yield batch\n                batch = []\n    if batch:  # don't forget the last partial batch\n        yield batch\n\n# Follow-up: add filtering without breaking the generator\ndef read_jsonl_filtered(filepath, batch_size, predicate=None):\n    batch = []\n    with open(filepath) as f:\n        for line in f:\n            line = line.strip()\n            if not line:\n                continue\n            record = json.loads(line)\n            if predicate and not predicate(record):\n                continue\n            batch.append(record)\n            if len(batch) == batch_size:\n                yield batch\n                batch = []\n    if batch:\n        yield batch\n\n# Usage with filter:\nclicks = read_jsonl_filtered(\n    \"events.jsonl\", 1000,\n    predicate=lambda r: r[\"type\"] == \"click\"\n)<\/code><\/pre>","walkthrough":"The critical detail interviewers look for: <code>if batch:<\/code> after the loop to yield the final partial batch \u2014 forgetting this loses data silently. This pattern is the foundation of every streaming ETL: read \u2192 batch \u2192 process \u2192 repeat. Memory stays at O(batch_size) no matter how large the file is. The predicate follow-up shows you can compose behaviors without nested generators.","concepts":["yield for batching","JSONL streaming","O(batch_size) memory","predicate filtering","partial final batch"]},{"id":12,"title":"Generator Pipeline: Filter \u2192 Transform \u2192 Aggregate","difficulty":"hard","category":"generators","skills":"generator chaining \u00b7 yield from \u00b7 itertools \u00b7 send()","body":"<p>Build a multi-stage generator pipeline that processes a stream of sensor readings. Each stage is a separate generator, and they chain together lazily \u2014 nothing runs until you consume the final output.<\/p>\n<pre><code>Input:\nreadings = [\n    {\"sensor\": \"temp_1\", \"value\": 22.5, \"unit\": \"C\", \"quality\": \"good\"},\n    {\"sensor\": \"temp_1\", \"value\": 999,  \"unit\": \"C\", \"quality\": \"error\"},\n    {\"sensor\": \"hum_1\",  \"value\": 45.0, \"unit\": \"%\", \"quality\": \"good\"},\n    {\"sensor\": \"temp_2\", \"value\": 18.3, \"unit\": \"C\", \"quality\": \"good\"},\n    {\"sensor\": \"temp_1\", \"value\": 23.1, \"unit\": \"C\", \"quality\": \"good\"},\n    {\"sensor\": \"hum_1\",  \"value\": 50.2, \"unit\": \"%\", \"quality\": \"good\"},\n    {\"sensor\": \"temp_2\", \"value\": 17.9, \"unit\": \"C\", \"quality\": \"good\"},\n]\n\nPipeline:\n1. filter_quality  \u2192 drop records where quality != \"good\"\n2. convert_units   \u2192 convert Celsius to Fahrenheit (value * 9/5 + 32)\n3. group_by_sensor \u2192 yield (sensor_id, [values]) when sensor changes or stream ends\n\nExpected final output (after consuming all stages):\n{\n    \"temp_1\": {\"count\": 2, \"avg\": 72.77},\n    \"hum_1\":  {\"count\": 2, \"avg\": 47.6},\n    \"temp_2\": {\"count\": 2, \"avg\": 63.38}\n}\n# Note: humidity values pass through convert_units unchanged (only unit=\"C\" converts)<\/code><\/pre>","hint":"Write each stage as a generator that takes an iterable. <code>filter_quality<\/code> yields records where quality is \"good\". <code>convert_units<\/code> checks the unit field. For the final aggregation, use <code>defaultdict(list)<\/code> to group then compute stats. Chain: <code>aggregate(convert(filter(readings)))<\/code>.","solution":"<pre><code>from collections import defaultdict\n\ndef filter_quality(stream):\n    for reading in stream:\n        if reading[\"quality\"] == \"good\":\n            yield reading\n\ndef convert_units(stream):\n    for reading in stream:\n        if reading[\"unit\"] == \"C\":\n            reading = {\n                **reading,\n                \"value\": round(reading[\"value\"] * 9/5 + 32, 2),\n                \"unit\": \"F\"\n            }\n        yield reading\n\ndef aggregate_by_sensor(stream):\n    groups = defaultdict(list)\n    for reading in stream:\n        groups[reading[\"sensor\"]].append(reading[\"value\"])\n    return {\n        sensor: {\n            \"count\": len(vals),\n            \"avg\": round(sum(vals) / len(vals), 2)\n        }\n        for sensor, vals in groups.items()\n    }\n\ndef run_sensor_pipeline(readings):\n    pipeline = convert_units(filter_quality(readings))\n    return aggregate_by_sensor(pipeline)\n\n# Bonus: generic pipe() helper\ndef pipe(data, *stages):\n    for stage in stages:\n        data = stage(data)\n    return data\n\nresult = pipe(readings, filter_quality, convert_units, aggregate_by_sensor)<\/code><\/pre>","walkthrough":"Each generator is a single-responsibility stage \u2014 testable in isolation, composable in any order. The <code>pipe()<\/code> helper is a pattern from functional programming: it applies each stage to the result of the previous one. Notice how <code>convert_units<\/code> creates a new dict (<code>{**reading, ...}<\/code>) instead of mutating the input \u2014 this prevents side effects between pipeline stages.","concepts":["generator chaining","dict spread to avoid mutation","pipe() pattern","lazy evaluation","defaultdict aggregation"]},{"id":13,"title":"Infinite Sequence Generator with Backpressure","difficulty":"hard","category":"generators","skills":"yield \u00b7 itertools.islice \u00b7 generator expressions \u00b7 memory patterns","body":"<p>Write a generator that produces an infinite stream of synthetic event data (simulating a message queue or Kafka topic). Then write consumer functions that can: take the first N events, take events until a condition, and sample every Kth event \u2014 all without loading everything into memory.<\/p>\n<pre><code>Requirements:\n1. event_stream() \u2014 infinite generator, yields events with incrementing IDs\n2. take_n(stream, n) \u2014 consume exactly n events\n3. take_until(stream, predicate) \u2014 consume until predicate returns True\n4. sample_every(stream, k) \u2014 yield every kth event (skip others)\n\nExpected behavior:\nstream = event_stream()\nfirst_5 = take_n(stream, 5)\n# [{\"id\": 1, \"type\": \"click\", ...}, ..., {\"id\": 5, ...}]\n\nstream2 = event_stream()\nuntil_purchase = take_until(stream2, lambda e: e[\"type\"] == \"purchase\")\n# all events up to and including the first \"purchase\"\n\nstream3 = event_stream()\nsampled = take_n(sample_every(stream3, 10), 3)\n# every 10th event, take 3 of them \u2192 events with id 10, 20, 30<\/code><\/pre>\n<p><strong>Follow-up:<\/strong> How would you handle a generator that reads from a real network socket? What happens if you never close it?<\/p>","hint":"Use <code>while True<\/code> with <code>yield<\/code> for the infinite stream. <code>itertools.islice<\/code> can replace <code>take_n<\/code>. For <code>sample_every<\/code>, use <code>enumerate<\/code> and yield when <code>index % k == 0<\/code>. Remember: generators are lazy \u2014 the infinite loop only runs when you pull from it.","solution":"<pre><code>import random\nimport itertools\n\ndef event_stream(start_id=1):\n    event_types = [\"click\", \"view\", \"purchase\", \"scroll\", \"logout\"]\n    current_id = start_id\n    while True:\n        yield {\n            \"id\": current_id,\n            \"type\": random.choice(event_types),\n            \"ts\": f\"2024-03-15T{10 + current_id // 3600:02d}:\"\n                  f\"{(current_id % 3600) // 60:02d}:\"\n                  f\"{current_id % 60:02d}\",\n        }\n        current_id += 1\n\ndef take_n(stream, n):\n    return list(itertools.islice(stream, n))\n\ndef take_until(stream, predicate):\n    result = []\n    for item in stream:\n        result.append(item)\n        if predicate(item):\n            break\n    return result\n\ndef sample_every(stream, k):\n    for i, item in enumerate(stream, 1):\n        if i % k == 0:\n            yield item\n\n# Follow-up: resource cleanup with contextmanager\nfrom contextlib import contextmanager\n\n@contextmanager\ndef managed_stream(source_func, *args):\n    gen = source_func(*args)\n    try:\n        yield gen\n    finally:\n        gen.close()  # sends GeneratorExit\n\nwith managed_stream(event_stream) as stream:\n    batch = take_n(stream, 100)\n# generator is properly closed here<\/code><\/pre>","walkthrough":"This is the Python version of how Kafka consumers work \u2014 infinite stream, consumer controls how much to pull. <code>itertools.islice<\/code> is the idiomatic way to take N from any iterable. The <code>sample_every<\/code> generator composes with <code>take_n<\/code> \u2014 you can stack generators endlessly. The follow-up about resource cleanup shows seniority: in production, generators reading from sockets or DB cursors must be closed, or you leak connections.","concepts":["infinite generators","itertools.islice","generator composition","contextmanager cleanup","backpressure pattern"]},{"id":14,"title":"DataFrame Cleaning and Merging","difficulty":"medium","category":"pandas","skills":"pandas \u00b7 merge \u00b7 fillna \u00b7 dtypes \u00b7 method chaining","body":"<p>You have two DataFrames: <code>orders<\/code> (sales data with some messy values) and <code>products<\/code> (product catalog). Clean the orders data, merge with products, and produce a summary.<\/p>\n<pre><code>import pandas as pd\n\norders = pd.DataFrame({\n    \"order_id\":    [\"O1\", \"O2\", \"O3\", \"O4\", \"O5\", \"O6\"],\n    \"product_id\":  [\"P1\", \"P2\", \"P1\", \"P3\", \"P2\", \"P99\"],\n    \"quantity\":    [2, None, 1, 3, 2, 1],\n    \"price\":       [\"10.50\", \"twenty\", \"10.50\", \"30.00\", \"20.00\", \"5.00\"],\n    \"order_date\":  [\"2024-01-15\", \"2024-01-16\", \"2024-01-16\",\n                    \"2024-01-17\", \"2024-01-17\", \"2024-01-18\"],\n})\n\nproducts = pd.DataFrame({\n    \"product_id\":   [\"P1\", \"P2\", \"P3\"],\n    \"product_name\": [\"Widget\", \"Gadget\", \"Gizmo\"],\n    \"category\":     [\"Hardware\", \"Software\", \"Hardware\"],\n})\n\nExpected Output (after clean + merge):\n   order_id product_id  quantity  price order_date product_name  category  total\n0       O1         P1       2.0  10.50 2024-01-15       Widget  Hardware  21.00\n1       O3         P1       1.0  10.50 2024-01-16       Widget  Hardware  10.50\n2       O4         P3       3.0  30.00 2024-01-17        Gizmo  Hardware  90.00\n3       O5         P2       2.0  20.00 2024-01-17       Gadget  Software  40.00\n\nDropped: O2 (invalid price), O6 (no matching product)<\/code><\/pre>\n<p><strong>Follow-up:<\/strong> How would you handle this if orders had 100M rows and didn't fit in memory?<\/p>","hint":"Use <code>pd.to_numeric(errors='coerce')<\/code> to convert price \u2014 invalid values become NaN. Drop NaN rows. Use <code>merge(how='inner')<\/code> to keep only orders with matching products. Compute total = quantity \u00d7 price.","solution":"<pre><code>import pandas as pd\n\ndef clean_and_merge(orders, products):\n    df = orders.copy()\n    df[\"price\"] = pd.to_numeric(df[\"price\"], errors=\"coerce\")\n    df = df.dropna(subset=[\"price\", \"quantity\"])\n    df[\"quantity\"] = df[\"quantity\"].astype(int)\n    df[\"order_date\"] = pd.to_datetime(df[\"order_date\"])\n    df = df.merge(products, on=\"product_id\", how=\"inner\")\n    df[\"total\"] = df[\"quantity\"] * df[\"price\"]\n    return df.reset_index(drop=True)\n\n# Method-chaining version (more idiomatic Pandas):\ndef clean_and_merge_v2(orders, products):\n    return (\n        orders\n        .assign(\n            price=lambda d: pd.to_numeric(d[\"price\"], errors=\"coerce\"),\n            order_date=lambda d: pd.to_datetime(d[\"order_date\"]),\n        )\n        .dropna(subset=[\"price\", \"quantity\"])\n        .assign(quantity=lambda d: d[\"quantity\"].astype(int))\n        .merge(products, on=\"product_id\", how=\"inner\")\n        .assign(total=lambda d: d[\"quantity\"] * d[\"price\"])\n        .reset_index(drop=True)\n    )\n\n# Follow-up: for 100M rows, use chunked reading:\ndef process_large_orders(filepath, products, chunksize=100_000):\n    chunks = []\n    for chunk in pd.read_csv(filepath, chunksize=chunksize):\n        cleaned = clean_and_merge(chunk, products)\n        chunks.append(cleaned)\n    return pd.concat(chunks, ignore_index=True)<\/code><\/pre>","walkthrough":"<code>pd.to_numeric(errors='coerce')<\/code> is the Pandas equivalent of a try/except for type conversion \u2014 invalid values become NaN instead of raising an error. The method-chaining version using <code>.assign()<\/code> is how experienced Pandas users write transforms. For the follow-up, <code>pd.read_csv(chunksize=N)<\/code> returns an iterator of DataFrames, letting you process 100M rows in constant memory.","concepts":["pd.to_numeric(errors='coerce')","dropna(subset=)","merge(how='inner')",".assign() chaining","chunked reading"]},{"id":15,"title":"GroupBy Aggregation and Reshaping","difficulty":"medium","category":"pandas","skills":"pandas \u00b7 groupby \u00b7 agg \u00b7 pivot_table \u00b7 multi-level operations","body":"<p>Given a DataFrame of daily sales, compute multiple aggregations per group and reshape the result. This is the Pandas version of SQL's GROUP BY + window functions.<\/p>\n<pre><code>import pandas as pd\n\nsales = pd.DataFrame({\n    \"date\":     [\"2024-01\", \"2024-01\", \"2024-01\", \"2024-02\", \"2024-02\",\n                 \"2024-02\", \"2024-03\", \"2024-03\"],\n    \"region\":   [\"East\", \"West\", \"East\", \"East\", \"West\",\n                 \"East\", \"West\", \"East\"],\n    \"product\":  [\"A\", \"A\", \"B\", \"A\", \"B\", \"B\", \"A\", \"A\"],\n    \"revenue\":  [100, 150, 200, 120, 180, 90, 160, 110],\n})\n\nTasks:\n1. Total revenue per region per month\n2. Each region's percentage of monthly total\n3. Month-over-month growth per region\n4. Pivot: regions as columns, months as rows, revenue as values<\/code><\/pre>","hint":"<code>groupby([\"date\",\"region\"]).agg()<\/code> for task 1. Use <code>transform(\"sum\")<\/code> to get the monthly total for percentage calculation. <code>pct_change()<\/code> or <code>shift()<\/code> for MoM growth. <code>pivot_table()<\/code> for the reshape.","solution":"<pre><code>import pandas as pd\n\nsales = pd.DataFrame({\n    \"date\":    [\"2024-01\",\"2024-01\",\"2024-01\",\"2024-02\",\"2024-02\",\n                \"2024-02\",\"2024-03\",\"2024-03\"],\n    \"region\":  [\"East\",\"West\",\"East\",\"East\",\"West\",\"East\",\"West\",\"East\"],\n    \"product\": [\"A\",\"A\",\"B\",\"A\",\"B\",\"B\",\"A\",\"A\"],\n    \"revenue\": [100, 150, 200, 120, 180, 90, 160, 110],\n})\n\n# Task 1: total revenue per region per month\nmonthly = (\n    sales.groupby([\"date\", \"region\"], as_index=False)[\"revenue\"].sum()\n)\n\n# Task 2: each region's % of monthly total\nmonthly[\"monthly_total\"] = monthly.groupby(\"date\")[\"revenue\"].transform(\"sum\")\nmonthly[\"pct_of_month\"] = (monthly[\"revenue\"] / monthly[\"monthly_total\"] * 100).round(1)\n\n# Task 3: MoM growth per region\nmonthly[\"prev_month\"] = monthly.groupby(\"region\")[\"revenue\"].shift(1)\nmonthly[\"mom_growth\"] = (\n    ((monthly[\"revenue\"] - monthly[\"prev_month\"]) / monthly[\"prev_month\"] * 100).round(1)\n)\n\n# Task 4: pivot \u2014 regions as columns, months as rows\npivot = sales.pivot_table(index=\"date\", columns=\"region\",\n                          values=\"revenue\", aggfunc=\"sum\")\n\n# Named aggregation (multiple agg functions):\nsummary = (\n    sales.groupby([\"date\", \"region\"])\n    .agg(\n        total_revenue=(\"revenue\", \"sum\"),\n        num_products=(\"product\", \"nunique\"),\n        avg_revenue=(\"revenue\", \"mean\"),\n    )\n    .reset_index()\n)<\/code><\/pre>","walkthrough":"<code>transform(\"sum\")<\/code> is the key trick \u2014 it computes the group-level aggregate but broadcasts it back to the original DataFrame shape, so you can divide without a manual join. <code>shift(1)<\/code> within a group gives the previous row's value, enabling MoM calculation. <code>pivot_table<\/code> is the Pandas equivalent of SQL's CASE WHEN + GROUP BY pivot. Named aggregation with <code>.agg(name=(\"col\", \"func\"))<\/code> is the cleanest way to compute multiple metrics per group.","concepts":["groupby().agg()","transform() vs agg()","shift() for lag","pivot_table()","named aggregation"]},{"id":16,"title":"Handle Missing Data and Multi-DataFrame Joins","difficulty":"hard","category":"pandas","skills":"pandas \u00b7 fillna \u00b7 merge strategies \u00b7 indicator \u00b7 concat","body":"<p>You have three DataFrames: <code>users<\/code>, <code>logins<\/code>, and <code>purchases<\/code>. Find: users who logged in but never purchased, fill missing profile data with defaults, and flag suspicious patterns (login without profile).<\/p>\n<pre><code>import pandas as pd\nimport numpy as np\n\nusers = pd.DataFrame({\n    \"user_id\": [1, 2, 3, 4, 5],\n    \"name\":    [\"Alice\", \"Bob\", np.nan, \"Dave\", \"Eve\"],\n    \"plan\":    [\"pro\", np.nan, \"free\", \"pro\", np.nan],\n    \"signup\":  [\"2024-01-01\", \"2024-01-05\", \"2024-02-10\", \"2024-02-15\", \"2024-03-01\"],\n})\n\nlogins = pd.DataFrame({\n    \"user_id\":  [1, 2, 2, 3, 6, 1, 4],\n    \"login_ts\": [\"2024-03-01\", \"2024-03-02\", \"2024-03-05\",\n                 \"2024-03-03\", \"2024-03-04\", \"2024-03-06\", \"2024-03-07\"],\n})\n\npurchases = pd.DataFrame({\n    \"user_id\":    [1, 1, 4],\n    \"product\":    [\"Widget\", \"Gadget\", \"Gizmo\"],\n    \"purchase_ts\":[\"2024-03-01\", \"2024-03-06\", \"2024-03-07\"],\n})\n\nExpected:\n1. Users who logged in but never purchased: [Bob(2), user_3(3), unknown(6)]\n2. Cleaned users DF with name filled as \"Unknown\" and plan filled as \"free\"\n3. Suspicious logins: user_id=6 (logged in but no user profile)\n4. Full activity summary per user: login_count, purchase_count, days_since_signup<\/code><\/pre>\n<p><strong>Follow-up:<\/strong> What's the difference between <code>merge<\/code>, <code>join<\/code>, and <code>concat<\/code>? When would you use each?<\/p>","hint":"Use <code>merge(how='left', indicator=True)<\/code> \u2014 the <code>_merge<\/code> column tells you which rows matched. Anti-join: filter where <code>_merge == 'left_only'<\/code>. Use <code>fillna()<\/code> for defaults. Compare login user_ids against user user_ids with set difference for suspicious logins.","solution":"<pre><code>import pandas as pd\nimport numpy as np\n\nusers = pd.DataFrame({\n    \"user_id\": [1, 2, 3, 4, 5],\n    \"name\":    [\"Alice\", \"Bob\", np.nan, \"Dave\", \"Eve\"],\n    \"plan\":    [\"pro\", np.nan, \"free\", \"pro\", np.nan],\n    \"signup\":  [\"2024-01-01\",\"2024-01-05\",\"2024-02-10\",\"2024-02-15\",\"2024-03-01\"],\n})\nlogins = pd.DataFrame({\n    \"user_id\":  [1, 2, 2, 3, 6, 1, 4],\n    \"login_ts\": [\"2024-03-01\",\"2024-03-02\",\"2024-03-05\",\n                 \"2024-03-03\",\"2024-03-04\",\"2024-03-06\",\"2024-03-07\"],\n})\npurchases = pd.DataFrame({\n    \"user_id\":    [1, 1, 4],\n    \"product\":    [\"Widget\", \"Gadget\", \"Gizmo\"],\n    \"purchase_ts\":[\"2024-03-01\",\"2024-03-06\",\"2024-03-07\"],\n})\n\n# 1. Anti-join: logged in but never purchased\nlogin_users = logins[[\"user_id\"]].drop_duplicates()\npurchase_users = purchases[[\"user_id\"]].drop_duplicates()\nlogged_no_purchase = login_users.merge(\n    purchase_users, on=\"user_id\", how=\"left\", indicator=True\n).query('_merge == \"left_only\"')[\"user_id\"].tolist()\n# [2, 3, 6]\n\n# 2. Clean users \u2014 fill missing values\nusers_clean = users.assign(\n    name=users[\"name\"].fillna(\"Unknown\"),\n    plan=users[\"plan\"].fillna(\"free\"),\n    signup=pd.to_datetime(users[\"signup\"]),\n)\n\n# 3. Suspicious logins \u2014 user_id not in users table\nknown_ids = set(users[\"user_id\"])\nlogin_ids = set(logins[\"user_id\"])\nsuspicious = login_ids - known_ids  # {6}\n\n# 4. Full activity summary\nlogin_counts = logins.groupby(\"user_id\").size().reset_index(name=\"login_count\")\npurchase_counts = purchases.groupby(\"user_id\").size().reset_index(name=\"purchase_count\")\n\nsummary = (\n    users_clean\n    .merge(login_counts, on=\"user_id\", how=\"left\")\n    .merge(purchase_counts, on=\"user_id\", how=\"left\")\n    .assign(\n        login_count=lambda d: d[\"login_count\"].fillna(0).astype(int),\n        purchase_count=lambda d: d[\"purchase_count\"].fillna(0).astype(int),\n        days_since_signup=lambda d: (pd.Timestamp(\"2024-03-10\") - d[\"signup\"]).dt.days,\n    )\n)\n\n# Follow-up:\n# merge()  \u2014 SQL-style join on columns, any join type\n# join()   \u2014 joins on INDEX (not columns), left join default\n# concat() \u2014 stacks DataFrames vertically (axis=0) or horizontally (axis=1)<\/code><\/pre>","walkthrough":"The anti-join using <code>merge(indicator=True)<\/code> + <code>.query('_merge == \"left_only\"')<\/code> is the Pandas equivalent of SQL's <code>LEFT JOIN WHERE right.key IS NULL<\/code>. The set difference trick (<code>login_ids - known_ids<\/code>) is the fastest way to find orphan references. The summary builds up with left merges and <code>fillna(0)<\/code> \u2014 exactly what you'd do in SQL with LEFT JOINs and COALESCE.","concepts":["anti-join with indicator=True","fillna() for defaults",".query() filtering","set operations","merge vs join vs concat"]},{"id":17,"title":"Top N Customers by Spend per Category","difficulty":"medium","category":"core","skills":"defaultdict \u00b7 nested aggregation \u00b7 sorting with lambda \u00b7 heapq","body":"<p>Write a function <code>top_customers_by_category(transactions, n)<\/code> that returns the top <code>n<\/code> customers by total spend within each category.<\/p>\n<pre><code>Input:\ntransactions = [\n    {\"txn_id\": \"T1\", \"customer\": \"Alice\", \"category\": \"Grocery\", \"amount\": 120.5},\n    {\"txn_id\": \"T2\", \"customer\": \"Bob\", \"category\": \"Grocery\", \"amount\": 200.0},\n    {\"txn_id\": \"T3\", \"customer\": \"Alice\", \"category\": \"Grocery\", \"amount\": 80.0},\n    {\"txn_id\": \"T4\", \"customer\": \"Charlie\", \"category\": \"Electronics\", \"amount\": 450.0},\n    {\"txn_id\": \"T5\", \"customer\": \"Bob\", \"category\": \"Electronics\", \"amount\": 300.0},\n    {\"txn_id\": \"T6\", \"customer\": \"Alice\", \"category\": \"Electronics\", \"amount\": 600.0},\n    {\"txn_id\": \"T7\", \"customer\": \"Diana\", \"category\": \"Grocery\", \"amount\": 350.0},\n    {\"txn_id\": \"T8\", \"customer\": \"Charlie\", \"category\": \"Grocery\", \"amount\": 90.0},\n    {\"txn_id\": \"T9\", \"customer\": \"Diana\", \"category\": \"Electronics\", \"amount\": 150.0},\n    {\"txn_id\": \"T10\", \"customer\": \"Bob\", \"category\": \"Grocery\", \"amount\": 175.0},\n]\n\nExpected Output for n=2:\n{\n    \"Grocery\": [(\"Bob\", 375.0), (\"Diana\", 350.0)],\n    \"Electronics\": [(\"Alice\", 600.0), (\"Charlie\", 450.0)]\n}<\/code><\/pre>","hint":"Aggregate first, rank second. Build a nested dict <code>category \u2192 customer \u2192 total<\/code> with <code>defaultdict(lambda: defaultdict(float))<\/code>, then for each category sort its <code>.items()<\/code> by total (descending) and slice <code>[:n]<\/code>.","solution":"<pre><code>from collections import defaultdict\n\ndef top_customers_by_category(transactions, n):\n    totals = defaultdict(lambda: defaultdict(float))   # category -> customer -> total\n    for t in transactions:\n        totals[t[\"category\"]][t[\"customer\"]] += t[\"amount\"]\n\n    return {\n        category: sorted(by_customer.items(), key=lambda kv: kv[1], reverse=True)[:n]\n        for category, by_customer in totals.items()\n    }\n\n# Many customers, small n: heapq avoids sorting everything\nimport heapq\n\ndef top_customers_by_category_heap(transactions, n):\n    totals = defaultdict(lambda: defaultdict(float))\n    for t in transactions:\n        totals[t[\"category\"]][t[\"customer\"]] += t[\"amount\"]\n    return {\n        category: heapq.nlargest(n, by_customer.items(), key=lambda kv: kv[1])\n        for category, by_customer in totals.items()\n    }\n\n# Deterministic tie-break (higher total first, then name A-Z):\n# key=lambda kv: (-kv[1], kv[0])<\/code><\/pre>","walkthrough":"Two clean phases: aggregate with a nested <code>defaultdict(float)<\/code>, then rank each category separately. Aggregation is O(T) over the transactions; sorting a category with m customers is O(m log m), while <code>heapq.nlargest<\/code> is O(m log n), which matters when n is tiny and customers are many. Python's sort is stable, so ties keep first-seen order; add a secondary key like <code>(-total, name)<\/code> when the interviewer wants deterministic tie-breaking.","concepts":["nested defaultdict","aggregate then rank","sorted + slice","heapq.nlargest","stable sort and ties"]},{"id":18,"title":"Flatten Nested Orders + Deduplicate Keeping Latest","difficulty":"medium","category":"core","skills":"nested loops \u00b7 tuple keys \u00b7 dict unpacking \u00b7 ISO timestamps","body":"<p>Write a function <code>flatten_and_deduplicate(orders)<\/code> that:<\/p>\n<p>1. Flattens this into a list of rows \u2014 each row is one item with its <code>order_id<\/code>, <code>customer<\/code>, <code>timestamp<\/code>, <code>sku<\/code>, <code>name<\/code>, <code>qty<\/code>, <code>price<\/code>.<br>2. Then deduplicates by <code>(customer, sku)<\/code> \u2014 if the same customer ordered the same SKU multiple times, keep only the latest order (by timestamp).<\/p>\n<pre><code>Input:\norders = [\n    {\n        \"order_id\": \"ORD001\",\n        \"customer\": \"Alice\",\n        \"items\": [\n            {\"sku\": \"SKU100\", \"name\": \"Milk\", \"qty\": 2, \"price\": 1.5},\n            {\"sku\": \"SKU101\", \"name\": \"Bread\", \"qty\": 1, \"price\": 2.0},\n        ],\n        \"timestamp\": \"2026-10-20T10:30:00\"\n    },\n    {\n        \"order_id\": \"ORD002\",\n        \"customer\": \"Bob\",\n        \"items\": [\n            {\"sku\": \"SKU100\", \"name\": \"Milk\", \"qty\": 3, \"price\": 1.5},\n            {\"sku\": \"SKU102\", \"name\": \"Eggs\", \"qty\": 1, \"price\": 3.0},\n        ],\n        \"timestamp\": \"2026-10-20T11:00:00\"\n    },\n    {\n        \"order_id\": \"ORD003\",\n        \"customer\": \"Alice\",\n        \"items\": [\n            {\"sku\": \"SKU100\", \"name\": \"Milk\", \"qty\": 5, \"price\": 1.4},\n            {\"sku\": \"SKU103\", \"name\": \"Butter\", \"qty\": 1, \"price\": 4.0},\n        ],\n        \"timestamp\": \"2026-10-21T09:00:00\"\n    },\n]\n\nExpected Output \u2014 5 rows (Alice's SKU100 from ORD001 gets dropped because ORD003 is newer):\n[\n    {\"order_id\": \"ORD003\", \"customer\": \"Alice\", \"sku\": \"SKU100\", \"name\": \"Milk\", \"qty\": 5, \"price\": 1.4, \"timestamp\": \"2026-10-21T09:00:00\"},\n    {\"order_id\": \"ORD001\", \"customer\": \"Alice\", \"sku\": \"SKU101\", \"name\": \"Bread\", \"qty\": 1, \"price\": 2.0, \"timestamp\": \"2026-10-20T10:30:00\"},\n    {\"order_id\": \"ORD002\", \"customer\": \"Bob\",   \"sku\": \"SKU100\", \"name\": \"Milk\", \"qty\": 3, \"price\": 1.5, \"timestamp\": \"2026-10-20T11:00:00\"},\n    {\"order_id\": \"ORD002\", \"customer\": \"Bob\",   \"sku\": \"SKU102\", \"name\": \"Eggs\", \"qty\": 1, \"price\": 3.0, \"timestamp\": \"2026-10-20T11:00:00\"},\n    {\"order_id\": \"ORD003\", \"customer\": \"Alice\", \"sku\": \"SKU103\", \"name\": \"Butter\", \"qty\": 1, \"price\": 4.0, \"timestamp\": \"2026-10-21T09:00:00\"},\n]<\/code><\/pre>","hint":"Flatten with two loops (orders \u2192 items), building one row per item. Keep a dict keyed by the tuple <code>(customer, sku)<\/code> and replace the stored row only when the new <code>timestamp<\/code> is greater; ISO strings compare correctly as text. The dict's insertion order gives you the expected output order.","solution":"<pre><code>def flatten_and_deduplicate(orders):\n    latest = {}                                   # (customer, sku) -> row\n    for order in orders:\n        for item in order[\"items\"]:\n            row = {\n                \"order_id\": order[\"order_id\"],\n                \"customer\": order[\"customer\"],\n                **item,                           # sku, name, qty, price\n                \"timestamp\": order[\"timestamp\"],\n            }\n            key = (row[\"customer\"], row[\"sku\"])\n            if key not in latest or row[\"timestamp\"] > latest[key][\"timestamp\"]:\n                latest[key] = row\n    return list(latest.values())\n\n# Two-step version (easier to explain out loud):\ndef flatten(orders):\n    return [\n        {\"order_id\": o[\"order_id\"], \"customer\": o[\"customer\"], **item, \"timestamp\": o[\"timestamp\"]}\n        for o in orders\n        for item in o[\"items\"]\n    ]\n\ndef dedupe_latest(rows, key_fields=(\"customer\", \"sku\")):\n    latest = {}\n    for row in rows:\n        key = tuple(row[f] for f in key_fields)\n        if key not in latest or row[\"timestamp\"] > latest[key][\"timestamp\"]:\n            latest[key] = row\n    return list(latest.values())<\/code><\/pre>","walkthrough":"Single pass: O(total items) time and O(unique (customer, sku) pairs) memory. The tuple key makes the composite \"same customer + same SKU\" rule explicit, and comparing ISO timestamps as strings avoids datetime parsing. A replaced dict value keeps its original slot, so Alice's SKU100 stays first but now holds ORD003, which is exactly the expected order. No pre-sorting is needed, so it also works when orders arrive out of order. On equal timestamps the first-seen row wins; switch to <code>>=<\/code> if the last-seen should win.","concepts":["tuple as composite key","flatten with nested loops","dict unpacking","ISO timestamp comparison","single-pass dedupe"]},{"id":19,"title":"Weighted Loyalty Score (Custom Aggregation)","difficulty":"medium","category":"core","skills":"custom aggregation \u00b7 helper functions \u00b7 defaultdict(float) \u00b7 conditional weights","body":"<p>Write a function <code>loyalty_scores(purchases)<\/code> that computes a custom loyalty score per customer. The scoring logic:<\/p>\n<ul>\n<li>Each purchase contributes: <code>amount \u00d7 recency_weight<\/code><\/li>\n<li>Recency weight: if <code>days_ago &lt;= 7<\/code> \u2192 weight is 1.0, if <code>days_ago &lt;= 30<\/code> \u2192 0.5, if <code>days_ago &lt;= 60<\/code> \u2192 0.25, else \u2192 0.1<\/li>\n<li>Returned items are penalized: subtract their contribution instead of adding<\/li>\n<li>Final score = sum of all weighted contributions for that customer<\/li>\n<\/ul>\n<pre><code>Input:\npurchases = [\n    {\"customer\": \"Alice\", \"amount\": 50.0,  \"days_ago\": 2,  \"returned\": False},\n    {\"customer\": \"Alice\", \"amount\": 200.0, \"days_ago\": 45, \"returned\": False},\n    {\"customer\": \"Alice\", \"amount\": 80.0,  \"days_ago\": 10, \"returned\": True},\n    {\"customer\": \"Bob\",   \"amount\": 300.0, \"days_ago\": 5,  \"returned\": False},\n    {\"customer\": \"Bob\",   \"amount\": 150.0, \"days_ago\": 60, \"returned\": False},\n    {\"customer\": \"Bob\",   \"amount\": 50.0,  \"days_ago\": 3,  \"returned\": True},\n    {\"customer\": \"Charlie\", \"amount\": 500.0, \"days_ago\": 90, \"returned\": False},\n]\n\nExample for Alice:\n(50 \u00d7 1.0) = 50     (2 days ago, not returned \u2192 add)\n(200 \u00d7 0.25) = 50   (45 days ago, not returned \u2192 add)\n(80 \u00d7 0.5) = 40     (10 days ago, returned \u2192 subtract)\nScore = 50 + 50 - 40 = 60.0\n\nExpected Output:\n{\"Alice\": 60.0, \"Bob\": 287.5, \"Charlie\": 50.0}<\/code><\/pre>","hint":"Separate the rule from the loop: write a small <code>recency_weight(days_ago)<\/code> helper that checks the smallest threshold first (<code>&lt;= 7<\/code>, then <code>&lt;= 30<\/code>, <code>&lt;= 60<\/code>, else 0.1). In the main loop compute <code>amount * weight<\/code>, flip the sign when <code>returned<\/code> is True, and add it into a per-customer total.","solution":"<pre><code>from collections import defaultdict\n\ndef recency_weight(days_ago):\n    if days_ago &lt;= 7:\n        return 1.0\n    if days_ago &lt;= 30:\n        return 0.5\n    if days_ago &lt;= 60:\n        return 0.25\n    return 0.1\n\ndef loyalty_scores(purchases):\n    scores = defaultdict(float)\n    for p in purchases:\n        contribution = p[\"amount\"] * recency_weight(p[\"days_ago\"])\n        scores[p[\"customer\"]] += -contribution if p[\"returned\"] else contribution\n    return dict(scores)\n\n# Table-driven weights: change thresholds without touching the logic\nWEIGHTS = [(7, 1.0), (30, 0.5), (60, 0.25)]\n\ndef recency_weight_v2(days_ago):\n    for limit, weight in WEIGHTS:\n        if days_ago &lt;= limit:\n            return weight\n    return 0.1<\/code><\/pre>","walkthrough":"The helper keeps the business rule in one place, so a threshold can change without touching the aggregation loop. Checking thresholds from smallest to largest lets each <code>if<\/code> rely on the previous ones failing (no need for <code>8 &lt;= days_ago &lt;= 30<\/code>). <code>defaultdict(float)<\/code> starts every customer at 0.0, and the signed contribution (<code>-c if returned else c<\/code>) handles returns in the same pass. For money, round once at the end (<code>round(score, 2)<\/code>) instead of inside the loop to avoid compounding float noise.","concepts":["helper function for rules","defaultdict(float)","signed contribution","ordered thresholds","table-driven weights"]},{"id":20,"title":"Top N Customers by Spend with Min Transactions","difficulty":"medium","category":"core","skills":"filtering · multi-field aggregation · business rule edge cases · sorted output","body":"<p>Write a function <code>top_customers(transactions, n, min_txns)<\/code> that:<\/p><ul><li>Excludes refunded transactions entirely — don’t count them in spend or in transaction count<\/li><li>Only considers customers who have at least <code>min_txns<\/code> completed transactions<\/li><li>Returns the top <code>n<\/code> customers by total completed spend, as a list of tuples <code>(customer, total_spend, txn_count)<\/code><\/li><\/ul><pre><code>transactions = [\n    {\"txn_id\": \"T1\",  \"customer\": \"Alice\",   \"amount\": 500.0,  \"status\": \"completed\"},\n    {\"txn_id\": \"T2\",  \"customer\": \"Alice\",   \"amount\": 150.0,  \"status\": \"completed\"},\n    {\"txn_id\": \"T3\",  \"customer\": \"Alice\",   \"amount\": 80.0,   \"status\": \"refunded\"},\n    {\"txn_id\": \"T4\",  \"customer\": \"Bob\",     \"amount\": 1200.0, \"status\": \"completed\"},\n    {\"txn_id\": \"T5\",  \"customer\": \"Charlie\", \"amount\": 300.0,  \"status\": \"completed\"},\n    {\"txn_id\": \"T6\",  \"customer\": \"Charlie\", \"amount\": 250.0,  \"status\": \"completed\"},\n    {\"txn_id\": \"T7\",  \"customer\": \"Charlie\", \"amount\": 100.0,  \"status\": \"completed\"},\n    {\"txn_id\": \"T8\",  \"customer\": \"Diana\",   \"amount\": 900.0,  \"status\": \"completed\"},\n    {\"txn_id\": \"T9\",  \"customer\": \"Diana\",   \"amount\": 50.0,   \"status\": \"refunded\"},\n    {\"txn_id\": \"T10\", \"customer\": \"Diana\",   \"amount\": 400.0,  \"status\": \"completed\"},\n    {\"txn_id\": \"T11\", \"customer\": \"Eve\",     \"amount\": 2000.0, \"status\": \"completed\"},\n    {\"txn_id\": \"T12\", \"customer\": \"Frank\",   \"amount\": 100.0,  \"status\": \"completed\"},\n    {\"txn_id\": \"T13\", \"customer\": \"Frank\",   \"amount\": 120.0,  \"status\": \"completed\"},\n    {\"txn_id\": \"T14\", \"customer\": \"Frank\",   \"amount\": 130.0,  \"status\": \"refunded\"},\n]\n\ntop_customers(transactions, n=2, min_txns=2)\n# expected: [(\"Diana\", 1300.0, 2), (\"Alice\", 650.0, 2)]<\/code><\/pre><p><strong>Think through it:<\/strong> Alice: 2 completed (500 + 150 = 650), Bob: 1 completed (fails min_txns=2), Charlie: 3 completed (650), Diana: 2 completed (1300), Eve: 1 completed (fails), Frank: 2 completed (220).<\/p><p><strong>What this tests beyond basics:<\/strong> Filtering before grouping, multi-field aggregation (sum + count together), and handling edge cases where high spenders get disqualified by a business rule.<\/p>","hint":"Filter out refunded transactions first, then group by customer and compute both total spend and count. Only keep customers meeting the <code>min_txns<\/code> threshold, then sort by spend descending and slice <code>[:n]<\/code>.","solution":"<pre><code>from collections import defaultdict\n\ndef top_customers(transactions, n, min_txns):\n    stats = defaultdict(lambda: {\"spend\": 0.0, \"count\": 0})\n    for t in transactions:\n        if t[\"status\"] == \"refunded\":\n            continue\n        c = t[\"customer\"]\n        stats[c][\"spend\"] += t[\"amount\"]\n        stats[c][\"count\"] += 1\n\n    qualified = [\n        (cust, s[\"spend\"], s[\"count\"])\n        for cust, s in stats.items()\n        if s[\"count\"] >= min_txns\n    ]\n    qualified.sort(key=lambda x: x[1], reverse=True)\n    return qualified[:n]<\/code><\/pre>","walkthrough":"Filter first (skip refunded), aggregate both spend and count in a single pass, then apply the business rule (<code>min_txns<\/code>) as a post-filter. Sorting by spend descending and slicing <code>[:n]<\/code> gives the top N. The <code>defaultdict(lambda: {...})<\/code> pattern lets you accumulate multiple fields per key without pre-initializing. This mirrors real DE scenarios where business rules (minimum activity thresholds) disqualify otherwise-top entities.","concepts":["filter before group","defaultdict with dict factory","multi-field aggregation","business rule filtering","sorted + slice"]},{"id":21,"title":"Top N Customers by Spend per Time Window","difficulty":"hard","category":"core","skills":"datetime arithmetic · window grouping · nested aggregation · dict comprehension","body":"<p>Write a function <code>top_customers_by_window(transactions, n, window_days)<\/code> that:<\/p><ul><li>Divides the date range into non-overlapping windows of <code>window_days<\/code> days, starting from the earliest transaction date<\/li><li>Groups transactions by window, then by customer within each window<\/li><li>Returns the top <code>n<\/code> customers by spend in each window<\/li><\/ul><pre><code>from datetime import datetime, timedelta\n\ntransactions = [\n    {\"txn_id\": \"T1\",  \"customer\": \"Alice\",   \"amount\": 200.0, \"date\": \"2026-10-01\"},\n    {\"txn_id\": \"T2\",  \"customer\": \"Alice\",   \"amount\": 150.0, \"date\": \"2026-10-08\"},\n    {\"txn_id\": \"T3\",  \"customer\": \"Alice\",   \"amount\": 300.0, \"date\": \"2026-10-20\"},\n    {\"txn_id\": \"T4\",  \"customer\": \"Bob\",     \"amount\": 500.0, \"date\": \"2026-10-03\"},\n    {\"txn_id\": \"T5\",  \"customer\": \"Bob\",     \"amount\": 100.0, \"date\": \"2026-10-18\"},\n    {\"txn_id\": \"T6\",  \"customer\": \"Charlie\", \"amount\": 400.0, \"date\": \"2026-10-12\"},\n    {\"txn_id\": \"T7\",  \"customer\": \"Charlie\", \"amount\": 350.0, \"date\": \"2026-10-14\"},\n    {\"txn_id\": \"T8\",  \"customer\": \"Diana\",   \"amount\": 250.0, \"date\": \"2026-10-05\"},\n    {\"txn_id\": \"T9\",  \"customer\": \"Diana\",   \"amount\": 600.0, \"date\": \"2026-10-22\"},\n    {\"txn_id\": \"T10\", \"customer\": \"Eve\",     \"amount\": 800.0, \"date\": \"2026-10-09\"},\n]\n\ntop_customers_by_window(transactions, n=2, window_days=10)\n# Window 1 (Oct 1–10): Eve 800, Bob 500, Alice 350, Diana 250 → top 2: Eve, Bob\n# Window 2 (Oct 11–20): Charlie 750, Alice 300, Bob 100 → top 2: Charlie, Alice\n# Window 3 (Oct 21–30): Diana 600 → top 1: Diana<\/code><\/pre><p><strong>Expected output:<\/strong><\/p><pre><code>{\"2026-10-01 to 2026-10-10\": [(\"Eve\", 800.0), (\"Bob\", 500.0)], \"2026-10-11 to 2026-10-20\": [(\"Charlie\", 750.0), (\"Alice\", 300.0)], \"2026-10-21 to 2026-10-30\": [(\"Diana\", 600.0)]}<\/code><\/pre>","hint":"Parse dates, find the earliest. Compute which window each transaction belongs to: <code>(date - earliest).days \/\/ window_days<\/code>. Use a nested dict: <code>window_label → customer → total<\/code>. Sort each window’s customers by spend and take top n.","solution":"<pre><code>from datetime import datetime, timedelta\nfrom collections import defaultdict\n\ndef top_customers_by_window(transactions, n, window_days):\n    # Parse dates\n    for t in transactions:\n        t[\"_date\"] = datetime.strptime(t[\"date\"], \"%Y-%m-%d\").date()\n\n    earliest = min(t[\"_date\"] for t in transactions)\n\n    # Group by window and customer\n    windows = defaultdict(lambda: defaultdict(float))\n    for t in transactions:\n        day_offset = (t[\"_date\"] - earliest).days\n        window_idx = day_offset \/\/ window_days\n        win_start = earliest + timedelta(days=window_idx * window_days)\n        win_end = win_start + timedelta(days=window_days - 1)\n        label = f\"{win_start} to {win_end}\"\n        windows[label][t[\"customer\"]] += t[\"amount\"]\n\n    # Top n per window\n    return {\n        label: sorted(\n            customers.items(),\n            key=lambda kv: kv[1],\n            reverse=True\n        )[:n]\n        for label, customers in sorted(windows.items())\n    }<\/code><\/pre>","walkthrough":"The window index formula <code>(date - earliest).days \/\/ window_days<\/code> assigns each transaction to a fixed-size bucket. Building the label from the index back into dates makes the output human-readable. The nested <code>defaultdict(float)<\/code> accumulates spend per customer per window in one pass. This pattern maps directly to tumbling windows in streaming systems (Kafka Streams, Flink) — the same concept, implemented in pure Python.","concepts":["datetime arithmetic","integer division for bucketing","nested defaultdict","tumbling window pattern","sorted dict comprehension"]}];
+const LS={
+1:`# P1: Flatten Nested Transactions
+customers = [
+    {"name": "Alice", "transactions": [{"id": "T1", "amount": 150.0, "currency": "USD"}, {"id": "T2", "amount": 89.50, "currency": "EUR"}]},
+    {"name": "Bob", "transactions": [{"id": "T3", "amount": 200.0, "currency": "USD"}]}
+]
+
+def flatten_transactions(customers):
+    pass
+
+
+print(flatten_transactions(customers))
+# expected: [{"customer": "Alice", "id": "T1", ...}, ...]
+`,
+2:`# P2: Deduplicate by Latest Timestamp
+events = [
+    {"event_id": "E1", "timestamp": "2024-03-15T10:00:00", "status": "pending"},
+    {"event_id": "E2", "timestamp": "2024-03-15T09:00:00", "status": "done"},
+    {"event_id": "E1", "timestamp": "2024-03-15T14:00:00", "status": "done"},
+    {"event_id": "E3", "timestamp": "2024-03-15T08:00:00", "status": "pending"},
+    {"event_id": "E2", "timestamp": "2024-03-15T12:00:00", "status": "failed"},
+]
+
+def dedup_latest(events):
+    pass
+
+
+print(dedup_latest(events))
+# expected: E1 at 14:00 (done), E2 at 12:00 (failed), E3 at 08:00 (pending)
+`,
+3:`# P3: Group and Aggregate Sales
+from collections import defaultdict
+
+sales = [
+    {"region": "APAC", "product": "Widget", "amount": 500},
+    {"region": "EMEA", "product": "Gadget", "amount": 300},
+    {"region": "APAC", "product": "Gizmo", "amount": 700},
+    {"region": "APAC", "product": "Widget", "amount": 200},
+    {"region": "EMEA", "product": "Widget", "amount": 450},
+    {"region": "EMEA", "product": "Gadget", "amount": 150},
+]
+
+def summarize_sales(sales):
+    pass
+
+
+print(summarize_sales(sales))
+# expected: {"APAC": {"total_revenue": 1400, "num_transactions": 3, "top_product": "Gizmo"}, "EMEA": {...}}
+`,
+4:`# P4: Parse and Clean CSV Data
+import csv, io
+
+csv_data = """name,email,amount,date
+Alice, alice@example.com, 150.50, 2024-01-15
+Bob, bob@example.com, , 2024-01-16
+, charlie@example.com, 200, 2024-01-17
+Dave, dave@example.com, not_a_number, 2024-01-18
+Eve, eve@example.com, 300.75, 2024-01-19
+
+"""
+
+def parse_and_clean(csv_data):
+    pass
+
+
+valid, errors = parse_and_clean(csv_data)
+print("Valid:", valid)
+print("Errors:", errors)
+# expected valid: Alice + Eve; errors for Bob (empty amount), row 4 (empty name), Dave (bad amount)
+`,
+5:`# P5: Nested JSON Flattening
+data = {
+    "user": {
+        "name": "Alice",
+        "address": {"city": "Bengaluru", "zip": "560001"},
+        "scores": [85, 92, 78]
+    },
+    "active": True
+}
+
+def flatten_json(data, prefix="", separator="."):
+    pass
+
+
+print(flatten_json(data))
+# expected: {"user.name": "Alice", "user.address.city": "Bengaluru", "user.address.zip": "560001", "user.scores": [85, 92, 78], "active": True}
+`,
+6:`# P6: Sliding Window Moving Average
+from collections import deque
+
+values = [10, 20, 30, 40, 50, 60, 70]
+k = 3
+
+def moving_average(values, k):
+    pass
+
+
+print(moving_average(values, k))
+# expected: [20.0, 30.0, 40.0, 50.0, 60.0]
+`,
+7:`# P7: Merge Overlapping Intervals
+intervals = [(1, 3), (2, 6), (8, 10), (15, 18), (9, 11)]
+
+def merge_intervals(intervals):
+    pass
+
+
+print(merge_intervals(intervals))
+# expected: [(1, 6), (8, 11), (15, 18)]
+`,
+8:`# P8: Log File Parser with Regex
+import re
+from collections import Counter
+
+logs = [
+    "2024-03-15T10:23:45 GET /api/users 200",
+    "2024-03-15T10:23:46 POST /api/orders 201",
+    "2024-03-15T10:23:47 GET /api/users 200",
+    "2024-03-15T10:23:48 GET /api/products 500",
+    "2024-03-15T10:23:49 GET /api/users 200",
+    "2024-03-15T10:23:50 DELETE /api/orders/123 404",
+    "2024-03-15T10:23:51 POST /api/orders 201",
+    "2024-03-15T10:23:52 GET /api/products 200",
+]
+
+def parse_logs(logs):
+    pass
+
+
+status_counts, top_paths = parse_logs(logs)
+print("Status:", status_counts)
+print("Top paths:", top_paths)
+# expected: {200: 4, 201: 2, 500: 1, 404: 1}, top 3 paths
+`,
+9:`# P9: Build a Schema Validator
+schema = {
+    "name":  {"type": str, "required": True},
+    "age":   {"type": int, "required": True},
+    "email": {"type": str, "required": False},
+    "score": {"type": float, "required": True},
+}
+records = [
+    {"name": "Alice", "age": 30, "score": 95.5},
+    {"name": "Bob", "age": "twenty", "email": "bob@x.com", "score": 88.0},
+    {"name": "", "age": 25, "score": None},
+]
+
+def validate_records(records, schema):
+    pass
+
+
+print(validate_records(records, schema))
+# expected: row 0 clean, row 1 age type error, row 2 empty name + None score
+`,
+10:`# P10: Two-Pass Data Pipeline
+import json
+
+raw_records = [
+    '{"name": " Alice ", "amount": "150.50", "country": "US"}',
+    '{"name": "Bob", "amount": "invalid", "country": "UK"}',
+    '{"name": "", "amount": "200", "country": "IN"}',
+    '{"name": "Charlie", "amount": "300.25", "country": "US"}',
+]
+CURRENCY_MAP = {"US": "USD", "UK": "GBP", "IN": "INR"}
+
+def parse(records):
+    pass
+def clean(records):
+    pass
+def validate(records):
+    pass
+def enrich(records):
+    pass
+def run_pipeline(raw_records):
+    pass
+
+
+print(run_pipeline(raw_records))
+# expected: [Alice USD, Charlie USD] — Bob (invalid) and blank name dropped
+`,
+11:`# P11: Stream Large File in Chunks
+import json
+
+# Create test file
+test_data = [
+    {"event_id": "E1", "type": "click"},
+    {"event_id": "E2", "type": "view"},
+    {"event_id": "E3", "type": "click"},
+    {"event_id": "E4", "type": "purchase"},
+    {"event_id": "E5", "type": "click"},
+]
+with open("events.jsonl", "w") as f:
+    for rec in test_data:
+        f.write(json.dumps(rec) + "\\n")
+
+def read_jsonl_batches(filepath, batch_size):
+    pass
+
+
+for batch in read_jsonl_batches("events.jsonl", 2):
+    print(batch)
+# expected: 3 batches — [E1,E2], [E3,E4], [E5]
+`,
+12:`# P12: Generator Pipeline — Filter -> Transform -> Aggregate
+from collections import defaultdict
+
+readings = [
+    {"sensor": "temp_1", "value": 22.5, "unit": "C", "quality": "good"},
+    {"sensor": "temp_1", "value": 999,  "unit": "C", "quality": "error"},
+    {"sensor": "hum_1",  "value": 45.0, "unit": "%", "quality": "good"},
+    {"sensor": "temp_2", "value": 18.3, "unit": "C", "quality": "good"},
+    {"sensor": "temp_1", "value": 23.1, "unit": "C", "quality": "good"},
+    {"sensor": "hum_1",  "value": 50.2, "unit": "%", "quality": "good"},
+    {"sensor": "temp_2", "value": 17.9, "unit": "C", "quality": "good"},
+]
+
+def filter_quality(stream):
+    pass
+def convert_units(stream):
+    pass
+def aggregate_by_sensor(stream):
+    pass
+def run_sensor_pipeline(readings):
+    pass
+
+
+print(run_sensor_pipeline(readings))
+# expected: temp_1 avg ~72.77F, hum_1 avg 47.6%, temp_2 avg ~63.38F
+`,
+13:`# P13: Infinite Sequence Generator with Backpressure
+import random, itertools
+
+def event_stream(start_id=1):
+    pass
+def take_n(stream, n):
+    pass
+def take_until(stream, predicate):
+    pass
+def sample_every(stream, k):
+    pass
+
+
+stream1 = event_stream()
+print("First 5:", take_n(stream1, 5))
+
+stream2 = event_stream()
+print("Until purchase:", take_until(stream2, lambda e: e["type"] == "purchase"))
+
+stream3 = event_stream()
+print("Sampled:", take_n(sample_every(stream3, 10), 3))
+# expected: every 10th event, take 3 of them
+`,
+14:`# P14: DataFrame Cleaning and Merging
+import pandas as pd
+
+orders = pd.DataFrame({
+    "order_id": ["O1","O2","O3","O4","O5","O6"],
+    "product_id": ["P1","P2","P1","P3","P2","P99"],
+    "quantity": [2, None, 1, 3, 2, 1],
+    "price": ["10.50","twenty","10.50","30.00","20.00","5.00"],
+    "order_date": ["2024-01-15","2024-01-16","2024-01-16","2024-01-17","2024-01-17","2024-01-18"],
+})
+products = pd.DataFrame({
+    "product_id": ["P1","P2","P3"],
+    "product_name": ["Widget","Gadget","Gizmo"],
+    "category": ["Hardware","Software","Hardware"],
+})
+
+def clean_and_merge(orders, products):
+    pass
+
+
+print(clean_and_merge(orders, products))
+# expected: 4 rows (O1, O3, O4, O5) with product_name, category, total
+`,
+15:`# P15: GroupBy Aggregation and Reshaping
+import pandas as pd
+
+sales = pd.DataFrame({
+    "date":    ["2024-01","2024-01","2024-01","2024-02","2024-02","2024-02","2024-03","2024-03"],
+    "region":  ["East","West","East","East","West","East","West","East"],
+    "product": ["A","A","B","A","B","B","A","A"],
+    "revenue": [100, 150, 200, 120, 180, 90, 160, 110],
+})
+
+# Task 1: Total revenue per region per month
+monthly = sales.groupby(["date", "region"], as_index=False)["revenue"].sum()
+
+# Task 2: Each region's % of monthly total
+# TODO: use transform("sum") for monthly totals, then divide
+
+# Task 3: MoM growth per region
+# TODO: use shift(1) within region groups
+
+# Task 4: Pivot — regions as columns, months as rows
+# TODO: use pivot_table()
+
+print(monthly)
+`,
+16:`# P16: Handle Missing Data and Multi-DataFrame Joins
+import pandas as pd
+import numpy as np
+
+users = pd.DataFrame({
+    "user_id": [1,2,3,4,5], "name": ["Alice","Bob",np.nan,"Dave","Eve"],
+    "plan": ["pro",np.nan,"free","pro",np.nan],
+    "signup": ["2024-01-01","2024-01-05","2024-02-10","2024-02-15","2024-03-01"],
+})
+logins = pd.DataFrame({
+    "user_id": [1,2,2,3,6,1,4],
+    "login_ts": ["2024-03-01","2024-03-02","2024-03-05","2024-03-03","2024-03-04","2024-03-06","2024-03-07"],
+})
+purchases = pd.DataFrame({
+    "user_id": [1,1,4], "product": ["Widget","Gadget","Gizmo"],
+    "purchase_ts": ["2024-03-01","2024-03-06","2024-03-07"],
+})
+
+# 1. Anti-join: logged in but never purchased
+# TODO: merge(indicator=True) + query('_merge == "left_only"')
+
+# 2. Clean users — fillna
+# TODO: name -> "Unknown", plan -> "free"
+
+# 3. Suspicious logins — set difference
+# TODO: login user_ids - known user_ids
+
+# 4. Full activity summary
+# TODO: left merge login_counts + purchase_counts onto users
+`,
+17:`# P17: Top N Customers by Spend per Category
+from collections import defaultdict
+
+transactions = [
+    {"txn_id": "T1",  "customer": "Alice",   "category": "Grocery",     "amount": 120.5},
+    {"txn_id": "T2",  "customer": "Bob",     "category": "Grocery",     "amount": 200.0},
+    {"txn_id": "T3",  "customer": "Alice",   "category": "Grocery",     "amount": 80.0},
+    {"txn_id": "T4",  "customer": "Charlie", "category": "Electronics", "amount": 450.0},
+    {"txn_id": "T5",  "customer": "Bob",     "category": "Electronics", "amount": 300.0},
+    {"txn_id": "T6",  "customer": "Alice",   "category": "Electronics", "amount": 600.0},
+    {"txn_id": "T7",  "customer": "Diana",   "category": "Grocery",     "amount": 350.0},
+    {"txn_id": "T8",  "customer": "Charlie", "category": "Grocery",     "amount": 90.0},
+    {"txn_id": "T9",  "customer": "Diana",   "category": "Electronics", "amount": 150.0},
+    {"txn_id": "T10", "customer": "Bob",     "category": "Grocery",     "amount": 175.0},
+]
+
+def top_customers_by_category(transactions, n):
+    pass
+
+
+print(top_customers_by_category(transactions, 2))
+# expected: {"Grocery": [("Bob", 375.0), ("Diana", 350.0)], "Electronics": [("Alice", 600.0), ("Charlie", 450.0)]}
+`,
+18:`# P18: Flatten Nested Orders + Deduplicate Keeping Latest
+orders = [
+    {"order_id": "ORD001", "customer": "Alice",
+     "items": [{"sku": "SKU100", "name": "Milk", "qty": 2, "price": 1.5},
+               {"sku": "SKU101", "name": "Bread", "qty": 1, "price": 2.0}],
+     "timestamp": "2026-10-20T10:30:00"},
+    {"order_id": "ORD002", "customer": "Bob",
+     "items": [{"sku": "SKU100", "name": "Milk", "qty": 3, "price": 1.5},
+               {"sku": "SKU102", "name": "Eggs", "qty": 1, "price": 3.0}],
+     "timestamp": "2026-10-20T11:00:00"},
+    {"order_id": "ORD003", "customer": "Alice",
+     "items": [{"sku": "SKU100", "name": "Milk", "qty": 5, "price": 1.4},
+               {"sku": "SKU103", "name": "Butter", "qty": 1, "price": 4.0}],
+     "timestamp": "2026-10-21T09:00:00"},
+]
+
+def flatten_and_deduplicate(orders):
+    pass
+
+
+for row in flatten_and_deduplicate(orders):
+    print(row)
+# expected: 5 rows — Alice SKU100 from ORD001 replaced by ORD003 (newer)
+`,
+19:`# P19: Weighted Loyalty Score
+from collections import defaultdict
+
+purchases = [
+    {"customer": "Alice",   "amount": 50.0,  "days_ago": 2,  "returned": False},
+    {"customer": "Alice",   "amount": 200.0, "days_ago": 45, "returned": False},
+    {"customer": "Alice",   "amount": 80.0,  "days_ago": 10, "returned": True},
+    {"customer": "Bob",     "amount": 300.0, "days_ago": 5,  "returned": False},
+    {"customer": "Bob",     "amount": 150.0, "days_ago": 60, "returned": False},
+    {"customer": "Bob",     "amount": 50.0,  "days_ago": 3,  "returned": True},
+    {"customer": "Charlie", "amount": 500.0, "days_ago": 90, "returned": False},
+]
+# Weight: <=7d -> 1.0, <=30d -> 0.5, <=60d -> 0.25, else -> 0.1
+# Returned items: subtract instead of add
+
+def recency_weight(days_ago):
+    pass
+
+def loyalty_scores(purchases):
+    pass
+
+
+print(loyalty_scores(purchases))
+# expected: {"Alice": 60.0, "Bob": 287.5, "Charlie": 50.0}
+`,
+20:`# P20: Top N Customers by Spend with Min Transactions
+from collections import defaultdict
+
+transactions = [
+    {"txn_id": "T1",  "customer": "Alice",   "amount": 500.0,  "status": "completed"},
+    {"txn_id": "T2",  "customer": "Alice",   "amount": 150.0,  "status": "completed"},
+    {"txn_id": "T3",  "customer": "Alice",   "amount": 80.0,   "status": "refunded"},
+    {"txn_id": "T4",  "customer": "Bob",     "amount": 1200.0, "status": "completed"},
+    {"txn_id": "T5",  "customer": "Charlie", "amount": 300.0,  "status": "completed"},
+    {"txn_id": "T6",  "customer": "Charlie", "amount": 250.0,  "status": "completed"},
+    {"txn_id": "T7",  "customer": "Charlie", "amount": 100.0,  "status": "completed"},
+    {"txn_id": "T8",  "customer": "Diana",   "amount": 900.0,  "status": "completed"},
+    {"txn_id": "T9",  "customer": "Diana",   "amount": 50.0,   "status": "refunded"},
+    {"txn_id": "T10", "customer": "Diana",   "amount": 400.0,  "status": "completed"},
+    {"txn_id": "T11", "customer": "Eve",     "amount": 2000.0, "status": "completed"},
+    {"txn_id": "T12", "customer": "Frank",   "amount": 100.0,  "status": "completed"},
+    {"txn_id": "T13", "customer": "Frank",   "amount": 120.0,  "status": "completed"},
+    {"txn_id": "T14", "customer": "Frank",   "amount": 130.0,  "status": "refunded"},
+]
+
+def top_customers(transactions, n, min_txns):
+    pass
+
+
+print(top_customers(transactions, n=2, min_txns=2))
+# expected: [("Diana", 1300.0, 2), ("Alice", 650.0, 2)]
+`,
+21:`# P21: Top N Customers by Spend per Time Window
+from datetime import datetime, timedelta
+from collections import defaultdict
+
+transactions = [
+    {"txn_id": "T1",  "customer": "Alice",   "amount": 200.0, "date": "2026-10-01"},
+    {"txn_id": "T2",  "customer": "Alice",   "amount": 150.0, "date": "2026-10-08"},
+    {"txn_id": "T3",  "customer": "Alice",   "amount": 300.0, "date": "2026-10-20"},
+    {"txn_id": "T4",  "customer": "Bob",     "amount": 500.0, "date": "2026-10-03"},
+    {"txn_id": "T5",  "customer": "Bob",     "amount": 100.0, "date": "2026-10-18"},
+    {"txn_id": "T6",  "customer": "Charlie", "amount": 400.0, "date": "2026-10-12"},
+    {"txn_id": "T7",  "customer": "Charlie", "amount": 350.0, "date": "2026-10-14"},
+    {"txn_id": "T8",  "customer": "Diana",   "amount": 250.0, "date": "2026-10-05"},
+    {"txn_id": "T9",  "customer": "Diana",   "amount": 600.0, "date": "2026-10-22"},
+    {"txn_id": "T10", "customer": "Eve",     "amount": 800.0, "date": "2026-10-09"},
+]
+
+def top_customers_by_window(transactions, n, window_days):
+    pass
+
+
+print(top_customers_by_window(transactions, n=2, window_days=10))
+# expected:
+# {
+#   "2026-10-01 to 2026-10-10": [("Eve", 800.0), ("Bob", 500.0)],
+#   "2026-10-11 to 2026-10-20": [("Charlie", 750.0), ("Alice", 300.0)],
+#   "2026-10-21 to 2026-10-30": [("Diana", 600.0)]
+# }
+`};
+
+/* ── STATE ── */
+const K='pyfluency-v1',TK='pyfluency-theme',ST=['todo','tried','solved','revisit'],LB={todo:'Queued',tried:'Running\u2026',solved:'Done \u2713',revisit:'Retry \u21bb'};
+let S={};try{S=JSON.parse(localStorage.getItem(K))||{}}catch(e){}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+try{const t=localStorage.getItem(TK);if(t)document.documentElement.dataset.theme=t}catch(e){}
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const code=s=>'<pre>'+esc(s).replace(/(#.*)/g,'<span class="c">$1</span>')+'</pre>';
+let NT={};try{NT=JSON.parse(localStorage.getItem('pyfluency-notes'))||{}}catch(e){}
+let ND=null,ntm;
+const saveNT=()=>{try{localStorage.setItem('pyfluency-notes',JSON.stringify(NT))}catch(e){}};
+const noteSaved=()=>{saveNT();clearTimeout(ntm);ntm=setTimeout(()=>{if(ND)ND.set({notes:NT}).catch(()=>{})},800)};
+const noteBox=k=>{const v=NT[k]||'',has=v.trim();return `<details class="note-learn"${has?' open':''}><summary>Learnings${has?' \u25cf':''}</summary><textarea data-k="${k}" rows="${Math.max(3,v.split('\n').length)}" placeholder="Your quick-revision notes: pattern, gotcha, one-line takeaway\u2026" aria-label="Learnings">${esc(v)}</textarea><div class="ns"></div></details>`};
+async function syncNotes(){try{if(typeof claude==='undefined')return;const u=await claude.use('user'),db=await claude.use('db');if(!u||!db)return;const id=await u.id();if(!id)return;
+const ref=db.doc('data/users/'+id+'/notes'),s=await ref.get(),r=(s.exists&&s.data().notes)||{};let ch=false;
+Object.keys(r).forEach(k=>{if(NT[k]!==r[k]){NT[k]=r[k];ch=true}});
+ND=ref;saveNT();if(Object.keys(NT).some(k=>!(k in r)))ref.set({notes:NT}).catch(()=>{});
+if(ch&&document.activeElement.tagName!=='TEXTAREA'){render();renderLab()}}catch(e){}}
+let TAB='practice';
+const CAT={core:'Core Python',generators:'Generators',pandas:'Pandas'};
+const isL=k=>k[0]==='L',clr=lab=>Object.keys(S).forEach(k=>{if(isL(k)===lab)delete S[k]});
+const cnt=lab=>{const o={solved:0,tried:0,revisit:0};Object.keys(S).forEach(k=>{if(isL(k)===lab&&o[S[k]]!==undefined)o[S[k]]++});return o};
+function progress(){const x=cnt(false),y=cnt(true),all=TAB==='cheat',lb=TAB==='lab',N=all?Q.length+L.length:lb?L.length:Q.length,
+d=all?{solved:x.solved+y.solved,tried:x.tried+y.tried,revisit:x.revisit+y.revisit}:lb?y:x;
+$('pb').style.width=(d.solved/N*100)+'%';
+$('ptxt').textContent='> '+(all?'all tabs \u00b7 ':'')+d.solved+' / '+N+(lb?' problems':' tasks')+' done \u00b7 '+d.tried+' running \u00b7 '+d.revisit+' retry \u00b7 '+(N-d.solved-d.tried-d.revisit)+' queued'}
+function renderLab(){const f=$('lflt').value,st=p=>S['L'+p.id]||'todo';
+$('lj').innerHTML=L.map(p=>`<button data-j="${p.id}" class="${st(p)}" title="${p.title}">P${p.id}</button>`).join('');
+$('ll').innerHTML=L.map(p=>{const s=st(p);if(f!=='all'&&s!==f)return'';const h=p.difficulty==='hard';
+return `<article class="card ${s}" id="lab-p${p.id}"><div class="meta"><span class="num lab">${String(p.id).padStart(2,'0')}</span><span class="tag ${h?'H':'M'}">${h?'Hard':'Medium'}</span><span class="tag ${p.category}">${CAT[p.category]}</span><select data-l="${p.id}">${ST.map(x=>`<option value="${x}"${x==s?' selected':''}>${LB[x]}</option>`).join('')}</select></div><h3>${p.title}</h3><p class="skills">${p.skills}</p><div class="lbody">${p.body}</div><details><summary>Hint</summary><p>${p.hint}</p></details>${noteBox('L'+p.id)}<button class="lcp" data-p="${p.id}">Copy starter for PyCharm</button><details class="sol"><summary>Solution</summary>${p.solution}<div class="why"><b>Why this works</b><p>${p.walkthrough}</p></div><div class="cons">${p.concepts.map(c=>`<span class="tag cn">${c}</span>`).join('')}</div></details></article>`}).join('')||'<p>Nothing here yet.</p>';
+progress()}
+function render(){const f=$('flt').value;
+$('list').innerHTML=Q.map((q,i)=>{const n=i+1,s=S[n]||'todo';if(f!=='all'&&s!==f)return'';
+return `<article class="card ${s}"><div class="meta"><span class="num drill">${String(n).padStart(2,'0')}</span><span class="tag ${q[1]}">${q[1]=='E'?'Easy':'Medium'}</span>${q[0]?`<span class="tag co">\u2605 ${q[0]}</span>`:''}<select data-n="${n}">${ST.map(x=>`<option value="${x}"${x==s?' selected':''}>${LB[x]}</option>`).join('')}</select></div><h3>${q[2]}</h3><p>${q[3]}</p>${code('# Input\n'+q[4]+'\n\n# Expected output\n# '+q[5])}<details><summary>Hint</summary><p>${q[6]}</p></details>${noteBox(String(n))}<button class="cp" data-n="${n}">Copy starter for PyCharm</button></article>`}).join('')||'<p>Nothing here yet.</p>';
+progress()}
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.n){S[t.dataset.n]=t.value;save();render()}else if(t.dataset.l){S['L'+t.dataset.l]=t.value;save();if($('lflt').value==='all'){t.closest('.card').className='card '+t.value;const j=document.querySelector('[data-j="'+t.dataset.l+'"]');if(j)j.className=t.value;progress()}else renderLab()}else if(t.id==='flt')render();else if(t.id==='lflt')renderLab()});
+document.addEventListener('click',async e=>{const t=e.target;
+if(t.classList.contains('cp')){const n=+t.dataset.n,q=Q[n-1],f=q[7];
+const stub=`# Q${n}: ${q[2]}\n${q[4]}\n\ndef ${f}:\n    pass\n\n\nprint(${f})\n# expected: ${q[5]}\n`;
+try{await navigator.clipboard.writeText(stub);t.textContent='Copied \u2713'}catch(err){t.textContent='Copy blocked: select the Input panel manually'}
+setTimeout(()=>t.textContent='Copy starter for PyCharm',2200)}
+if(t.classList.contains('lcp')){const pid=+t.dataset.p;const stub=LS[pid];if(stub){try{await navigator.clipboard.writeText(stub);t.textContent='Copied ✓'}catch(err){t.textContent='Copy blocked'}setTimeout(()=>t.textContent='Copy starter for PyCharm',2200)}}
+if(t.id==='rs'){if(t.dataset.go){clr(false);save();render();t.textContent='Reset progress';delete t.dataset.go}else{t.dataset.go=1;t.textContent='Click again to confirm'}}
+if(t.id==='rl'){if(t.dataset.go){clr(true);save();renderLab();t.textContent='Reset lab progress';delete t.dataset.go}else{t.dataset.go=1;t.textContent='Click again to confirm'}}
+if(t.dataset.j){const e=$('lab-p'+t.dataset.j);if(e)e.scrollIntoView({behavior:'smooth',block:'start'})}});
+
+/* ── THEME TOGGLE ── */
+function updateThemeLabel(){const dark=getComputedStyle(document.documentElement).colorScheme==='dark';$('th-label').textContent=dark?'Light':'Dark'}
+$('th').addEventListener('click',()=>{const r=document.documentElement,dark=getComputedStyle(r).colorScheme==='dark',nt=dark?'light':'dark';r.dataset.theme=nt;try{localStorage.setItem(TK,nt)}catch(err){}updateThemeLabel()});
+updateThemeLabel();
+
+/* ── TAB SWITCHING ── */
+const TABS=['practice','lab','cheat'],links=[...document.querySelectorAll('.rail-nav a')];
+function showTab(t){if(!TABS.includes(t))t='practice';TAB=t;TABS.forEach(x=>{$(x).hidden=x!==t});links.forEach(a=>a.classList.toggle('on',a.dataset.tab===t));progress();window.scrollTo(0,0)}
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();showTab(a.dataset.tab)}));
+
+/* ── CHEAT SHEET ── */
+$('cl').innerHTML=C.map(c=>`<div class="card"><h3>${c[0]}</h3>${code(c[1])}</div>`).join('');
+
+/* ── INIT ── */
+render();renderLab();showTab(location.hash.slice(1));setTimeout(syncNotes,0);
+
+/* ── TEXTAREA AUTO-RESIZE ── */
+document.addEventListener('input',e=>{const t=e.target;if(t.tagName!=='TEXTAREA'||t.dataset.k===undefined)return;
+NT[t.dataset.k]=t.value;noteSaved();t.style.height='auto';t.style.height=Math.max(84,t.scrollHeight)+'px';
+t.closest('details').querySelector('summary').textContent='Learnings'+(t.value.trim()?' \u25cf':'');
+const s=t.nextElementSibling;s.textContent='Saved \u2713';clearTimeout(s._t);s._t=setTimeout(()=>s.textContent='',1500)});
+</script>
+</body></html>
+
+</body></html>

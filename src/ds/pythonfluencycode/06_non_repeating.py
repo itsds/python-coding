@@ -15,6 +15,5 @@ def first_unique(s):
 
     return ""
 
-
 print(first_unique(s))
 # expected: 'w'
