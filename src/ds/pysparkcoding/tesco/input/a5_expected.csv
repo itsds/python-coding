@@ -1,0 +1,21 @@
+--- Task 1: Total unique IPs ---
+unique_ip_count
+5
+
+--- Task 2: Requests per endpoint ---
+endpoint,request_count
+/api/products,6
+/api/orders,4
+/api/users,2
+
+--- Task 3: Unique IPs per endpoint ---
+endpoint,unique_ip_count
+/api/products,4
+/api/orders,4
+/api/users,2
+
+--- Task 4: Error rate per endpoint (status >= 400) ---
+endpoint,total_requests,error_count,error_rate_pct
+/api/orders,4,1,25.0
+/api/products,6,0,0.0
+/api/users,2,0,0.0

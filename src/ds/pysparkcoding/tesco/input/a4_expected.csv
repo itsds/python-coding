@@ -1,0 +1,16 @@
+emp_id,emp_name,month,salary,max_salary_in_month,min_salary_in_month,is_highest,is_lowest
+E1,Amit,2024-01,75000,90000,70000,false,false
+E2,Priya,2024-01,82000,90000,70000,false,false
+E3,Rahul,2024-01,70000,90000,70000,false,true
+E4,Sneha,2024-01,90000,90000,70000,true,false
+E5,Vikram,2024-01,78000,90000,70000,false,false
+E1,Amit,2024-02,76000,88000,72000,false,false
+E2,Priya,2024-02,80000,88000,72000,false,false
+E3,Rahul,2024-02,72000,88000,72000,false,true
+E4,Sneha,2024-02,88000,88000,72000,true,false
+E5,Vikram,2024-02,82000,88000,72000,false,false
+E1,Amit,2024-03,78000,92000,71000,false,false
+E2,Priya,2024-03,85000,92000,71000,false,false
+E3,Rahul,2024-03,71000,92000,71000,false,true
+E4,Sneha,2024-03,92000,92000,71000,true,false
+E5,Vikram,2024-03,80000,92000,71000,false,false

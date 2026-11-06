@@ -1,0 +1,7 @@
+Store,Product,Subgroup,Sales,sales_5char,sales_4char,sales_3char
+S1,P1,ABC11,10,40,65,105
+S1,P2,ABB21,20,20,35,35
+S1,P3,ABC11,30,40,65,105
+S1,P4,ABC31,40,40,40,105
+S1,P5,ABB22,15,15,35,35
+S1,P6,ABC12,25,25,65,105

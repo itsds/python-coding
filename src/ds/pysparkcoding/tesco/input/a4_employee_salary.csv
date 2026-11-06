@@ -1,0 +1,16 @@
+emp_id,emp_name,department,month,salary
+E1,Amit,Engineering,2024-01,75000
+E1,Amit,Engineering,2024-02,76000
+E1,Amit,Engineering,2024-03,78000
+E2,Priya,Engineering,2024-01,82000
+E2,Priya,Engineering,2024-02,80000
+E2,Priya,Engineering,2024-03,85000
+E3,Rahul,Engineering,2024-01,70000
+E3,Rahul,Engineering,2024-02,72000
+E3,Rahul,Engineering,2024-03,71000
+E4,Sneha,Engineering,2024-01,90000
+E4,Sneha,Engineering,2024-02,88000
+E4,Sneha,Engineering,2024-03,92000
+E5,Vikram,Engineering,2024-01,78000
+E5,Vikram,Engineering,2024-02,82000
+E5,Vikram,Engineering,2024-03,80000

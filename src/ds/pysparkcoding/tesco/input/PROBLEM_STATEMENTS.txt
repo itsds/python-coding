@@ -1,0 +1,255 @@
+================================================================================
+  XEBIA / TESCO CLIENT ROUND — PYSPARK CODING PROBLEMS (Category A)
+================================================================================
+
+IMPORTANT CONTEXT FROM INTERVIEWER FEEDBACK:
+- They want PRODUCTION-READY code, not just "solve it"
+- After solving, they WILL ask: "Now implement this using SOLID principles"
+- They check: modular structure, exception handling, unit test awareness
+- Use DataFrame API fluently — avoid RDD or suboptimal patterns
+- Stay focused on the problem — don't add irrelevant complexity
+
+================================================================================
+A1. SUBSTRING SALES AGGREGATION
+================================================================================
+Input:  input/a1_substring_sales.csv
+Output: expected_output/a1_expected.csv
+
+SCHEMA: Store(string), Product(string), Subgroup(string), Sales(int)
+
+PROBLEM:
+For each row, compute the total sales across all rows whose Subgroup
+matches on the first N characters, for N = 5, 4, and 3.
+
+Example logic for row (S1, P1, ABC11, 10):
+  - sales_5char: sum of Sales where substring(Subgroup, 1, 5) == "ABC11"
+    → rows P1(10) + P3(30) = 40
+  - sales_4char: sum of Sales where substring(Subgroup, 1, 4) == "ABC1"
+    → rows P1(10) + P3(30) + P6(25) = 65
+  - sales_3char: sum of Sales where substring(Subgroup, 1, 3) == "ABC"
+    → rows P1(10) + P3(30) + P4(40) + P6(25) = 105
+
+KEY CONCEPTS TESTED:
+  - substring() function
+  - Window functions with partition by substring OR self-join approach
+  - Choosing between window vs join (discuss tradeoffs)
+
+EDGE CASES TO THINK ABOUT:
+  - What if Subgroup has fewer than 5 characters?
+  - What if Sales is null?
+  - Multiple stores (not just S1) — does your solution scale?
+
+
+================================================================================
+A2. ROUND TRIP DETECTION
+================================================================================
+Input:  input/a2_round_trips.csv
+Output: expected_output/a2_expected.csv
+
+SCHEMA: id(int), source(string), destination(string)
+
+PROBLEM:
+Find all city pairs where a round trip exists.
+A round trip means: if there's a row with source=X, destination=Y,
+AND another row with source=Y, destination=X, then (X,Y) is a round trip.
+
+Output each pair ONCE (sorted alphabetically to avoid duplicates like
+both B,C and C,B appearing).
+
+KEY CONCEPTS TESTED:
+  - Self-join pattern
+  - OR: collect sets and check intersection
+  - Deduplication of symmetric pairs
+
+EDGE CASES TO THINK ABOUT:
+  - Row 9 has source=A, destination=A (self-loop) — should it count?
+    (Most interpretations: NO, exclude self-loops)
+  - Row 10 has G→H but there's H→E (not H→G), so no round trip for G
+  - What if same route appears multiple times? (B→C in row 1 and row 11)
+
+
+================================================================================
+A3. HERO PRODUCT
+================================================================================
+Input:  input/a3_hero_product.csv
+Output: expected_output/a3_expected.csv
+
+SCHEMA: order_data(string) — format is "order_id:[product1,product2,...]"
+
+PROBLEM:
+Parse the string column to extract order_id and product list.
+Find the "hero product" — the product that appears in the most orders.
+
+Step 1: Parse "101:[p1,p2,p3,p5]" → order_id=101, products=[p1,p2,p3,p5]
+Step 2: Explode products so each row is (order_id, product)
+Step 3: Count distinct orders per product
+Step 4: Find the product with highest count
+
+KEY CONCEPTS TESTED:
+  - String parsing: split, regexp_extract, regexp_replace
+  - explode() to unnest arrays
+  - groupBy + count aggregation
+  - Handling the bracket/colon format
+
+EDGE CASES TO THINK ABOUT:
+  - What if a product appears twice in the same order? (count once per order)
+  - What if two products tie for hero? (return all tied products)
+  - Empty product list: "108:[]"
+  - What if order_data has leading/trailing spaces?
+
+EXPECTED HERO: p1 and p2 tied at 4 orders each
+
+
+================================================================================
+A4. EMPLOYEE SALARY — HIGH/LOW PER MONTH (WINDOW FUNCTIONS)
+================================================================================
+Input:  input/a4_employee_salary.csv
+Output: expected_output/a4_expected.csv
+
+SCHEMA: emp_id(string), emp_name(string), department(string),
+        month(string), salary(int)
+
+PROBLEM:
+For each month, identify which employee has the highest and lowest salary.
+Add columns: max_salary_in_month, min_salary_in_month, is_highest, is_lowest.
+
+Use WINDOW FUNCTIONS — this is the explicit requirement.
+
+KEY CONCEPTS TESTED:
+  - Window specification: partitionBy("month")
+  - max() and min() over window
+  - Comparing row value to window aggregate
+  - rank() or dense_rank() for ties
+
+EDGE CASES TO THINK ABOUT:
+  - What if two employees have the same salary in a month? (both are highest)
+  - What if all employees have the same salary in a month?
+  - Null salary values
+
+
+================================================================================
+A5. AGGREGATION JOB — ACCESS LOG ANALYSIS
+================================================================================
+Input:  input/a5_access_log.csv
+Output: expected_output/a5_expected.csv
+
+SCHEMA: timestamp(string), ip_address(string), method(string),
+        endpoint(string), status_code(int), response_time_ms(int)
+
+PROBLEM (4 sub-tasks — they may ask any one):
+
+Task 1: Count total unique IP addresses
+Task 2: Count requests per endpoint
+Task 3: Count unique IPs per endpoint
+Task 4: Calculate error rate per endpoint (status_code >= 400)
+
+THIS IS THE "BOILERPLATE" PROBLEM — memorize the pattern:
+  SparkSession setup → read CSV → transform → aggregate → show/write
+
+KEY CONCEPTS TESTED:
+  - SparkSession creation (master, appName, getOrCreate)
+  - Reading CSV with header and inferSchema
+  - countDistinct() vs approx_count_distinct()
+  - groupBy + agg() with multiple aggregation functions
+  - Filtering (status_code >= 400)
+
+EDGE CASES TO THINK ABOUT:
+  - Schema inference might get types wrong — explicit schema is better
+  - What if CSV has malformed rows? (mode: PERMISSIVE vs DROPMALFORMED)
+  - Null IP addresses
+
+
+================================================================================
+A6. STRING MANIPULATION & DATA CLEANUP
+================================================================================
+Input:  input/a6_string_cleanup.csv
+Output: expected_output/a6_expected.csv
+
+SCHEMA: id(int), full_name(string), email(string), phone(string),
+        registration_code(string)
+
+PROBLEM:
+Clean and transform messy data into standardized format:
+
+Task 1: Clean full_name
+  - Trim leading/trailing spaces
+  - Collapse multiple internal spaces to single space
+  - Convert to Title Case
+  Input:  "  Amit   Kumar  " → Output: "Amit Kumar"
+  Input:  "PRIYA SHARMA"     → Output: "Priya Sharma"
+  Input:  "rahul  m  gupta"  → Output: "Rahul M Gupta"
+
+Task 2: Extract email domain (everything after @)
+  Input:  "amit.kumar@gmail.com"        → Output: "gmail.com"
+  Input:  "priya.sharma@yahoo.co.in"    → Output: "yahoo.co.in"
+
+Task 3: Standardize phone to 10 digits
+  - Remove all non-digit characters
+  - Take the LAST 10 digits (drop country code)
+  Input:  "(+91) 98765-43210"  → Output: "9876543210"
+  Input:  "+91(65432)10987"    → Output: "6543210987"
+
+Task 4: Parse registration_code (format: REG-YYYY-DEPT-SEQ-CITY)
+  - Extract: year, department, sequence number, city
+  Input:  "REG-2024-ENG-001-BLR" → year=2024, dept=ENG, seq=001, city=BLR
+
+KEY PySpark FUNCTIONS TO USE:
+  - trim(), regexp_replace(), initcap()
+  - substring_index() or split() for email domain
+  - regexp_replace() + substring() for phone
+  - split() with element_at() or getItem() for registration code
+
+EDGE CASES TO THINK ABOUT:
+  - Email with multiple dots in domain (yahoo.co.in)
+  - Phone with fewer than 10 digits after stripping
+  - Names with suffixes (Jr, Sr) or single-letter middle names
+
+
+================================================================================
+A7. FIND STORES CARRYING A PRODUCT (VARIABLE-LENGTH DATA)
+================================================================================
+Input:  input/a7_store_products.txt (NOT a standard CSV — variable columns!)
+Output: expected_output/a7_expected.csv
+
+FORMAT: Each line is: store_id,product1,product2,...,productN
+  Lines have DIFFERENT numbers of products (variable length).
+
+PROBLEM:
+
+Task 1: Given a product (e.g., "P1"), find all stores that carry it.
+  P1 is carried by: S1, S2, S4, S6, S8, S10
+
+Task 2: Find the product carried by the most stores.
+  P1 = 6 stores, P2 = 6 stores (tied)
+
+READING STRATEGY:
+  Since columns are variable-length, you CANNOT read as a normal CSV.
+  Options:
+  a) Read as single text column → split → separate first element as
+     store_id → remaining elements as products array → explode
+  b) Read with spark.read.text() → process each line
+
+KEY CONCEPTS TESTED:
+  - Handling non-standard/semi-structured data
+  - split() to convert string to array
+  - element_at() or getItem(0) to extract store_id
+  - slice() or array_except() to get products sub-array
+  - explode() to flatten
+  - groupBy + count for aggregation
+
+EDGE CASES TO THINK ABOUT:
+  - Store with only 1 product
+  - Store with duplicate products in same row
+  - Product names with spaces or special characters
+  - Empty line in file
+
+
+================================================================================
+PREPARATION ORDER (recommended):
+  A1 → A2 → A3 → A7 → A4 → A5 → A6
+  (hardest/most-likely-asked first, boilerplate last)
+
+AFTER EACH SOLUTION:
+  Be ready to answer: "Now restructure this using SOLID principles"
+  (That's Category B — we'll prep that pattern after you solve these)
+================================================================================
