@@ -1,0 +1,22 @@
+--- Task 1: Find all stores carrying product P1 ---
+store_id
+S1
+S2
+S4
+S6
+S8
+S10
+
+--- Task 2: Product availability count (how many stores carry each product) ---
+product,store_count
+P1,6
+P2,6
+P3,5
+P5,4
+P4,3
+P6,2
+P7,2
+P99,2
+P8,1
+P9,1
+P10,1
