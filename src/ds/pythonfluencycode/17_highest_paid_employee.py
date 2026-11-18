@@ -34,7 +34,7 @@ def top_earner(rows):
 print(top_earner(rows))
 # expected: {'HR': 'Asha', 'IT': 'Ravi'}
 
-#=====================================================
+#================================================================================
 # RECENT Learnings in Python Coding
 # Dict Comprehension
 # dict.get("",0)
